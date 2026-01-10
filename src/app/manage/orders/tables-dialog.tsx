@@ -1,0 +1,301 @@
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import AutoPagination from '@/components/auto-pagination';
+import { useEffect, useState } from 'react';
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
+import { cn, getVietnameseTableStatus, simpleMatchText } from '@/lib/utils';
+import { Input } from '@/components/ui/input';
+import { TableStatus } from '@/app/constants/table.constant';
+import { useListTableNode } from '@/app/queries/useTableNode';
+import { TableNodeType } from '@/app/ValidationSchemas/table-node.schema';
+
+// Mock fallback
+const mockTableNodes: TableNodeType[] = [
+  {
+    id: 1,
+    name: 'Bàn 1',
+    seats: 4,
+    areaId: 1,
+    layoutId: null,
+    status: TableStatus.AVAILABLE,
+    token: '',
+    type: 'TABLE' as any,
+    positionX: 0,
+    positionY: 0,
+    rotation: null,
+    width: 100,
+    height: 100,
+    imageUrl: '',
+    createdById: null,
+    updatedById: null,
+    deletedById: null,
+    deletedAt: null,
+    createdAt: '',
+    updatedAt: '',
+  },
+  {
+    id: 2,
+    name: 'Bàn 2',
+    seats: 6,
+    areaId: 1,
+    layoutId: null,
+    status: TableStatus.OCCUPIED,
+    token: '',
+    type: 'TABLE' as any,
+    positionX: 0,
+    positionY: 0,
+    rotation: null,
+    width: 100,
+    height: 100,
+    imageUrl: '',
+    createdById: null,
+    updatedById: null,
+    deletedById: null,
+    deletedAt: null,
+    createdAt: '',
+    updatedAt: '',
+  },
+];
+
+export const columns: ColumnDef<TableNodeType>[] = [
+  {
+    accessorKey: 'name',
+    header: 'Tên bàn',
+    cell: ({ row }) => (
+      <div className="font-medium">{row.getValue('name')}</div>
+    ),
+    filterFn: (row, columnId, filterValue: string) => {
+      if (filterValue === undefined) return true;
+      return simpleMatchText(String(row.original.name), String(filterValue));
+    },
+  },
+  {
+    accessorKey: 'seats',
+    header: 'Số chỗ ngồi',
+    cell: ({ row }) => (
+      <div className="text-center">{row.getValue('seats')}</div>
+    ),
+  },
+  {
+    accessorKey: 'status',
+    header: 'Trạng thái',
+    cell: ({ row }) => (
+      <div>{getVietnameseTableStatus(row.getValue('status'))}</div>
+    ),
+  },
+];
+
+const PAGE_SIZE = 10;
+
+export function TablesDialog({
+  onChoose,
+}: {
+  onChoose: (tableNode: TableNodeType) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const { data: dataTableNodes, isLoading } = useListTableNode();
+  const data: TableNodeType[] = dataTableNodes?.payload?.data || [];
+
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: PAGE_SIZE,
+  });
+
+  const table = useReactTable({
+    data,
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    onPaginationChange: setPagination,
+    autoResetPageIndex: false,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+      pagination,
+    },
+  });
+
+  useEffect(() => {
+    table.setPagination({
+      pageIndex: 0,
+      pageSize: PAGE_SIZE,
+    });
+  }, [table]);
+
+  const choose = (tableNode: TableNodeType) => {
+    onChoose(tableNode);
+    setOpen(false);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline">Chọn bàn</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[600px] max-h-full overflow-auto">
+        <DialogHeader>
+          <DialogTitle>Chọn bàn</DialogTitle>
+        </DialogHeader>
+        <div>
+          <div className="w-full">
+            <div className="flex items-center py-4">
+              <Input
+                placeholder="Tên bàn"
+                value={
+                  (table.getColumn('name')?.getFilterValue() as string) ?? ''
+                }
+                onChange={(event) =>
+                  table.getColumn('name')?.setFilterValue(event.target.value)
+                }
+                className="w-[200px]"
+              />
+            </div>
+
+            {isLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <div className="text-sm text-muted-foreground">Đang tải...</div>
+              </div>
+            ) : (
+              <div className="rounded-md border">
+                <Table>
+                  <TableHeader>
+                    {table.getHeaderGroups().map((headerGroup) => (
+                      <TableRow key={headerGroup.id}>
+                        {headerGroup.headers.map((header) => {
+                          return (
+                            <TableHead key={header.id}>
+                              {header.isPlaceholder
+                                ? null
+                                : flexRender(
+                                    header.column.columnDef.header,
+                                    header.getContext(),
+                                  )}
+                            </TableHead>
+                          );
+                        })}
+                      </TableRow>
+                    ))}
+                  </TableHeader>
+                  <TableBody>
+                    {table.getRowModel().rows?.length ? (
+                      table
+                        .getRowModel()
+                        .rows.filter((row) => {
+                          const originalType = row.original.type;
+                          return (
+                            originalType === 'SQUARE' ||
+                            originalType === 'ROUND' ||
+                            originalType === 'TABLE'
+                          );
+                        })
+                        .map((row) => (
+                          <TableRow
+                            key={row.id}
+                            data-state={row.getIsSelected() && 'selected'}
+                            onClick={() => {
+                              if (
+                                row.original.status === TableStatus.AVAILABLE ||
+                                row.original.status === TableStatus.RESERVED
+                              ) {
+                                choose(row.original);
+                              }
+                            }}
+                            className={cn({
+                              'cursor-pointer hover:bg-muted/50':
+                                row.original.status === TableStatus.AVAILABLE ||
+                                row.original.status === TableStatus.RESERVED,
+                              'cursor-not-allowed opacity-50':
+                                row.original.status === TableStatus.OCCUPIED ||
+                                row.original.status ===
+                                  TableStatus.OUT_OF_SERVICE ||
+                                row.original.status === TableStatus.HIDE,
+                            })}
+                          >
+                            {row.getVisibleCells().map((cell) => (
+                              <TableCell key={cell.id}>
+                                {flexRender(
+                                  cell.column.columnDef.cell,
+                                  cell.getContext(),
+                                )}
+                              </TableCell>
+                            ))}
+                          </TableRow>
+                        ))
+                    ) : (
+                      <TableRow>
+                        <TableCell
+                          colSpan={columns.length}
+                          className="h-24 text-center"
+                        >
+                          Không có dữ liệu.
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+
+            <div className="flex items-center justify-end space-x-2 py-4">
+              <div className="text-xs text-muted-foreground py-4 flex-1 ">
+                Hiển thị{' '}
+                <strong>{table.getPaginationRowModel().rows.length}</strong>{' '}
+                trong <strong>{data.length}</strong> kết quả
+              </div>
+              <div>
+                <AutoPagination
+                  page={table.getState().pagination.pageIndex + 1}
+                  pageSize={table.getPageCount()}
+                  onClick={(pageNumber) => {
+                    table.setPagination({
+                      pageIndex: pageNumber - 1,
+                      pageSize: PAGE_SIZE,
+                    });
+                  }}
+                  isLink={false}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
