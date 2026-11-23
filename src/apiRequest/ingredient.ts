@@ -9,7 +9,7 @@ const prefix = '/ingredients';
 export const ingredienrApiRequest = {
   list: () =>
     http.get<GetAllIngredientResType>(`${prefix}`, {
-      next: { tags: ['ingredientsingredients'] },
+      next: { tags: ['ingredients'] },
     }),
   delete: (id: number) =>
     http.delete<GetIngredientDetailResType>(`${prefix}/${id}`),

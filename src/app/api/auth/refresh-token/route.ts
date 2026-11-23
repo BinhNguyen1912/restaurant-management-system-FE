@@ -6,7 +6,6 @@ import jwt from 'jsonwebtoken';
 export async function POST(request: Request) {
   const cookieStore = cookies();
   const refreshToken = cookieStore.get('refreshToken')?.value;
-  console.log('refreshToken at cookie store', refreshToken);
 
   if (!refreshToken) {
     return Response.json(

@@ -1,5 +1,6 @@
 import { Role } from '@/app/constants/type';
 import {
+  BookOpenText,
   Home,
   LineChart,
   ShoppingCart,
@@ -17,6 +18,12 @@ const menuItems = [
     Icon: Home,
     href: '/manage/dashboard',
     roles: [Role.ADMIN, Role.STAFF],
+  },
+  {
+    title: 'Sổ cái',
+    Icon: BookOpenText,
+    href: '/manage/ledger-accounts',
+    roles: [Role.ADMIN],
   },
   {
     title: 'Đơn hàng',
@@ -40,25 +47,19 @@ const menuItems = [
     title: 'Lời Nhắc',
     Icon: ClipboardClock,
     href: '/manage/reminders',
-    roles: [Role.ADMIN],
+    roles: [Role.ADMIN, Role.STAFF],
   },
   {
     title: 'Nguyên Liệu',
     Icon: Warehouse,
     href: '/manage/ingredients',
-    roles: [Role.ADMIN],
+    roles: [Role.ADMIN, Role.STAFF],
   },
   {
     title: 'Quản Lý Định Lượng',
     Icon: AlarmSmoke,
     href: '/manage/recipes',
-    roles: [Role.ADMIN],
-  },
-  {
-    title: 'Phân tích',
-    Icon: LineChart,
-    href: '/manage/analytics',
-    roles: [Role.ADMIN],
+    roles: [Role.ADMIN, Role.STAFF],
   },
   {
     title: 'Nhân viên',

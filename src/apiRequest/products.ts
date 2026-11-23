@@ -44,7 +44,7 @@ export const productsApiRequest = {
   //Bây giờ mình sẽ dùng tag để dùng Fn : RevalidateTag để nó Build cho những file Static Rendering
   getListProduct: () =>
     http.get<GetListProductsResType>(`${prefix}`, {
-      next: { tags: ['dishes'] },
+      next: { tags: ['products'] },
     }),
 
   delete: (id: number) =>
