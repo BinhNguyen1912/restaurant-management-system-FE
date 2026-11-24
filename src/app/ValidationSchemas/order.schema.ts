@@ -235,6 +235,10 @@ export const UpdateOrderSchema = z.object({
   ]),
   quantity: z.number(),
   skuId: z.number(),
+  /** BẮT BUỘC khi huỷ đơn (BE trả 400 nếu thiếu) — lý do được ghi vào nhật ký thao tác */
+  reason: z.string().trim().max(500).optional(),
+  /** giảm giá áp thêm trên đơn (đồng); BE tính lại tiền + ghi audit */
+  discountTotal: z.coerce.number().min(0).optional(),
 });
 export const UpdateOrderResSchema = z.object({
   order: OrderResSchema,

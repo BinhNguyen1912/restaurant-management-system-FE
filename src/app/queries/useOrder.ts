@@ -32,8 +32,8 @@ export const useUpdateOrderMutation = () => {
 
 export const useCreateGuestOrderMutation = () => {
   return useMutation({
-    mutationFn: (data: GuestCreateNewOrderType) =>
-      orderApiRequest.createGuestOrder(data),
+    mutationFn: ({ data, voucherCode }: { data: GuestCreateNewOrderType; voucherCode?: string }) =>
+      orderApiRequest.createGuestOrder(data, voucherCode),
   });
 };
 
@@ -42,10 +42,12 @@ export const useCreateOrderForGuestMutation = () => {
     mutationFn: ({
       guestId,
       orders,
+      voucherCode,
     }: {
       guestId: number;
       orders: GuestCreateNewOrderType;
-    }) => orderApiRequest.createOrderForGuest(guestId, orders),
+      voucherCode?: string;
+    }) => orderApiRequest.createOrderForGuest(guestId, orders, voucherCode),
   });
 };
 

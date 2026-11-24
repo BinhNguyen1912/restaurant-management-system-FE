@@ -120,7 +120,7 @@ export default function ProductDetailDialog({
           quantity: selection.quantity,
         }));
 
-      const result = await mutateAsync(orderData);
+      const result = await mutateAsync({ data: orderData });
       console.log('Order result:', result);
       toast.success('Đặt món thành công!');
       onClose();

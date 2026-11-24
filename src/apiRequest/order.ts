@@ -22,10 +22,16 @@ import {
 import http from '@/lib/http';
 const prefix = '/orders';
 const orderApiRequest = {
-  createGuestOrder: (body: GuestCreateNewOrderType) =>
-    http.post<OrderResType>('guest/new-order', body),
-  createOrderForGuest: (guestId: number, body: GuestCreateNewOrderType) =>
-    http.post<OrderResType>(`orders/create-order-for-guest/${guestId}`, body),
+  createGuestOrder: (body: GuestCreateNewOrderType, voucherCode?: string) =>
+    http.post<OrderResType>(
+      `guest/new-order${voucherCode ? `?voucherCode=${encodeURIComponent(voucherCode)}` : ''}`,
+      body,
+    ),
+  createOrderForGuest: (guestId: number, body: GuestCreateNewOrderType, voucherCode?: string) =>
+    http.post<OrderResType>(
+      `orders/create-order-for-guest/${guestId}${voucherCode ? `?voucherCode=${encodeURIComponent(voucherCode)}` : ''}`,
+      body,
+    ),
   updateOrder: (id: number, body: UpdateOrderType) =>
     http.put<UpdateOrderResType>(`orders/${id}`, body),
   getOrdersList: (params?: OrderQueryType) => {
