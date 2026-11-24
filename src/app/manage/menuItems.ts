@@ -12,6 +12,7 @@ import {
   ClipboardClock,
   Wallet,
   ScrollText,
+  Percent,
 } from 'lucide-react';
 
 const menuItems = [
@@ -31,6 +32,12 @@ const menuItems = [
     title: 'Nhật ký sổ cái',
     Icon: ScrollText,
     href: '/manage/ledger',
+    roles: [Role.ADMIN],
+  },
+  {
+    title: 'Thuế & phí',
+    Icon: Percent,
+    href: '/manage/tax-settings',
     roles: [Role.ADMIN],
   },
   {
