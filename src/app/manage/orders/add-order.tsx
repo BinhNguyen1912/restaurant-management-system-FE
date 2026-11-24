@@ -354,7 +354,7 @@ export default function AddOrder() {
                         </div>
                       )}
                       <SafeImage
-                        src={dish.images?.[0] || '/placeholder-food.jpg'}
+                        src={dish.images?.[0] || '/placeholder-food.svg'}
                         alt={dish.name}
                         fill
                         quality={100}

@@ -83,7 +83,7 @@ export default function ProductCard({
         )}
 
         <SafeImage
-          src={product.images?.[0] || '/placeholder-food.jpg'}
+          src={product.images?.[0] || '/placeholder-food.svg'}
           alt={product.name}
           fill
           className="object-cover hover:scale-105 transition-transform duration-300"

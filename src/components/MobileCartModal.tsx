@@ -89,7 +89,7 @@ export default function MobileCartModal({
                     {/* Product Image */}
                     <div className="relative w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
                       <SafeImage
-                        src={product.images?.[0] || '/placeholder-food.jpg'}
+                        src={product.images?.[0] || '/placeholder-food.svg'}
                         alt={product.name}
                         fill
                         className="object-cover"

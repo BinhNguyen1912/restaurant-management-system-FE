@@ -25,6 +25,8 @@ export const OPTIMIZED_IMAGE_HOSTS = new Set([
 /** Ảnh nội bộ (`/foo.png`) hoặc host đã khai báo thì `next/image` xử lý được */
 export function canOptimizeImage(src?: string | null): boolean {
   if (!src) return false;
+  // SVG cần `images.dangerouslyAllowSVG` (mặc định tắt) -> để <img> xử lý
+  if (/\.svg(\?|$)/i.test(src)) return false;
   if (src.startsWith('/') || src.startsWith('data:')) return true;
   try {
     return OPTIMIZED_IMAGE_HOSTS.has(new URL(src).hostname);

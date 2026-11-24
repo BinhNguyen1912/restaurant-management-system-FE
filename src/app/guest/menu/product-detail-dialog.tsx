@@ -198,7 +198,7 @@ export default function ProductDetailDialog({
                 </span>
               </div>
               <SafeImage
-                src={product.images?.[0] || '/placeholder-food.jpg'}
+                src={product.images?.[0] || '/placeholder-food.svg'}
                 alt={product.name}
                 fill
                 className="object-cover transition-transform duration-500 ease-out hover:scale-105"

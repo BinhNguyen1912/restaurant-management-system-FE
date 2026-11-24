@@ -308,7 +308,7 @@ export default function MenuOrder() {
                         </div>
                       )}
                       <SafeImage
-                        src={dish.images?.[0] || '/placeholder-food.jpg'}
+                        src={dish.images?.[0] || '/placeholder-food.svg'}
                         alt={dish.name}
                         fill
                         className="object-cover"
