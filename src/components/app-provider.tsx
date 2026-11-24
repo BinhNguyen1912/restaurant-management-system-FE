@@ -10,7 +10,7 @@ import React, {
   useState,
 } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import dynamic from 'next/dynamic';
 import RefreshToken from '@/components/refresh-token';
 import MessageSocketHandler from '@/components/message-socket-handler';
 import ReminderSocketHandler from '@/components/reminder-socket-handler';
@@ -26,6 +26,11 @@ import { set } from 'zod';
 import { decode } from '@/lib/jwt';
 import ListenLogoutSocket from '@/components/listen-logout-socket';
 import NewOrderSound from '@/components/newOrderSound';
+
+const ReactQueryDevtoolsLazy = dynamic(
+  () => import('@tanstack/react-query-devtools').then((mod) => mod.ReactQueryDevtools),
+  { ssr: false },
+);
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -157,7 +162,8 @@ export default function AppProvider({
       <NewOrderSound />
       <MessageSocketHandler />
       <ReminderSocketHandler />
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* Devtools chỉ tải ở môi trường dev và tách chunk riêng */}
+      {process.env.NODE_ENV === 'development' ? <ReactQueryDevtoolsLazy /> : null}
     </QueryClientProvider>
     // </AppContext.Provider>
   );
