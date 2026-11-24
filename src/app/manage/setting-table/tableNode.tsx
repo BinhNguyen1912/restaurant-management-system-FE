@@ -5,7 +5,7 @@ import { Handle, Position, useUpdateNodeInternals } from 'reactflow';
 import { Button } from '@/components/ui/button';
 import { RotateCcw, X } from 'lucide-react';
 import { TableNodeData, TableStatus } from './types/table';
-import Image from 'next/image';
+import SafeImage from '@/components/SafeImage';
 import TableDialog from '@/app/manage/setting-table/tableDialog';
 import { TableStatusValues } from '@/app/constants/table.constant';
 import { Badge } from '@/components/ui/badge';
@@ -49,7 +49,7 @@ export default function TableNode({ data, selected }: TableNodeProps) {
         >
           <div className="flex flex-col items-center">
             <div className="relative">
-              <Image
+              <SafeImage
                 src={data.imageUrl}
                 alt={data.name}
                 width={data.width}

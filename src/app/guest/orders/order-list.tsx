@@ -26,7 +26,7 @@ import {
   getVietnameseOrderStatus,
   handleErrorApi,
 } from '@/lib/utils';
-import Image from 'next/image';
+import SafeImage from '@/components/SafeImage';
 import React, { useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Bell, CreditCard, Wallet } from 'lucide-react';
@@ -328,7 +328,7 @@ export default function OrderList() {
                 </div>
                 <div className="flex-shrink-0 relative">
                   {item.image ? (
-                    <Image
+                    <SafeImage
                       src={item.image}
                       alt={item.productName}
                       height={100}

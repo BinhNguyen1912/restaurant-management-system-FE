@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
+import SafeImage from '@/components/SafeImage';
 import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/lib/utils';
 import { Heart, ShoppingCart } from 'lucide-react';
@@ -82,7 +82,7 @@ export default function ProductCard({
           </div>
         )}
 
-        <Image
+        <SafeImage
           src={product.images?.[0] || '/placeholder-food.jpg'}
           alt={product.name}
           fill

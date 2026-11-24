@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
+import SafeImage from '@/components/SafeImage';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -197,7 +197,7 @@ export default function ProductDetailDialog({
                   Độc quyền
                 </span>
               </div>
-              <Image
+              <SafeImage
                 src={product.images?.[0] || '/placeholder-food.jpg'}
                 alt={product.name}
                 fill

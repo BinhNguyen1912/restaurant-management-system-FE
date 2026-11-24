@@ -1,6 +1,6 @@
 'use client';
 import React, { useMemo, useState, useEffect } from 'react';
-import Image from 'next/image';
+import SafeImage from '@/components/SafeImage';
 import { Button } from '@/components/ui/button';
 import {
   Tooltip,
@@ -307,7 +307,7 @@ export default function MenuOrder() {
                           </span>
                         </div>
                       )}
-                      <Image
+                      <SafeImage
                         src={dish.images?.[0] || '/placeholder-food.jpg'}
                         alt={dish.name}
                         fill

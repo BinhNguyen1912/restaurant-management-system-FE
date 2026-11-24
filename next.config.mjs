@@ -66,6 +66,17 @@ const nextConfig = {
         hostname: 'backimthang.vn',
         pathname: '/**',
       },
+      // ảnh seed/demo (demo-data.seed.ts, catalog.seed.ts)
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'fastly.picsum.photos',
+        pathname: '/**',
+      },
     ],
   },
 };

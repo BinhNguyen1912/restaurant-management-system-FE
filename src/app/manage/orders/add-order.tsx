@@ -19,7 +19,7 @@ import { Button } from '@/components/ui/button';
 import { TablesDialog } from '@/app/manage/orders/tables-dialog';
 import { Switch } from '@/components/ui/switch';
 import GuestsDialog from '@/app/manage/orders/guests-dialog';
-import Image from 'next/image';
+import SafeImage from '@/components/SafeImage';
 import { cn, formatCurrency, handleErrorApi } from '@/lib/utils';
 
 import { DishStatus } from '@/app/constants/type';
@@ -353,7 +353,7 @@ export default function AddOrder() {
                           </span>
                         </div>
                       )}
-                      <Image
+                      <SafeImage
                         src={dish.images?.[0] || '/placeholder-food.jpg'}
                         alt={dish.name}
                         fill
