@@ -2,7 +2,15 @@
 
 import { useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
-import { AlertTriangle, LockKeyhole, Plus, UnlockKeyhole } from 'lucide-react';
+import {
+  AlertTriangle,
+  FileWarning,
+  ImagePlus,
+  LockKeyhole,
+  Plus,
+  UnlockKeyhole,
+  X,
+} from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -34,7 +42,18 @@ import {
   useGetCashShifts,
   useOpenCashShift,
 } from '@/app/queries/useCashShift';
+import { mediaApiRequest } from '@/apiRequest/media';
 import { formatCurrency } from '@/lib/utils';
+
+/*
+ * Ảnh chứng từ hiển thị bằng <img> thường (không qua next/image): URL Cloudinary do
+ * BE trả về, kích thước thumbnail 32–64px nên không cần tối ưu, và tránh phụ thuộc
+ * danh sách host của next/image — chứng từ không được phép làm chết trang.
+ */
+const MAX_EVIDENCE = 5;
+const EVIDENCE_ACCEPT = 'image/jpeg,image/png,image/webp,video/mp4,video/quicktime,video/webm';
+
+const isVideoUrl = (url: string) => /\.(mp4|mov|webm)(\?|$)/i.test(url) || url.includes('/video/upload/');
 
 const formatTime = (value: string | null) =>
   value ? new Date(value).toLocaleString('vi-VN') : '—';
@@ -82,6 +101,9 @@ export default function CashShiftBoard() {
   const [movementType, setMovementType] = useState<'IN' | 'OUT'>('OUT');
   const [movementReason, setMovementReason] = useState('');
   const [movementAmount, setMovementAmount] = useState('');
+  /** Chứng từ đã upload xong (URL Cloudinary) */
+  const [evidenceUrls, setEvidenceUrls] = useState<string[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
   const [countedCash, setCountedCash] = useState('');
   const [closeNote, setCloseNote] = useState('');
 
@@ -113,6 +135,27 @@ export default function CashShiftBoard() {
     }
   };
 
+  const handleEvidencePick = async (files: FileList | null) => {
+    if (!files?.length) return;
+    const remaining = MAX_EVIDENCE - evidenceUrls.length;
+    if (remaining <= 0) {
+      toast.warn(`Tối đa ${MAX_EVIDENCE} chứng từ cho 1 khoản chi`);
+      return;
+    }
+    setIsUploading(true);
+    try {
+      const urls = await mediaApiRequest.uploadEvidence(
+        Array.from(files).slice(0, remaining),
+      );
+      setEvidenceUrls((current) => [...current, ...urls]);
+      toast.success(`Đã tải ${urls.length} chứng từ`);
+    } catch (error: any) {
+      toast.error(error?.message ?? 'Tải chứng từ thất bại');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   const handleMovement = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!shift) return;
@@ -123,10 +166,12 @@ export default function CashShiftBoard() {
           type: movementType,
           reason: movementReason.trim(),
           amount: Number(movementAmount),
+          evidenceUrls: evidenceUrls.length ? evidenceUrls : undefined,
         },
       });
       setMovementReason('');
       setMovementAmount('');
+      setEvidenceUrls([]);
       toast.success(movementType === 'IN' ? 'Đã ghi thu tiền' : 'Đã ghi chi tiền');
     } catch (error: any) {
       toast.error(error?.message ?? 'Không ghi được thu/chi');
@@ -256,22 +301,86 @@ export default function CashShiftBoard() {
                       required
                     />
                   </div>
-                  <Button type="submit" disabled={isAddingMovement}>
+                  <Button type="submit" disabled={isAddingMovement || isUploading}>
                     <Plus className="mr-1 h-4 w-4" /> Ghi
                   </Button>
+
+                  <div className="flex w-full flex-wrap items-center gap-2">
+                    <label
+                      htmlFor="movement-evidence"
+                      className="inline-flex cursor-pointer items-center gap-1 rounded-md border px-3 py-1.5 text-sm hover:bg-muted"
+                    >
+                      <ImagePlus className="h-4 w-4" />
+                      {isUploading ? 'Đang tải…' : 'Đính kèm ảnh/video chứng từ'}
+                    </label>
+                    <input
+                      id="movement-evidence"
+                      type="file"
+                      className="hidden"
+                      accept={EVIDENCE_ACCEPT}
+                      multiple
+                      onChange={(event) => {
+                        void handleEvidencePick(event.target.files);
+                        event.target.value = '';
+                      }}
+                    />
+                    <span className="text-xs text-muted-foreground">
+                      Hoá đơn / biên nhận — tối đa {MAX_EVIDENCE} file, ảnh ≤5MB, video ≤30MB
+                    </span>
+                  </div>
+
+                  {evidenceUrls.length > 0 ? (
+                    <div className="flex w-full flex-wrap gap-2">
+                      {evidenceUrls.map((url) => (
+                        <div
+                          key={url}
+                          className="relative h-16 w-16 overflow-hidden rounded-md border bg-muted"
+                        >
+                          {isVideoUrl(url) ? (
+                            <a
+                              href={url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="flex h-full w-full items-center justify-center text-xs"
+                            >
+                              video
+                            </a>
+                          ) : (
+                            <img
+                              src={url}
+                              alt="chứng từ"
+                              className="absolute inset-0 h-full w-full object-cover"
+                              loading="lazy"
+                            />
+                          )}
+                          <button
+                            type="button"
+                            aria-label="Bỏ chứng từ"
+                            className="absolute right-0 top-0 rounded-bl bg-background/90 p-0.5"
+                            onClick={() =>
+                              setEvidenceUrls((current) => current.filter((item) => item !== url))
+                            }
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
                 </form>
                 <Table>
                   <TableHeader>
                     <TableRow>
                       <TableHead>Loại</TableHead>
                       <TableHead>Lý do</TableHead>
+                      <TableHead>Chứng từ</TableHead>
                       <TableHead className="text-right">Số tiền</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {movements.length === 0 ? (
                       <TableRow>
-                        <TableCell colSpan={3} className="text-sm text-muted-foreground">
+                        <TableCell colSpan={4} className="text-sm text-muted-foreground">
                           Chưa có khoản thu/chi nào trong ca
                         </TableCell>
                       </TableRow>
@@ -284,6 +393,48 @@ export default function CashShiftBoard() {
                             </Badge>
                           </TableCell>
                           <TableCell>{movement.reason}</TableCell>
+                          <TableCell>
+                            {(movement.evidenceUrls ?? []).length === 0 ? (
+                              movement.type === 'OUT' ? (
+                                <span className="flex items-center gap-1 text-xs text-amber-600">
+                                  <FileWarning className="h-3 w-3" /> thiếu chứng từ
+                                </span>
+                              ) : (
+                                <span className="text-xs text-muted-foreground">—</span>
+                              )
+                            ) : (
+                              <div className="flex gap-1">
+                                {movement.evidenceUrls.map((url) =>
+                                  isVideoUrl(url) ? (
+                                    <a
+                                      key={url}
+                                      href={url}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      className="flex h-8 w-8 items-center justify-center rounded border text-[10px]"
+                                    >
+                                      video
+                                    </a>
+                                  ) : (
+                                    <a
+                                      key={url}
+                                      href={url}
+                                      target="_blank"
+                                      rel="noreferrer"
+                                      className="relative h-8 w-8 overflow-hidden rounded border"
+                                    >
+                                      <img
+                                        src={url}
+                                        alt="chứng từ"
+                                        className="absolute inset-0 h-full w-full object-cover"
+                                        loading="lazy"
+                                      />
+                                    </a>
+                                  ),
+                                )}
+                              </div>
+                            )}
+                          </TableCell>
                           <TableCell className="text-right">
                             {formatCurrency(movement.amount)}
                           </TableCell>

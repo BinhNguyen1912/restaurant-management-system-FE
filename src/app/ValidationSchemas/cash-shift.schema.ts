@@ -9,6 +9,8 @@ export const cashMovementSchema = z.object({
   type: cashMovementTypeSchema,
   reason: z.string(),
   amount: z.number(),
+  /** Ảnh/video chứng từ (hoá đơn, biên nhận) */
+  evidenceUrls: z.array(z.string()).default([]),
   createdById: z.number().nullable(),
   createdAt: z.string(),
 });
@@ -82,6 +84,8 @@ export const createCashMovementBodySchema = z.object({
   type: cashMovementTypeSchema,
   reason: z.string().trim().min(1, 'Phải ghi lý do thu/chi').max(255),
   amount: z.coerce.number().positive('Số tiền phải lớn hơn 0'),
+  /** Upload qua POST /media/upload (ảnh ≤5MB, video ≤30MB), tối đa 5 chứng từ */
+  evidenceUrls: z.array(z.string()).max(5, 'Tối đa 5 chứng từ').optional(),
 });
 export type CreateCashMovementBodyType = z.infer<
   typeof createCashMovementBodySchema
