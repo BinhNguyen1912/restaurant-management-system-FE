@@ -3,7 +3,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { X, Plus, Minus } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
-import Image from 'next/image';
+import SafeImage from '@/components/SafeImage';
 
 interface SkuSelection {
   skuId: number;
@@ -88,8 +88,8 @@ export default function MobileCartModal({
                   >
                     {/* Product Image */}
                     <div className="relative w-16 h-16 rounded-full overflow-hidden flex-shrink-0">
-                      <Image
-                        src={product.images?.[0] || '/placeholder-food.jpg'}
+                      <SafeImage
+                        src={product.images?.[0] || '/placeholder-food.svg'}
                         alt={product.name}
                         fill
                         className="object-cover"

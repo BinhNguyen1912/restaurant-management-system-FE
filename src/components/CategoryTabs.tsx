@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
+import SafeImage from '@/components/SafeImage';
 
 interface Category {
   id: number;
@@ -66,7 +66,7 @@ export default function CategoryTabs({
                   : 'bg-gray-100 hover:bg-red-50'
               }`}
             >
-              <Image
+              <SafeImage
                 src={category.logo}
                 alt={category.name}
                 width={48}
