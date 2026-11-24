@@ -9,11 +9,12 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Upload, X } from 'lucide-react';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { Resolver, useForm } from 'react-hook-form';
+import { useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import {
   Form,
   FormControl,
@@ -22,8 +23,8 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { handleErrorApi } from '@/lib/utils';
+import { getApiErrorMessage } from '@/lib/api-error';
 import { mediaApiRequest } from '@/apiRequest/media';
 import { toast } from 'react-toastify';
 import { revalidateApiRequest } from '@/apiRequest/revalidateApiRequest';
@@ -32,9 +33,9 @@ import {
   useUpdateProductMutation,
 } from '@/app/queries/useProducts';
 import {
-  GenerateSKU,
-  UpdateProductBodySchema,
   UpdateProductBodyType,
+  UpdateProductFormSchema,
+  UpdateProductFormType,
 } from '@/app/ValidationSchemas/product.schema';
 import DialogCategory from '@/app/manage/products/dialog-category';
 import { useGetCategories } from '@/app/queries/useCategory';
@@ -53,6 +54,9 @@ type VariantType = {
   valueOption: VariantOption[];
 };
 
+/** Ảnh đã chọn nhưng chưa upload — chỉ upload khi bấm Lưu */
+type PendingImage = { id: string; file: File; previewUrl: string };
+
 export default function EditProduct({
   id,
   setId,
@@ -62,12 +66,13 @@ export default function EditProduct({
   setId: (value: number | undefined) => void;
   onSubmitSuccess?: () => void;
 }) {
-  const [files, setFiles] = useState<File[]>([]);
+  const [pendingImages, setPendingImages] = useState<PendingImage[]>([]);
   const [images, setImages] = useState<string[]>([]);
   const [variants, setVariants] = useState<VariantType[]>([]);
-  const [variantFiles, setVariantFiles] = useState<Map<string, File>>(
-    new Map(),
-  );
+  /** blob preview của ảnh tuỳ chọn biến thể -> File (key theo preview URL để không lệch khi xoá) */
+  const [variantFiles, setVariantFiles] = useState<Record<string, File>>({});
+  const pendingImagesRef = useRef<PendingImage[]>([]);
+  const variantFilesRef = useRef<Record<string, File>>({});
 
   const imageInputRef = useRef<HTMLInputElement | null>(null);
   const updateMutation = useUpdateProductMutation();
@@ -77,42 +82,56 @@ export default function EditProduct({
     id: id as number,
     enabled: Boolean(id),
   });
-  const [originalSkus, setOriginalSkus] = useState<UpsertSKUBody[]>([]);
   const { data: categories } = useGetCategories();
   const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
 
-  const form = useForm<UpdateProductBodyType>({
-    resolver: zodResolver(
-      UpdateProductBodySchema,
-    ) as Resolver<UpdateProductBodyType>,
+  const form = useForm<UpdateProductFormType>({
+    resolver: zodResolver(UpdateProductFormSchema),
     defaultValues: {
       name: '',
+      description: '',
       basePrice: 0,
       virtualPrice: 0,
       images: [],
       categories: [],
       variants: [],
-      skus: [],
       publishedAt: null,
     },
   });
 
   useEffect(() => {
+    pendingImagesRef.current = pendingImages;
+  }, [pendingImages]);
+  useEffect(() => {
+    variantFilesRef.current = variantFiles;
+  }, [variantFiles]);
+  useEffect(() => {
+    return () => {
+      pendingImagesRef.current.forEach((item) =>
+        URL.revokeObjectURL(item.previewUrl),
+      );
+      Object.keys(variantFilesRef.current).forEach((url) =>
+        URL.revokeObjectURL(url),
+      );
+    };
+  }, []);
+
+  useEffect(() => {
     if (data?.payload) {
-      const categoryIds = data.payload.categories.map((c) => c.id);
+      const product = data.payload;
+      const categoryIds = product.categories.map((c) => c.id);
       setSelectedCategories(categoryIds);
-      setImages(data.payload.images || []);
-      setVariants(data?.payload?.variants || []);
-      setOriginalSkus(data.payload.skus || []);
+      setImages(product.images || []);
+      setVariants(product.variants || []);
       form.reset({
-        name: data.payload.name,
-        basePrice: data.payload.basePrice,
-        virtualPrice: data.payload.virtualPrice,
+        name: product.name,
+        description: product.productTranslations?.[0]?.description ?? '',
+        basePrice: product.basePrice,
+        virtualPrice: product.virtualPrice,
         categories: categoryIds,
-        variants: data.payload.variants || [],
-        skus: data.payload.skus || [],
-        images: data.payload.images,
-        publishedAt: data.payload.publishedAt,
+        variants: product.variants || [],
+        images: product.images || [],
+        publishedAt: product.publishedAt,
       });
     }
   }, [data, form]);
@@ -140,14 +159,33 @@ export default function EditProduct({
     value: string | number,
   ) => {
     const updated = [...variants];
-    updated[variantIndex].valueOption[optionIndex][field] = value as never;
+    const options = [...updated[variantIndex].valueOption];
+    options[optionIndex] = { ...options[optionIndex], [field]: value };
+    updated[variantIndex] = { ...updated[variantIndex], valueOption: options };
     setVariants(updated);
   };
 
   const handleAddVariantOption = (variantIndex: number) => {
     const updated = [...variants];
-    updated[variantIndex].valueOption.push({ value: '', price: 0, image: '' });
+    updated[variantIndex] = {
+      ...updated[variantIndex],
+      valueOption: [
+        ...updated[variantIndex].valueOption,
+        { value: '', price: 0, image: '' },
+      ],
+    };
     setVariants(updated);
+  };
+
+  /** Xoá file tạm + thu hồi blob preview của 1 ảnh tuỳ chọn biến thể */
+  const dropVariantFile = (imageKey?: string) => {
+    if (!imageKey || !variantFilesRef.current[imageKey]) return;
+    URL.revokeObjectURL(imageKey);
+    setVariantFiles((prev) => {
+      const clone = { ...prev };
+      delete clone[imageKey];
+      return clone;
+    });
   };
 
   const handleRemoveVariantOption = (
@@ -155,116 +193,135 @@ export default function EditProduct({
     optionIndex: number,
   ) => {
     const updated = [...variants];
-    updated[variantIndex].valueOption.splice(optionIndex, 1);
+    const options = [...updated[variantIndex].valueOption];
+    const [removed] = options.splice(optionIndex, 1);
+    updated[variantIndex] = { ...updated[variantIndex], valueOption: options };
     setVariants(updated);
-    // Form sẽ tự động cập nhật nhờ useEffect ở trên
+    dropVariantFile(removed?.image);
   };
 
   const handleRemoveVariant = (index: number) => {
     const updated = [...variants];
-    updated.splice(index, 1);
+    const [removed] = updated.splice(index, 1);
     setVariants(updated);
+    removed?.valueOption.forEach((option) => dropVariantFile(option.image));
   };
 
-  const handleFilesChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFiles = e.target.files;
-    if (selectedFiles && selectedFiles.length > 0) {
-      const newFiles = Array.from(selectedFiles);
-      setFiles(newFiles);
+  const handleVariantImagePick = (
+    variantIndex: number,
+    optionIndex: number,
+    file: File,
+  ) => {
+    const previous = variants[variantIndex]?.valueOption[optionIndex]?.image;
+    if (previous) dropVariantFile(previous);
 
-      // Tạo preview images
-      const previewUrls = newFiles.map((f) => URL.createObjectURL(f));
-      setImages((prev) => [...prev, ...previewUrls]);
-    }
+    const previewUrl = URL.createObjectURL(file);
+    setVariantFiles((prev) => ({ ...prev, [previewUrl]: file }));
+    handleVariantOptionChange(variantIndex, optionIndex, 'image', previewUrl);
+  };
+
+  const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = e.target.files;
+    if (!selectedFiles || selectedFiles.length === 0) return;
+
+    // Cộng dồn ảnh đang chờ upload thay vì ghi đè (trước đây chọn lần 2 là mất ảnh lần 1)
+    const incoming = Array.from(selectedFiles).map((file) => ({
+      id: `${file.name}-${file.size}-${file.lastModified}-${Math.random()
+        .toString(36)
+        .slice(2)}`,
+      file,
+      previewUrl: URL.createObjectURL(file),
+    }));
+    setPendingImages((prev) => [...prev, ...incoming]);
+    e.target.value = '';
+  };
+
+  const removePendingImage = (index: number) => {
+    const target = pendingImages[index];
+    if (!target) return;
+    URL.revokeObjectURL(target.previewUrl);
+    setPendingImages((prev) => prev.filter((item) => item.id !== target.id));
   };
 
   const resetForm = () => {
+    pendingImagesRef.current.forEach((item) =>
+      URL.revokeObjectURL(item.previewUrl),
+    );
+    Object.keys(variantFilesRef.current).forEach((url) =>
+      URL.revokeObjectURL(url),
+    );
     form.reset();
-    setFiles([]);
+    setPendingImages([]);
     setImages([]);
     setVariants([]);
-    setVariantFiles(new Map());
+    setVariantFiles({});
     setSelectedCategories([]);
   };
 
-  async function submit(values: UpdateProductBodyType) {
+  async function submit(values: UpdateProductFormType) {
     if (updateMutation.isPending) return;
 
     try {
-      // Upload ảnh mới nếu có
-      let finalImageUrls = [...images.filter((img) => !img.includes('blob:'))];
+      // 1. Upload ảnh mới (chia lô 10 file/request — trước đây nhồi hết vào 1 request nên chọn >3 ảnh là 400)
+      const uploadedUrls = await mediaApiRequest.uploadMany(
+        pendingImages.map((item) => item.file),
+      );
+      const finalImageUrls = [...images, ...uploadedUrls];
 
-      if (files.length > 0) {
-        const formData = new FormData();
-        files.forEach((file) => {
-          formData.append('files', file);
-        });
-
-        const uploadResult = await mediaApiRequest.upload(formData);
-        const uploadedUrls =
-          uploadResult?.payload?.data.map((item: any) => item.url) || [];
-        finalImageUrls = [...finalImageUrls, ...uploadedUrls];
-      }
-
-      // Upload ảnh cho biến thể nếu có
+      // 2. Upload ảnh của tuỳ chọn biến thể (nếu người dùng vừa chọn)
       const updatedVariants = await Promise.all(
-        variants.map(async (variant, vi) => {
-          const updatedOptions = await Promise.all(
-            variant.valueOption.map(async (option, oi) => {
-              const fileKey = `variant-${vi}-option-${oi}`;
-              const file = variantFiles.get(fileKey);
-
+        variants.map(async (variant) => {
+          const valueOption = await Promise.all(
+            variant.valueOption.map(async (option) => {
+              const file = option.image
+                ? variantFiles[option.image]
+                : undefined;
               if (file) {
-                const formData = new FormData();
-                formData.append('files', file);
-                const uploadResult = await mediaApiRequest.upload(formData);
-                return {
-                  ...option,
-                  image: uploadResult?.payload?.data[0].url,
-                };
+                const [url] = await mediaApiRequest.uploadMany([file]);
+                return { ...option, image: url };
               }
-              return option;
+              return {
+                ...option,
+                // Ảnh cũ đã là URL http(s) thì giữ, preview blob thì bỏ
+                image: /^https?:\/\//i.test(option.image ?? '')
+                  ? option.image
+                  : '',
+              };
             }),
           );
-
-          return {
-            ...variant,
-            valueOption: updatedOptions,
-          };
+          return { ...variant, valueOption };
         }),
       );
 
-      // Đảm bảo variants và skus luôn đồng bộ
-      let generatedSkus: UpsertSKUBody[] = [];
+      // 3. Sinh SKU: có biến thể -> mỗi tuỳ chọn 1 SKU; không có -> 1 SKU mặc định theo tên món
+      const generatedSkus: UpsertSKUBody[] =
+        updatedVariants.length > 0
+          ? updatedVariants.flatMap((variant) =>
+              variant.valueOption.map((option) => ({
+                price: option.price,
+                image: option.image || '',
+                value: option.value,
+              })),
+            )
+          : [
+              {
+                price: values.basePrice,
+                image: finalImageUrls[0] || '',
+                value: values.name,
+              },
+            ];
 
-      if (updatedVariants.length > 0) {
-        // ✅ Có variants → tạo SKUs từ variants
-        generatedSkus = updatedVariants.flatMap((variant) =>
-          variant.valueOption.map((option) => ({
-            price: option.price,
-            image: option.image || '',
-            value: option.value,
-          })),
-        );
-      } else {
-        // ✅ Không có variants → tạo 1 SKU mặc định từ basePrice
-        generatedSkus = [
-          {
-            price: values.basePrice,
-            image: finalImageUrls[0] || '',
-            value: values.name,
-          },
-        ];
-      }
-      const body = {
-        ...values,
+      const body: UpdateProductBodyType = {
+        name: values.name,
+        description: values.description ?? '',
+        basePrice: values.basePrice,
+        virtualPrice: values.virtualPrice,
         images: finalImageUrls,
         categories: selectedCategories,
         variants: updatedVariants,
         skus: generatedSkus,
+        publishedAt: values.publishedAt,
       };
-
-      console.log('Final body:', body);
 
       await updateMutation.mutateAsync({ id: id as number, ...body });
       toast.success('Cập nhật thành công');
@@ -274,7 +331,9 @@ export default function EditProduct({
       resetForm();
       onSubmitSuccess?.();
     } catch (error) {
+      console.error('[edit-product] update failed', error);
       handleErrorApi({ error, setError: form.setError });
+      toast.error(getApiErrorMessage(error, 'Có lỗi xảy ra khi cập nhật món ăn'));
     }
   }
 
@@ -319,14 +378,13 @@ export default function EditProduct({
                       <div className="space-y-4">
                         <div className="grid grid-cols-3 gap-2">
                           {images.map((img, idx) => (
-                            <div key={idx} className="relative group">
+                            <div key={`uploaded-${img}-${idx}`} className="relative group">
                               <div className="aspect-square rounded-lg overflow-hidden border">
                                 <img
                                   src={img}
-                                  alt={`Preview ${idx + 1}`}
+                                  alt={`Ảnh ${idx + 1}`}
                                   className="w-full h-full object-cover"
                                   onError={(e) => {
-                                    // Xử lý lỗi tải ảnh (đặc biệt là blob URL đã bị revoke)
                                     const target = e.target as HTMLImageElement;
                                     target.src = '/placeholder-image.jpg';
                                   }}
@@ -335,18 +393,37 @@ export default function EditProduct({
                               <button
                                 type="button"
                                 className="absolute top-1 right-1 bg-gray-400 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
-                                onClick={() => {
+                                onClick={() =>
                                   setImages((prev) =>
                                     prev.filter((_, i) => i !== idx),
-                                  );
-                                }}
+                                  )
+                                }
                               >
                                 ×
                               </button>
                             </div>
                           ))}
 
-                          {images.length < 6 && (
+                          {pendingImages.map((item, idx) => (
+                            <div key={item.id} className="relative group">
+                              <div className="aspect-square rounded-lg overflow-hidden border">
+                                <img
+                                  src={item.previewUrl}
+                                  alt={`Ảnh chờ upload ${idx + 1}`}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                              <button
+                                type="button"
+                                className="absolute top-1 right-1 bg-gray-400 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                                onClick={() => removePendingImage(idx)}
+                              >
+                                ×
+                              </button>
+                            </div>
+                          ))}
+
+                          {images.length + pendingImages.length < 10 && (
                             <div
                               className="aspect-square rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center cursor-pointer hover:border-gray-400 transition-colors"
                               onClick={() => imageInputRef.current?.click()}
@@ -369,7 +446,8 @@ export default function EditProduct({
                         />
 
                         <p className="text-xs text-muted-foreground">
-                          Tối đa 6 ảnh, kích thước tối đa 2MB mỗi ảnh
+                          Tối đa 10 ảnh, mỗi ảnh &lt; 5MB. Ảnh mới chỉ được upload
+                          khi bấm Lưu.
                         </p>
                       </div>
                       <FormMessage />
@@ -396,6 +474,28 @@ export default function EditProduct({
                           {...field}
                           placeholder="Nhập tên sản phẩm"
                           className="mt-1"
+                        />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Label htmlFor="description" className="text-sm font-medium">
+                          Mô tả
+                        </Label>
+                        <Textarea
+                          id="description"
+                          rows={2}
+                          maxLength={500}
+                          placeholder="Mô tả ngắn về món ăn (không bắt buộc)"
+                          className="mt-1"
+                          {...field}
+                          value={field.value ?? ''}
                         />
                         <FormMessage />
                       </FormItem>
@@ -680,18 +780,9 @@ export default function EditProduct({
                                       onChange={(e) => {
                                         const file = e.target.files?.[0];
                                         if (file) {
-                                          // Sử dụng index làm key thay vì giá trị
-                                          const fileKey = `variant-${vi}-option-${oi}`;
-                                          setVariantFiles((prev) =>
-                                            new Map(prev).set(fileKey, file),
-                                          );
-                                          handleVariantOptionChange(
-                                            vi,
-                                            oi,
-                                            'image',
-                                            URL.createObjectURL(file),
-                                          );
+                                          handleVariantImagePick(vi, oi, file);
                                         }
+                                        e.target.value = '';
                                       }}
                                     />
                                   </div>

@@ -38,6 +38,7 @@ import {
 } from '@/app/ValidationSchemas/product.schema';
 import { mediaApiRequest } from '@/apiRequest/media';
 import { useAddProductMutation } from '@/app/queries/useProducts';
+import { getApiErrorMessage } from '@/lib/api-error';
 
 /** Ảnh đã chọn nhưng chưa upload: giữ File + blob preview, upload 1 lần khi submit */
 type PendingImage = {
@@ -47,23 +48,6 @@ type PendingImage = {
 };
 
 const createPreviewUrl = (file: File) => URL.createObjectURL(file);
-
-/** Lấy thông điệp lỗi thật từ BE (validation 400/422) để hiển thị cho người dùng */
-function getErrorMessage(error: unknown): string {
-  const err = error as { payload?: any; message?: string } | undefined;
-  const payload = err?.payload;
-  if (payload && Array.isArray(payload.errors) && payload.errors.length > 0) {
-    return payload.errors
-      .map((item: { path?: (string | number)[]; message?: string }) => item.message)
-      .filter(Boolean)
-      .join(' • ');
-  }
-  if (payload?.message && typeof payload.message === 'string') {
-    return payload.message;
-  }
-  if (err?.message) return err.message;
-  return 'Có lỗi xảy ra khi thêm món ăn';
-}
 
 export default function AddDish() {
   const [open, setOpen] = useState(false);
@@ -343,7 +327,7 @@ export default function AddDish() {
       handleOpenChange(false);
     } catch (error) {
       console.error('[add-product] create failed', error);
-      toast.error(getErrorMessage(error));
+      toast.error(getApiErrorMessage(error, 'Có lỗi xảy ra khi thêm món ăn'));
     }
   };
 

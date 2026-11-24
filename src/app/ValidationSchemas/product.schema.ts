@@ -486,6 +486,14 @@ export const CreateProductFormSchema = z.object({
 
 export type CreateProductFormType = z.infer<typeof CreateProductFormSchema>;
 
+/**
+ * Form sửa món dùng chung hình dạng với form thêm món (không có `skus`: SKU luôn được
+ * sinh lại từ biến thể lúc submit). Dùng riêng `UpdateProductBodySchema` cho payload API.
+ */
+export const UpdateProductFormSchema = CreateProductFormSchema;
+
+export type UpdateProductFormType = z.infer<typeof UpdateProductFormSchema>;
+
 export const CreateProductBodySchema = ProductSchema.pick({
   basePrice: true,
   virtualPrice: true,
