@@ -14,6 +14,7 @@ import { formatCurrency, handleErrorApi } from '@/lib/utils';
 import { useGuestTaxSettings } from '@/app/queries/useGuestTaxSettings';
 import { computeOrderMoney } from '@/lib/order-money';
 import OrderMoneyBreakdown from '@/components/OrderMoneyBreakdown';
+import { Input } from '@/components/ui/input';
 import { toast } from 'react-toastify';
 import { useCreateGuestOrderMutation } from '@/app/queries/useOrder';
 import { useCallStaffMutation } from '@/app/queries/useAccount';
@@ -62,6 +63,8 @@ export default function MenuOrder() {
   );
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isMobileCartOpen, setIsMobileCartOpen] = useState(false);
+  /** mã giảm giá khách nhập — BE kiểm hạn/lượt rồi ghi snapshot, giảm giá hiện sau khi đặt món */
+  const [voucherCode, setVoucherCode] = useState('');
   const route = useRouter();
   const { mutateAsync } = useCreateGuestOrderMutation();
   const callStaffMutation = useCallStaffMutation();
@@ -207,7 +210,7 @@ export default function MenuOrder() {
     if (orders.length === 0) return;
 
     try {
-      const result = await mutateAsync(orders);
+      const result = await mutateAsync({ data: orders, voucherCode: voucherCode.trim() || undefined });
       console.log('Order result:', result);
       toast.success('Đặt món thành công!', {
         hideProgressBar: true,
@@ -501,6 +504,24 @@ export default function MenuOrder() {
 
           <div className="mt-4 xl:mt-6 pt-3 xl:pt-4 border-t border-gray-200">
             <div className="mb-3 xl:mb-4">
+              <div className="mb-2 grid gap-1">
+                <label htmlFor="voucher-code" className="text-xs text-muted-foreground">
+                  Mã giảm giá (không bắt buộc)
+                </label>
+                <Input
+                  id="voucher-code"
+                  placeholder="VD: GIAM10"
+                  value={voucherCode}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => setVoucherCode(event.target.value.toUpperCase())}
+                  className="h-9 uppercase"
+                />
+                {voucherCode.trim() ? (
+                  <span className="text-[11px] text-muted-foreground">
+                    Mã được kiểm khi bấm &quot;Đặt món&quot;: hết hạn, hết lượt hay không giảm được đồng nào
+                    thì báo lỗi và chưa tạo đơn.
+                  </span>
+                ) : null}
+              </div>
               {taxSettings.data?.payload ? (
                 <OrderMoneyBreakdown
                   subtotal={money.subtotal}
