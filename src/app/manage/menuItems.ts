@@ -24,6 +24,12 @@ const menuItems = [
     roles: [Role.ADMIN, Role.STAFF],
   },
   {
+    title: 'Báo cáo doanh thu',
+    Icon: LineChart,
+    href: '/manage/reports',
+    roles: [Role.ADMIN],
+  },
+  {
     title: 'Sổ cái',
     Icon: BookOpenText,
     href: '/manage/ledger-accounts',
