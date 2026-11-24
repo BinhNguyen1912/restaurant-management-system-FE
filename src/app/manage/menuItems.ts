@@ -11,6 +11,7 @@ import {
   AlarmSmoke,
   ClipboardClock,
   Wallet,
+  ScrollText,
 } from 'lucide-react';
 
 const menuItems = [
@@ -24,6 +25,12 @@ const menuItems = [
     title: 'Sổ cái',
     Icon: BookOpenText,
     href: '/manage/ledger-accounts',
+    roles: [Role.ADMIN],
+  },
+  {
+    title: 'Nhật ký sổ cái',
+    Icon: ScrollText,
+    href: '/manage/ledger',
     roles: [Role.ADMIN],
   },
   {
