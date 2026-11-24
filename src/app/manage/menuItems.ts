@@ -10,6 +10,7 @@ import {
   Warehouse,
   AlarmSmoke,
   ClipboardClock,
+  Wallet,
 } from 'lucide-react';
 
 const menuItems = [
@@ -24,6 +25,12 @@ const menuItems = [
     Icon: BookOpenText,
     href: '/manage/ledger-accounts',
     roles: [Role.ADMIN],
+  },
+  {
+    title: 'Ca & két tiền',
+    Icon: Wallet,
+    href: '/manage/cash-shifts',
+    roles: [Role.ADMIN, Role.STAFF],
   },
   {
     title: 'Đơn hàng',

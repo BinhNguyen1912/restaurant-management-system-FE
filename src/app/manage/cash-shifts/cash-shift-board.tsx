@@ -1,0 +1,445 @@
+'use client';
+
+import { useMemo, useState } from 'react';
+import { toast } from 'react-toastify';
+import { AlertTriangle, LockKeyhole, Plus, UnlockKeyhole } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import {
+  CASH_MOVEMENT_LABEL,
+  CashMovementTypeRes,
+} from '@/app/ValidationSchemas/cash-shift.schema';
+import {
+  useAddCashMovement,
+  useCloseCashShift,
+  useGetCashShiftCurrent,
+  useGetCashShifts,
+  useOpenCashShift,
+} from '@/app/queries/useCashShift';
+import { formatCurrency } from '@/lib/utils';
+
+const formatTime = (value: string | null) =>
+  value ? new Date(value).toLocaleString('vi-VN') : '—';
+
+function Stat({
+  label,
+  value,
+  hint,
+  tone = 'default',
+}: {
+  label: string;
+  value: number;
+  hint?: string;
+  tone?: 'default' | 'danger' | 'success';
+}) {
+  return (
+    <div className="rounded-lg border p-3">
+      <div className="text-xs uppercase text-muted-foreground">{label}</div>
+      <div
+        className={
+          tone === 'danger'
+            ? 'text-xl font-semibold text-destructive'
+            : tone === 'success'
+              ? 'text-xl font-semibold text-emerald-600'
+              : 'text-xl font-semibold'
+        }
+      >
+        {formatCurrency(value)}
+      </div>
+      {hint ? <div className="text-xs text-muted-foreground">{hint}</div> : null}
+    </div>
+  );
+}
+
+export default function CashShiftBoard() {
+  const current = useGetCashShiftCurrent();
+  const history = useGetCashShifts({ limit: 20 });
+  const { mutateAsync: openShift, isPending: isOpening } = useOpenCashShift();
+  const { mutateAsync: closeShift, isPending: isClosing } = useCloseCashShift();
+  const { mutateAsync: addMovement, isPending: isAddingMovement } =
+    useAddCashMovement();
+
+  const [openingFloat, setOpeningFloat] = useState('0');
+  const [openNote, setOpenNote] = useState('');
+  const [movementType, setMovementType] = useState<'IN' | 'OUT'>('OUT');
+  const [movementReason, setMovementReason] = useState('');
+  const [movementAmount, setMovementAmount] = useState('');
+  const [countedCash, setCountedCash] = useState('');
+  const [closeNote, setCloseNote] = useState('');
+
+  const shift = current.data?.payload ?? null;
+  const totals = shift?.liveTotals;
+  const movements = useMemo<CashMovementTypeRes[]>(
+    () => shift?.movements ?? [],
+    [shift],
+  );
+  const historyRows = history.data?.payload?.data ?? [];
+
+  const movementSum = useMemo(() => {
+    const sum = { IN: 0, OUT: 0 };
+    for (const movement of movements) sum[movement.type] += movement.amount;
+    return sum;
+  }, [movements]);
+
+  const handleOpen = async (event: React.FormEvent) => {
+    event.preventDefault();
+    try {
+      await openShift({
+        openingFloat: Number(openingFloat),
+        note: openNote.trim() || undefined,
+      });
+      setOpenNote('');
+      toast.success('Đã mở ca');
+    } catch (error: any) {
+      toast.error(error?.message ?? 'Không mở được ca');
+    }
+  };
+
+  const handleMovement = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!shift) return;
+    try {
+      await addMovement({
+        id: shift.id,
+        body: {
+          type: movementType,
+          reason: movementReason.trim(),
+          amount: Number(movementAmount),
+        },
+      });
+      setMovementReason('');
+      setMovementAmount('');
+      toast.success(movementType === 'IN' ? 'Đã ghi thu tiền' : 'Đã ghi chi tiền');
+    } catch (error: any) {
+      toast.error(error?.message ?? 'Không ghi được thu/chi');
+    }
+  };
+
+  const handleClose = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!shift) return;
+    try {
+      const closed = await closeShift({
+        id: shift.id,
+        body: {
+          countedCash: Number(countedCash),
+          note: closeNote.trim() || undefined,
+        },
+      });
+      const variance = closed.payload?.variance ?? 0;
+      setCountedCash('');
+      setCloseNote('');
+      if (variance === 0) toast.success('Đóng ca: két khớp');
+      else if (variance < 0)
+        toast.warn(`Đóng ca: thiếu ${formatCurrency(Math.abs(variance))} — đã ghi sổ thiếu quỹ`);
+      else toast.info(`Đóng ca: thừa ${formatCurrency(variance)} — đã ghi sổ thừa quỹ`);
+    } catch (error: any) {
+      toast.error(error?.message ?? 'Không đóng được ca');
+    }
+  };
+
+  return (
+    <div className="grid gap-4">
+      {current.isLoading ? (
+        <Card>
+          <CardContent className="py-6 text-sm text-muted-foreground">
+            Đang tải ca làm việc…
+          </CardContent>
+        </Card>
+      ) : shift ? (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <UnlockKeyhole className="h-5 w-5" /> Ca #{shift.id} đang mở
+            </CardTitle>
+            <CardDescription>
+              Mở lúc {formatTime(shift.openedAt)} · nhân viên #{shift.staffId}
+              {shift.note ? ` · ${shift.note}` : ''}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-4">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+              <Stat label="Tiền lẻ đầu ca" value={totals?.openingFloat ?? 0} />
+              <Stat
+                label="Thu tiền mặt trong ca"
+                value={(totals?.cashIn ?? 0) + (totals?.cashInMovements ?? 0)}
+                hint={
+                  movementSum.IN > 0
+                    ? `gồm ${formatCurrency(movementSum.IN)} thu tay`
+                    : undefined
+                }
+                tone="success"
+              />
+              <Stat label="Chi trong ca" value={totals?.cashOut ?? 0} tone="danger" />
+              <Stat
+                label="Két phải có"
+                value={totals?.expectedCash ?? 0}
+                hint="tiền lẻ + thu − chi"
+              />
+              <div className="rounded-lg border p-3">
+                <div className="text-xs uppercase text-muted-foreground">
+                  Đơn tiền mặt chưa thu
+                </div>
+                <div
+                  className={
+                    (totals?.unpaidCashOrders ?? 0) > 0
+                      ? 'flex items-center gap-1 text-xl font-semibold text-destructive'
+                      : 'text-xl font-semibold'
+                  }
+                >
+                  {(totals?.unpaidCashOrders ?? 0) > 0 ? (
+                    <AlertTriangle className="h-4 w-4" />
+                  ) : null}
+                  {totals?.unpaidCashOrders ?? 0}
+                </div>
+                {(totals?.unpaidCashOrders ?? 0) > 0 ? (
+                  <div className="text-xs text-destructive">
+                    Phải thu hết mới đóng ca được
+                  </div>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="grid gap-4 lg:grid-cols-2">
+              <div>
+                <h3 className="mb-2 text-sm font-semibold">Thu / chi tiền mặt</h3>
+                <form className="mb-3 flex flex-wrap items-end gap-2" onSubmit={handleMovement}>
+                  <div className="grid gap-1">
+                    <Label htmlFor="movement-type">Loại</Label>
+                    <select
+                      id="movement-type"
+                      className="h-9 rounded-md border bg-background px-2 text-sm"
+                      value={movementType}
+                      onChange={(event) =>
+                        setMovementType(event.target.value as 'IN' | 'OUT')
+                      }
+                    >
+                      <option value="OUT">Chi ra</option>
+                      <option value="IN">Thu vào</option>
+                    </select>
+                  </div>
+                  <div className="grid min-w-[12rem] flex-1 gap-1">
+                    <Label htmlFor="movement-reason">Lý do</Label>
+                    <Input
+                      id="movement-reason"
+                      value={movementReason}
+                      onChange={(event) => setMovementReason(event.target.value)}
+                      placeholder="mua đá, trả tiền rau…"
+                      required
+                    />
+                  </div>
+                  <div className="grid w-32 gap-1">
+                    <Label htmlFor="movement-amount">Số tiền</Label>
+                    <Input
+                      id="movement-amount"
+                      inputMode="numeric"
+                      value={movementAmount}
+                      onChange={(event) => setMovementAmount(event.target.value)}
+                      required
+                    />
+                  </div>
+                  <Button type="submit" disabled={isAddingMovement}>
+                    <Plus className="mr-1 h-4 w-4" /> Ghi
+                  </Button>
+                </form>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Loại</TableHead>
+                      <TableHead>Lý do</TableHead>
+                      <TableHead className="text-right">Số tiền</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {movements.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={3} className="text-sm text-muted-foreground">
+                          Chưa có khoản thu/chi nào trong ca
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      movements.map((movement) => (
+                        <TableRow key={movement.id}>
+                          <TableCell>
+                            <Badge variant={movement.type === 'IN' ? 'default' : 'secondary'}>
+                              {CASH_MOVEMENT_LABEL[movement.type]}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>{movement.reason}</TableCell>
+                          <TableCell className="text-right">
+                            {formatCurrency(movement.amount)}
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+
+              <div>
+                <h3 className="mb-2 text-sm font-semibold">Đóng ca — đếm két</h3>
+                <form className="grid gap-3" onSubmit={handleClose}>
+                  <div className="grid gap-1">
+                    <Label htmlFor="counted-cash">Tiền mặt thực đếm</Label>
+                    <Input
+                      id="counted-cash"
+                      inputMode="numeric"
+                      value={countedCash}
+                      onChange={(event) => setCountedCash(event.target.value)}
+                      placeholder={String(totals?.expectedCash ?? '')}
+                      required
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Két phải có {formatCurrency(totals?.expectedCash ?? 0)}. Lệch thừa/thiếu
+                      sẽ tự sinh bút toán <b>CASH_OVERAGE</b> / <b>CASH_SHORTAGE</b> vào sổ cái.
+                    </p>
+                  </div>
+                  <div className="grid gap-1">
+                    <Label htmlFor="close-note">Ghi chú (tuỳ chọn)</Label>
+                    <Textarea
+                      id="close-note"
+                      value={closeNote}
+                      onChange={(event) => setCloseNote(event.target.value)}
+                      rows={2}
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    variant="destructive"
+                    disabled={isClosing || (totals?.unpaidCashOrders ?? 0) > 0}
+                  >
+                    <LockKeyhole className="mr-1 h-4 w-4" /> Đóng ca
+                  </Button>
+                </form>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <UnlockKeyhole className="h-5 w-5" /> Mở ca làm việc
+            </CardTitle>
+            <CardDescription>
+              Mỗi chi nhánh chỉ có 1 ca mở. Đếm tiền lẻ có sẵn trong két trước khi mở ca.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form className="flex flex-wrap items-end gap-2" onSubmit={handleOpen}>
+              <div className="grid w-40 gap-1">
+                <Label htmlFor="opening-float">Tiền lẻ đầu ca</Label>
+                <Input
+                  id="opening-float"
+                  inputMode="numeric"
+                  value={openingFloat}
+                  onChange={(event) => setOpeningFloat(event.target.value)}
+                  required
+                />
+              </div>
+              <div className="grid min-w-[14rem] flex-1 gap-1">
+                <Label htmlFor="open-note">Ghi chú (tuỳ chọn)</Label>
+                <Input
+                  id="open-note"
+                  value={openNote}
+                  onChange={(event) => setOpenNote(event.target.value)}
+                />
+              </div>
+              <Button type="submit" disabled={isOpening}>
+                Mở ca
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      )}
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Lịch sử ca</CardTitle>
+          <CardDescription>
+            20 ca gần nhất của chi nhánh. Lệch két đã ghi sổ cái ở tài khoản thiếu/thừa quỹ.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Ca</TableHead>
+                <TableHead>Mở</TableHead>
+                <TableHead>Đóng</TableHead>
+                <TableHead className="text-right">Đầu ca</TableHead>
+                <TableHead className="text-right">Thu tiền mặt</TableHead>
+                <TableHead className="text-right">Chi</TableHead>
+                <TableHead className="text-right">Két phải có</TableHead>
+                <TableHead className="text-right">Đếm được</TableHead>
+                <TableHead className="text-right">Lệch</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {historyRows.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={9} className="text-sm text-muted-foreground">
+                    Chưa có ca nào
+                  </TableCell>
+                </TableRow>
+              ) : (
+                historyRows.map((row) => (
+                  <TableRow key={row.id}>
+                    <TableCell>
+                      #{row.id}{' '}
+                      <Badge variant={row.status === 'OPEN' ? 'default' : 'outline'}>
+                        {row.status === 'OPEN' ? 'đang mở' : 'đã đóng'}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{formatTime(row.openedAt)}</TableCell>
+                    <TableCell>{formatTime(row.closedAt)}</TableCell>
+                    <TableCell className="text-right">
+                      {formatCurrency(row.openingFloat)}
+                    </TableCell>
+                    <TableCell className="text-right">{formatCurrency(row.cashIn)}</TableCell>
+                    <TableCell className="text-right">{formatCurrency(row.cashOut)}</TableCell>
+                    <TableCell className="text-right">
+                      {row.expectedCash === null ? '—' : formatCurrency(row.expectedCash)}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {row.countedCash === null ? '—' : formatCurrency(row.countedCash)}
+                    </TableCell>
+                    <TableCell
+                      className={
+                        (row.variance ?? 0) < 0
+                          ? 'text-right font-medium text-destructive'
+                          : (row.variance ?? 0) > 0
+                            ? 'text-right font-medium text-emerald-600'
+                            : 'text-right'
+                      }
+                    >
+                      {row.variance === null ? '—' : formatCurrency(row.variance)}
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
