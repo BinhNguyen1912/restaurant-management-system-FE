@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import ReconciliationBoard from '@/app/manage/reconciliation/reconciliation-board';
+import ReconciliationRuns from '@/app/manage/reconciliation/reconciliation-runs';
 
 export default function ReconciliationPage() {
   return (
@@ -13,6 +14,9 @@ export default function ReconciliationPage() {
       </div>
       <Suspense>
         <ReconciliationBoard />
+      </Suspense>
+      <Suspense>
+        <ReconciliationRuns />
       </Suspense>
     </main>
   );
