@@ -21,7 +21,7 @@ import {
   HandCoins,
   Loader,
 } from 'lucide-react';
-import Image from 'next/image';
+import SafeImage from '@/components/SafeImage';
 import { Fragment } from 'react';
 import { OrdersListResType } from '@/app/ValidationSchemas/order.schema';
 import { usePayOrdersByGuestMutation } from '@/app/queries/useOrder';
@@ -134,7 +134,7 @@ export default function OrderGuestDetail({
                   <OrderStatusIcon.PAID className="w-4 h-4 text-yellow-400" />
                 )}
               </span>
-              <Image
+              <SafeImage
                 src={productImages[0] || defaultImage}
                 alt={firstItem.productName}
                 title={firstItem.productName}

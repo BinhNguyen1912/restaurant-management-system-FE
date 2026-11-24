@@ -10,6 +10,18 @@ export const mediaApiRequest = {
   },
 
   /**
+   * Chứng từ tiền mặt: ảnh HOẶC video, tối đa 5 file / request (BE: POST /media/upload).
+   * Trả về URL Cloudinary để gắn vào khoản thu/chi.
+   */
+  uploadEvidence: async (files: File[]): Promise<string[]> => {
+    if (!files.length) return [];
+    const formData = new FormData();
+    files.forEach((file) => formData.append('files', file));
+    const res = await http.post<MediaResType>('/media/upload', formData);
+    return (res?.payload?.data ?? []).map((item) => item.url);
+  },
+
+  /**
    * Upload nhiều ảnh, tự chia lô 10 file/request.
    * Trước đây FE nhồi hết file vào 1 request -> chọn 4 ảnh là BE trả 400 "Unexpected field",
    * lỗi bị nuốt và form gửi lên URL blob: (ảnh hỏng).

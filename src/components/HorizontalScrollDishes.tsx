@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
+import SafeImage from '@/components/SafeImage';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
@@ -120,7 +120,7 @@ export default function HorizontalScrollDishes() {
         {dishes.map((dish) => (
           <Card key={dish.id} className="flex-shrink-0 w-80 bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
             <div className="relative h-48 overflow-hidden">
-              <Image
+              <SafeImage
                 src={dish.image}
                 alt={dish.name}
                 fill

@@ -26,7 +26,7 @@ import {
   getVietnameseOrderStatus,
   simpleMatchText,
 } from '@/lib/utils';
-import Image from 'next/image';
+import SafeImage from '@/components/SafeImage';
 import { Badge } from '@/components/ui/badge';
 import {
   Popover,
@@ -146,7 +146,7 @@ const orderTableColumns: ColumnDef<OrderItem>[] = [
       <div className="flex items-center gap-2">
         <Popover>
           <PopoverTrigger asChild>
-            <Image
+            <SafeImage
               src={row.original.items[0].product.images[0]}
               alt={row.original.items[0].productName}
               width={50}
@@ -156,7 +156,7 @@ const orderTableColumns: ColumnDef<OrderItem>[] = [
           </PopoverTrigger>
           <PopoverContent>
             <div className="flex flex-wrap gap-2">
-              <Image
+              <SafeImage
                 src={row.original.items[0].product.images[0]}
                 alt={row.original.items[0].productName}
                 width={100}
