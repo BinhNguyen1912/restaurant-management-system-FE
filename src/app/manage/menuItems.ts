@@ -13,6 +13,7 @@ import {
   Wallet,
   ScrollText,
   Percent,
+  Landmark,
 } from 'lucide-react';
 
 const menuItems = [
@@ -32,6 +33,12 @@ const menuItems = [
     title: 'Nhật ký sổ cái',
     Icon: ScrollText,
     href: '/manage/ledger',
+    roles: [Role.ADMIN],
+  },
+  {
+    title: 'Đối soát',
+    Icon: Landmark,
+    href: '/manage/reconciliation',
     roles: [Role.ADMIN],
   },
   {
