@@ -22,6 +22,7 @@ import {
   Loader,
 } from 'lucide-react';
 import SafeImage from '@/components/SafeImage';
+import OrderMoneyBreakdown from '@/components/OrderMoneyBreakdown';
 import { Fragment } from 'react';
 import { OrdersListResType } from '@/app/ValidationSchemas/order.schema';
 import { usePayOrdersByGuestMutation } from '@/app/queries/useOrder';
@@ -79,6 +80,38 @@ export default function OrderGuestDetail({
       handleErrorApi({ error });
     }
   };
+
+  // Tổng hợp tiền của các đơn CHƯA thanh toán — dùng số server trả (đã bóc tách phí/thuế)
+  const unpaidTotals = ordersFilterToPurchase.reduce(
+    (acc, order) => {
+      const itemTotal = (order.items ?? []).reduce(
+        (total, item) => total + item.quantity * item.skuPrice,
+        0,
+      );
+      return {
+        subtotal: acc.subtotal + (order.subtotal ?? itemTotal),
+        discountTotal: acc.discountTotal + (order.discountTotal ?? 0),
+        serviceChargeAmount:
+          acc.serviceChargeAmount + (order.serviceChargeAmount ?? 0),
+        serviceChargeRate: order.serviceChargeRate ?? acc.serviceChargeRate,
+        taxTotal: acc.taxTotal + (order.taxTotal ?? 0),
+        taxRate: order.taxRate ?? acc.taxRate,
+        pricesIncludeTax: acc.pricesIncludeTax,
+        grandTotal: acc.grandTotal + (order.grandTotal ?? itemTotal),
+      };
+    },
+    {
+      subtotal: 0,
+      discountTotal: 0,
+      serviceChargeAmount: 0,
+      serviceChargeRate: undefined as number | undefined,
+      taxTotal: 0,
+      taxRate: undefined as number | undefined,
+      pricesIncludeTax: undefined as boolean | undefined,
+      grandTotal: 0,
+    },
+  );
+
   return (
     <div className="space-y-2 text-sm">
       {safeGuest && (
@@ -155,7 +188,9 @@ export default function OrderGuestDetail({
                 x{firstItem.quantity}
               </span>
               <span className="italic">
-                {formatCurrency(firstItem.quantity * firstItem.skuPrice)}
+                {formatCurrency(
+                  order.grandTotal ?? firstItem.quantity * firstItem.skuPrice,
+                )}
               </span>
               <span
                 className="hidden sm:inline"
@@ -180,18 +215,18 @@ export default function OrderGuestDetail({
         })}
       </div>
 
-      <div className="space-x-1">
-        <span className="font-semibold">Chưa thanh toán:</span>
-        <Badge>
-          <span>
-            {formatCurrency(
-              ordersFilterToPurchase.reduce((acc, order) => {
-                if (!order.items || order.items.length === 0) return acc;
-                return acc + order.items[0].quantity * order.items[0].skuPrice;
-              }, 0),
-            )}
-          </span>
-        </Badge>
+      <div className="rounded-md border p-2">
+        <div className="mb-1 text-xs font-semibold">Chưa thanh toán</div>
+        <OrderMoneyBreakdown
+          subtotal={unpaidTotals.subtotal}
+          discountTotal={unpaidTotals.discountTotal}
+          serviceChargeAmount={unpaidTotals.serviceChargeAmount}
+          serviceChargeRate={unpaidTotals.serviceChargeRate}
+          taxTotal={unpaidTotals.taxTotal}
+          taxRate={unpaidTotals.taxRate}
+          pricesIncludeTax={unpaidTotals.pricesIncludeTax}
+          grandTotal={unpaidTotals.grandTotal}
+        />
       </div>
       <div className="space-x-1">
         <span className="font-semibold">Đã thanh toán:</span>

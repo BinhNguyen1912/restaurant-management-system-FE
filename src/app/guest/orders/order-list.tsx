@@ -27,6 +27,7 @@ import {
   handleErrorApi,
 } from '@/lib/utils';
 import SafeImage from '@/components/SafeImage';
+import OrderMoneyBreakdown from '@/components/OrderMoneyBreakdown';
 import React, { useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Bell, CreditCard, Wallet } from 'lucide-react';
@@ -372,17 +373,27 @@ export default function OrderList() {
             ))}
 
             <div className="mt-2 pt-2 border-t">
-              <div className="flex justify-between">
-                <span className="font-semibold">Tổng cộng:</span>
-                <span className="font-bold">
-                  {formatCurrency(
-                    order.items.reduce(
-                      (total, item) => total + item.quantity * item.skuPrice,
-                      0,
-                    ),
-                  )}
-                </span>
-              </div>
+              <OrderMoneyBreakdown
+                subtotal={
+                  order.subtotal ??
+                  order.items.reduce(
+                    (total, item) => total + item.quantity * item.skuPrice,
+                    0,
+                  )
+                }
+                discountTotal={order.discountTotal}
+                serviceChargeAmount={order.serviceChargeAmount ?? 0}
+                serviceChargeRate={order.serviceChargeRate}
+                taxTotal={order.taxTotal ?? 0}
+                taxRate={order.taxRate}
+                grandTotal={
+                  order.grandTotal ??
+                  order.items.reduce(
+                    (total, item) => total + item.quantity * item.skuPrice,
+                    0,
+                  )
+                }
+              />
             </div>
           </div>
         ))}

@@ -11,6 +11,9 @@ import {
 import { useGetProducts } from '@/app/queries/useProducts';
 import { useGetCategories } from '@/app/queries/useCategory';
 import { formatCurrency, handleErrorApi } from '@/lib/utils';
+import { useGuestTaxSettings } from '@/app/queries/useGuestTaxSettings';
+import { computeOrderMoney } from '@/lib/order-money';
+import OrderMoneyBreakdown from '@/components/OrderMoneyBreakdown';
 import { toast } from 'react-toastify';
 import { useCreateGuestOrderMutation } from '@/app/queries/useOrder';
 import { useCallStaffMutation } from '@/app/queries/useAccount';
@@ -152,6 +155,15 @@ export default function MenuOrder() {
       return total + sku.price * item.quantity;
     }, 0);
   }, [selectedSkus, dishes]);
+
+  // Cấu hình VAT/phí của chi nhánh + breakdown tiền hiện trước khi đặt món
+  const taxSettings = useGuestTaxSettings();
+  const money = computeOrderMoney({
+    subtotal: totalPrice,
+    taxRate: taxSettings.data?.payload?.taxRate,
+    serviceChargeRate: taxSettings.data?.payload?.serviceChargeRate,
+    pricesIncludeTax: taxSettings.data?.payload?.pricesIncludeTax,
+  });
 
   const handleQuantityChange = (
     productId: number,
@@ -488,11 +500,26 @@ export default function MenuOrder() {
           )}
 
           <div className="mt-4 xl:mt-6 pt-3 xl:pt-4 border-t border-gray-200">
-            <div className="flex items-center justify-between mb-3 xl:mb-4">
-              <span className="font-semibold text-sm xl:text-base">Tổng:</span>
-              <span className="text-base xl:text-lg font-bold text-red-600">
-                {formatCurrency(totalPrice)}
-              </span>
+            <div className="mb-3 xl:mb-4">
+              {taxSettings.data?.payload ? (
+                <OrderMoneyBreakdown
+                  subtotal={money.subtotal}
+                  serviceChargeAmount={money.serviceChargeAmount}
+                  serviceChargeRate={taxSettings.data.payload.serviceChargeRate}
+                  taxTotal={money.taxTotal}
+                  taxRate={taxSettings.data.payload.taxRate}
+                  pricesIncludeTax={taxSettings.data.payload.pricesIncludeTax}
+                  grandTotal={money.grandTotal}
+                  emphasizeTotal
+                />
+              ) : (
+                <div className="flex items-center justify-between">
+                  <span className="font-semibold text-sm xl:text-base">Tổng:</span>
+                  <span className="text-base xl:text-lg font-bold text-red-600">
+                    {formatCurrency(totalPrice)}
+                  </span>
+                </div>
+              )}
             </div>
             <Button
               className="w-full h-10 xl:h-11 text-white text-sm xl:text-base"
@@ -539,7 +566,7 @@ export default function MenuOrder() {
           >
             <div className="flex justify-between items-center w-full text-sm md:text-base">
               <span>Giỏ hàng · {orders.length} món</span>
-              <span className="font-bold">{formatCurrency(totalPrice)}</span>
+              <span className="font-bold">{formatCurrency(money.grandTotal)}</span>
             </div>
           </Button>
         </div>

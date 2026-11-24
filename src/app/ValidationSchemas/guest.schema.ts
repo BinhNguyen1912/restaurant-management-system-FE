@@ -78,6 +78,14 @@ export const guestOrderSchema = z.object({
     OrderStatus.CANCELLED,
   ]),
   voucherSnapshotId: z.number().nullable(),
+  // Tiền trên đơn — dùng để hiện breakdown (Tạm tính/Phí/VAT/Tổng)
+  subtotal: z.number().optional(),
+  discountTotal: z.number().optional(),
+  serviceChargeRate: z.number().optional(),
+  serviceChargeAmount: z.number().optional(),
+  taxRate: z.number().optional(),
+  taxTotal: z.number().optional(),
+  grandTotal: z.number().optional(),
   type: z.enum([
     TypeToOrderStatus.AT_TABLE,
     TypeToOrderStatus.ONLINE,

@@ -26,6 +26,15 @@ export const OrderSchema = z.object({
     OrderStatus.READY,
   ]),
   voucherSnapshotId: z.number().nullable(),
+  // Tiền trên đơn (Decimal ở DB, API trả number) — dùng để hiện breakdown
+  subtotal: z.number().optional(),
+  discountTotal: z.number().optional(),
+  serviceChargeRate: z.number().optional(),
+  serviceChargeAmount: z.number().optional(),
+  taxRate: z.number().optional(),
+  taxTotal: z.number().optional(),
+  grandTotal: z.number().optional(),
+  currency: z.string().optional(),
   type: z.enum([OrderType.AT_TABLE, OrderType.ONLINE, OrderType.RESERVATION]),
   createdById: z.number().nullable(),
   updatedById: z.number().nullable(),
@@ -155,6 +164,14 @@ export const OrderResSchema = OrderSchema.extend({
 });
 export const OrderDetailSchema = z.object({
   id: z.number(),
+  // Tiền trên đơn (đã bóc tách phí phục vụ / VAT)
+  subtotal: z.number().optional(),
+  discountTotal: z.number().optional(),
+  serviceChargeRate: z.number().optional(),
+  serviceChargeAmount: z.number().optional(),
+  taxRate: z.number().optional(),
+  taxTotal: z.number().optional(),
+  grandTotal: z.number().optional(),
   userId: z.number().nullable(),
   guestId: z.number().nullable(),
   reservationId: z.number().nullable(),
