@@ -10,6 +10,9 @@ export async function POST(request: Request) {
   const cookieStores = cookies();
   try {
     const { payload } = await authApiRequests.sRegister(body);
+    if (!payload) {
+      return Response.json({ message: 'Đăng ký thất bại' }, { status: 500 });
+    }
 
     const { accessToken, refreshToken } = payload;
     const decodeAccessToken = decode(accessToken);

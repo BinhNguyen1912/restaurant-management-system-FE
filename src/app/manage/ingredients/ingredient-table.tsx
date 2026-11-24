@@ -57,7 +57,6 @@ import EditDish from '@/app/manage/products/edit-product';
 import AddDish from '@/app/manage/products/add-product';
 import { toast } from 'react-toastify';
 import {
-  useDeleteDishMutation,
   useDeleteProductMutation,
   useGetProductListManager,
 } from '@/app/queries/useProducts';

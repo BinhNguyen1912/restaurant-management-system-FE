@@ -81,3 +81,7 @@ export type UpdateReminderType = z.infer<typeof UpdateReminderSchema>;
 export type ReminderQueryType = z.infer<typeof ReminderQuerySchema>;
 export type ReminderResType = z.infer<typeof ReminderResSchema>;
 export type ReminderType = z.infer<typeof RemindersSchema>;
+
+/** Dùng chung cho Reminder/ReminderLog: ngày giờ hợp lệ, hoặc null khi chưa hoàn thành */
+export const dateSchema = z.coerce.date();
+export const nullableDateSchema = z.coerce.date().nullable();

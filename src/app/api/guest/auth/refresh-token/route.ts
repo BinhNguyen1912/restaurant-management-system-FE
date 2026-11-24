@@ -18,15 +18,22 @@ export async function POST(request: Request) {
     );
   }
   try {
-    const payload = await guestApiRequests.sRefreshToken({ refreshToken });
-    const decodeAccessToken = jwt.decode(payload.payload.accessToken) as {
+    const res = await guestApiRequests.sRefreshToken({ refreshToken });
+    const payload = res.payload;
+    if (!payload) {
+      return Response.json(
+        { message: 'Không làm mới được phiên đăng nhập' },
+        { status: 401 },
+      );
+    }
+    const decodeAccessToken = jwt.decode(payload.accessToken) as {
       ext: number;
     };
-    const decodeRefreshToken = jwt.decode(payload.payload.refreshToken) as {
+    const decodeRefreshToken = jwt.decode(payload.refreshToken) as {
       ext: number;
     };
     cookieStore.set({
-      value: payload.payload.accessToken,
+      value: payload.accessToken,
       path: '/',
       httpOnly: true,
       sameSite: 'lax',
@@ -35,7 +42,7 @@ export async function POST(request: Request) {
       expires: decodeAccessToken.ext * 1000,
     });
     cookieStore.set({
-      value: payload.payload.refreshToken,
+      value: payload.refreshToken,
       path: '/',
       httpOnly: true,
       sameSite: 'lax',
@@ -43,7 +50,7 @@ export async function POST(request: Request) {
       secure: true,
       expires: decodeRefreshToken.ext * 1000,
     });
-    return Response.json(payload.payload);
+    return Response.json(payload);
   } catch (error: any) {
     return Response.json(
       {

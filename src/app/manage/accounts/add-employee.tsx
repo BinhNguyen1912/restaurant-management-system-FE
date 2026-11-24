@@ -18,10 +18,6 @@ import { useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-  CreateEmployeeAccountBody,
-  CreateEmployeeAccountBodyType,
-} from '@/app/SchemaModel/account.schema';
 import { useAddEmployeeAccount } from '@/app/queries/useAccount';
 import { mediaApiRequest } from '@/apiRequest/media';
 import { toast } from 'react-toastify';

@@ -2,7 +2,6 @@
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
 import { HttpError } from '@/lib/http';
-import { GuestLoginBodyType } from '@/app/ValidationSchemas/guest.schema';
 import { guestApiRequests } from '@/apiRequest/guest';
 import { GuestLoginType } from '@/app/ValidationSchemas/guest.schema';
 export async function POST(request: Request) {

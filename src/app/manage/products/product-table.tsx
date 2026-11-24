@@ -57,7 +57,6 @@ import EditDish from '@/app/manage/products/edit-product';
 import AddDish from '@/app/manage/products/add-product';
 import { toast } from 'react-toastify';
 import {
-  useDeleteDishMutation,
   useDeleteProductMutation,
   useGetProductListManager,
 } from '@/app/queries/useProducts';
@@ -254,7 +253,7 @@ export default function DishTable() {
       page: pageIndex + 1,
       orderBy: 'desc',
       sortBy: 'createdAt',
-    }).data?.payload.data || [];
+    }).data?.payload?.data || [];
   // data = dataProducts || [];
 
   const table = useReactTable({

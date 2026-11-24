@@ -1,6 +1,7 @@
 'use client';
 import { useEffect } from 'react';
 import { useAppStore } from '@/components/app-provider';
+import { Role } from '@/app/constants/type';
 
 /**
  * Component để xử lý socket events cho messaging
@@ -21,7 +22,7 @@ export default function MessageSocketHandler() {
     console.log('👤 Current role:', role);
 
     // Admin joins manager room to receive messages
-    if (role === 'MANAGER' || role === 'EMPLOYEE') {
+    if (role === Role.ADMIN || role === Role.STAFF) {
       console.log('🎧 Admin joining manager room...');
       socket.emit('join-manager-room');
     }
