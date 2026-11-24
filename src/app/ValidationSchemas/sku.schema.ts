@@ -1,12 +1,25 @@
 import { create } from 'domain';
 import { z } from 'zod';
 
+export const SkuStatus = {
+  AVAILABLE: 'AVAILABLE',
+  OUT_OF_STOCK: 'OUT_OF_STOCK',
+  DISCONTINUED: 'DISCONTINUED',
+  HIDDEN: 'HIDDEN',
+} as const;
+
 export const SKUSchema = z.object({
   id: z.number(),
   value: z.string(),
   price: z.number(),
   image: z.string().optional(),
   productId: z.number(),
+  status: z.enum([
+    SkuStatus.AVAILABLE,
+    SkuStatus.OUT_OF_STOCK,
+    SkuStatus.DISCONTINUED,
+    SkuStatus.HIDDEN,
+  ]),
 
   createdById: z.number(),
   updatedById: z.number().nullable(),

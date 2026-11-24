@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import {
   Dialog,
@@ -14,7 +14,7 @@ import { XCircle, AlertCircle } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import Link from 'next/link';
 
-export default function PaymentFailedPage() {
+function PaymentFailedContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -155,5 +155,23 @@ export default function PaymentFailedPage() {
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+}
+
+/**
+ * Next yêu cầu useSearchParams() phải nằm trong Suspense boundary khi prerender,
+ * nếu không `next build` fail ở bước export (trước đây build đỏ vì thiếu boundary này).
+ */
+export default function PaymentFailedPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center">
+          <p className="text-muted-foreground">Đang tải kết quả thanh toán...</p>
+        </div>
+      }
+    >
+      <PaymentFailedContent />
+    </Suspense>
   );
 }

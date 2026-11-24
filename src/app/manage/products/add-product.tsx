@@ -1,9 +1,11 @@
 'use client';
 
-import { useState, useMemo, useRef } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { PlusCircle, Upload, Plus, X, CalendarIcon } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { PlusCircle, Upload, Plus, X } from 'lucide-react';
 import { toast } from 'react-toastify';
+
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -24,132 +26,136 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import DialogCategory from './dialog-category';
 import { Switch } from '@/components/ui/switch';
+
+import DialogCategory from './dialog-category';
 import {
   CreateProductBodyType,
-  VariantOption,
-  VariantsType,
-  VariantType,
+  CreateProductFormSchema,
+  CreateProductFormType,
   UpsertSKUBodyType,
+  VariantOption,
 } from '@/app/ValidationSchemas/product.schema';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { format } from 'date-fns';
-import { Calendar } from '@/components/ui/calendar';
 import { mediaApiRequest } from '@/apiRequest/media';
 import { useAddProductMutation } from '@/app/queries/useProducts';
+import { getApiErrorMessage } from '@/lib/api-error';
 
-// ========== TYPE DEFINITIONS ==========
+/** Ảnh đã chọn nhưng chưa upload: giữ File + blob preview, upload 1 lần khi submit */
+type PendingImage = {
+  id: string;
+  file: File;
+  previewUrl: string;
+};
 
-// interface VariantOption {
-//   value: string;
-//   price: number;
-//   image: string;
-// }
+const createPreviewUrl = (file: File) => URL.createObjectURL(file);
 
-// interface Variant {
-//   value: string;
-//   valueOption: VariantOption[];
-// }
-
-// interface CreateDishBodyType {
-//   name: string;
-//   description: string;
-//   price: number;
-//   images: string[];
-//   status: DishStatus;
-//   categories: number[];
-//   variants: Variant[];
-//   skus: VariantOption[];
-//   publishedAt?: string | null; // ISO string
-//   isPublished: boolean;
-// }
-
-// const getVietnameseDishStatus = (status: DishStatus): string => {
-//   const statusMap: Record<DishStatus, string> = {
-//     AVAILABLE: 'Có sẵn',
-//     UNAVAILABLE: 'Hết hàng',
-//   };
-//   return statusMap[status] || status;
-// };
-
-// ========== MAIN COMPONENT ==========
 export default function AddDish() {
-  const [files, setFiles] = useState<File[]>([]);
-
   const [open, setOpen] = useState(false);
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
-  const [variants, setVariants] = useState<VariantType[]>([]);
+  const [pendingImages, setPendingImages] = useState<PendingImage[]>([]);
+  /** blob preview URL của ảnh tuỳ chọn biến thể -> File tương ứng (upload khi submit) */
+  const [variantFiles, setVariantFiles] = useState<Record<string, File>>({});
   const imageInputRef = useRef<HTMLInputElement>(null);
   const addProductMutation = useAddProductMutation();
-  const form = useForm<CreateProductBodyType>({
+
+  const form = useForm<CreateProductFormType>({
+    resolver: zodResolver(CreateProductFormSchema),
     defaultValues: {
       name: '',
+      description: '',
       basePrice: 0,
       virtualPrice: 0,
       images: [],
       categories: [],
       variants: [],
-      skus: [],
       publishedAt: null,
     },
   });
 
   const images = form.watch('images');
+  const variants = form.watch('variants');
 
-  const previewImages = useMemo(() => {
-    if (files && files.length) {
-      return files.map((f) => URL.createObjectURL(f)); // files là files[]
-    }
-    return images; // fallback: mảng string từ form
-  }, [files, images]);
-  const handleFilesChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFiles = e.target.files;
-    if (selectedFiles && selectedFiles.length > 0) {
-      const newFiles = Array.from(selectedFiles);
-      setFiles(newFiles);
+  // Dọn object URL khi unmount để không rò rỉ bộ nhớ
+  const pendingImagesRef = useRef<PendingImage[]>([]);
+  const variantFilesRef = useRef<Record<string, File>>({});
+  useEffect(() => {
+    pendingImagesRef.current = pendingImages;
+  }, [pendingImages]);
+  useEffect(() => {
+    variantFilesRef.current = variantFiles;
+  }, [variantFiles]);
+  useEffect(() => {
+    return () => {
+      pendingImagesRef.current.forEach((item) =>
+        URL.revokeObjectURL(item.previewUrl),
+      );
+      Object.keys(variantFilesRef.current).forEach((url) =>
+        URL.revokeObjectURL(url),
+      );
+    };
+  }, []);
 
-      // Tạo preview images
-      const previewUrls = newFiles.map((f) => URL.createObjectURL(f));
-
-      // Upload files và lấy URL thực
-      try {
-        const formData = new FormData();
-        newFiles.forEach((file) => {
-          formData.append('files', file);
-        });
-
-        // Gọi API upload - giả sử bạn có hàm mediaApiRequest.upload
-        const uploadResult = await mediaApiRequest.upload(formData);
-        const imageUrls =
-          uploadResult?.payload?.data.map((item: any) => item.url) || [];
-
-        // Set URL thực vào form
-        form.setValue('images', imageUrls);
-      } catch (error) {
-        console.error('Upload failed:', error);
-        toast.error('Upload ảnh thất bại');
-        // Fallback: vẫn set preview nhưng cảnh báo
-        form.setValue('images', previewUrls);
-      }
-    }
+  const setVariants = (next: CreateProductFormType['variants']) => {
+    form.setValue('variants', next, { shouldDirty: true, shouldValidate: true });
   };
-  // --- VARIANTS HANDLERS ---
+
+  /** Xoá file tạm + thu hồi blob preview của 1 ảnh tuỳ chọn biến thể */
+  const dropVariantFile = (imageKey?: string) => {
+    if (!imageKey || !variantFilesRef.current[imageKey]) return;
+    URL.revokeObjectURL(imageKey);
+    setVariantFiles((prev) => {
+      const clone = { ...prev };
+      delete clone[imageKey];
+      return clone;
+    });
+  };
+
+  // ===== ẢNH SẢN PHẨM =====
+  const handleFilesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = e.target.files;
+    if (!selected || selected.length === 0) return;
+
+    const incoming = Array.from(selected).map((file) => ({
+      id: `${file.name}-${file.size}-${file.lastModified}-${Math.random()
+        .toString(36)
+        .slice(2)}`,
+      file,
+      previewUrl: createPreviewUrl(file),
+    }));
+
+    // Cộng dồn ảnh thay vì ghi đè (trước đây chọn ảnh lần 2 là mất ảnh lần 1)
+    setPendingImages((prev) => [...prev, ...incoming]);
+    // Cho phép chọn lại đúng file vừa xoá
+    e.target.value = '';
+  };
+
+  const removePendingImage = (index: number) => {
+    const target = pendingImages[index];
+    if (!target) return;
+    URL.revokeObjectURL(target.previewUrl);
+    setPendingImages((prev) => prev.filter((item) => item.id !== target.id));
+  };
+
+  const removeUploadedImage = (index: number) => {
+    form.setValue(
+      'images',
+      form.getValues('images').filter((_, i) => i !== index),
+      { shouldDirty: true },
+    );
+  };
+
+  // ===== BIẾN THỂ =====
   const handleAddVariant = () => {
     setVariants([
-      ...variants,
+      ...form.getValues('variants'),
       { value: '', valueOption: [{ value: '', price: 0, image: '' }] },
     ]);
   };
 
   const handleVariantChange = (index: number, value: string) => {
-    const updated = [...variants];
-    updated[index].value = value;
-    setVariants(updated);
+    const next = [...form.getValues('variants')];
+    next[index] = { ...next[index], value };
+    setVariants(next);
   };
 
   const handleVariantOptionChange = (
@@ -158,100 +164,177 @@ export default function AddDish() {
     field: keyof VariantOption,
     value: string | number,
   ) => {
-    const updated = [...variants];
-    updated[variantIndex].valueOption[optionIndex][field] = value as never;
-    setVariants(updated);
+    const next = [...form.getValues('variants')];
+    const options = [...next[variantIndex].valueOption];
+    options[optionIndex] = { ...options[optionIndex], [field]: value };
+    next[variantIndex] = { ...next[variantIndex], valueOption: options };
+    setVariants(next);
   };
 
   const handleAddVariantOption = (variantIndex: number) => {
-    const updated = [...variants];
-    updated[variantIndex].valueOption.push({ value: '', price: 0, image: '' });
-    setVariants(updated);
+    const next = [...form.getValues('variants')];
+    next[variantIndex] = {
+      ...next[variantIndex],
+      valueOption: [
+        ...next[variantIndex].valueOption,
+        { value: '', price: 0, image: '' },
+      ],
+    };
+    setVariants(next);
   };
 
   const handleRemoveVariantOption = (
     variantIndex: number,
     optionIndex: number,
   ) => {
-    const updated = [...variants];
-    updated[variantIndex].valueOption.splice(optionIndex, 1);
-    setVariants(updated);
+    const next = [...form.getValues('variants')];
+    const options = [...next[variantIndex].valueOption];
+    const [removed] = options.splice(optionIndex, 1);
+    next[variantIndex] = { ...next[variantIndex], valueOption: options };
+    setVariants(next);
+    // Xoá file tạm đi kèm preview đó
+    dropVariantFile(removed?.image);
   };
 
   const handleRemoveVariant = (index: number) => {
-    const updated = [...variants];
-    updated.splice(index, 1);
-    setVariants(updated);
+    const next = [...form.getValues('variants')];
+    const [removed] = next.splice(index, 1);
+    setVariants(next);
+    removed?.valueOption.forEach((option) => dropVariantFile(option.image));
   };
 
-  const reset = () => {
-    setFiles([]);
-    setOpen(false);
-    setVariants([]);
+  const handleVariantImagePick = (
+    variantIndex: number,
+    optionIndex: number,
+    file: File,
+  ) => {
+    const previous = form.getValues('variants')[variantIndex]?.valueOption[
+      optionIndex
+    ]?.image;
+    if (previous && variantFiles[previous]) {
+      URL.revokeObjectURL(previous);
+      setVariantFiles((prev) => {
+        const clone = { ...prev };
+        delete clone[previous];
+        return clone;
+      });
+    }
+
+    const previewUrl = createPreviewUrl(file);
+    setVariantFiles((prev) => ({ ...prev, [previewUrl]: file }));
+    handleVariantOptionChange(variantIndex, optionIndex, 'image', previewUrl);
+  };
+
+  const resetForm = () => {
+    pendingImagesRef.current.forEach((item) =>
+      URL.revokeObjectURL(item.previewUrl),
+    );
+    Object.keys(variantFilesRef.current).forEach((url) =>
+      URL.revokeObjectURL(url),
+    );
+    setPendingImages([]);
+    setVariantFiles({});
+    setShowCategoryDropdown(false);
     form.reset();
   };
 
-  const handleSubmit = async (values: CreateProductBodyType) => {
+  const handleOpenChange = (next: boolean) => {
+    setOpen(next);
+    if (!next) resetForm();
+  };
+
+  const handleSubmit = async (values: CreateProductFormType) => {
     if (addProductMutation.isPending) return;
+
+    // Biến thể: bắt buộc có tên biến thể + giá trị tuỳ chọn (BE không chặn, nhưng SKU sẽ vô nghĩa)
+    const invalidVariant = values.variants.find(
+      (variant) => !variant.value.trim(),
+    );
+    if (invalidVariant) {
+      toast.error('Tên biến thể không được để trống');
+      return;
+    }
+    const invalidOption = values.variants.find((variant) =>
+      variant.valueOption.some((option) => !option.value.trim()),
+    );
+    if (invalidOption) {
+      toast.error('Giá trị tuỳ chọn của biến thể không được để trống');
+      return;
+    }
+
     try {
-      // Nếu có files chưa upload, upload chúng trước
-      let finalImageUrls = values.images;
+      // 1. Upload ảnh sản phẩm (chia lô 10 file/request, lỗi thì dừng — không gửi blob lên BE)
+      const uploadedImageUrls = await mediaApiRequest.uploadMany(
+        pendingImages.map((item) => item.file),
+      );
+      const finalImages = [...values.images, ...uploadedImageUrls];
 
-      if (
-        files.length > 0 &&
-        values.images.some((img) => img.includes('blob:'))
-      ) {
-        const formData = new FormData();
-        files.forEach((file) => {
-          formData.append('files', file);
-        });
+      // 2. Upload ảnh của từng tuỳ chọn biến thể
+      const uploadedVariants = await Promise.all(
+        values.variants.map(async (variant) => {
+          const valueOption = await Promise.all(
+            variant.valueOption.map(async (option) => {
+              const file = option.image ? variantFiles[option.image] : undefined;
+              if (file) {
+                const [url] = await mediaApiRequest.uploadMany([file]);
+                return { ...option, image: url };
+              }
+              // Ảnh cũ đã là URL http(s) thì giữ, preview blob thì bỏ
+              return {
+                ...option,
+                image: /^https?:\/\//i.test(option.image ?? '')
+                  ? option.image
+                  : '',
+              };
+            }),
+          );
+          return { ...variant, valueOption };
+        }),
+      );
 
-        const uploadResult = await mediaApiRequest.upload(formData);
-        finalImageUrls =
-          uploadResult?.payload?.data.map((item: any) => item.url) || [];
-      }
+      // 3. Sinh SKU: có biến thể -> mỗi tuỳ chọn 1 SKU; không có -> 1 SKU mặc định theo tên món
+      const skus: UpsertSKUBodyType[] =
+        uploadedVariants.length > 0
+          ? uploadedVariants.flatMap((variant) =>
+              variant.valueOption.map((option) => ({
+                value: option.value,
+                price: option.price,
+                image: option.image ?? '',
+              })),
+            )
+          : [
+              {
+                value: values.name,
+                price: values.basePrice,
+                image: finalImages[0] ?? '',
+              },
+            ];
 
-      // Đảm bảo variants và skus luôn đồng bộ
-      let generatedSkus: UpsertSKUBodyType[] = [];
-
-      if (variants.length > 0) {
-        // ✅ Có variants → tạo SKUs từ variants
-        generatedSkus = variants.flatMap((variant) =>
-          variant.valueOption.map((option) => ({
-            price: option.price,
-            image: option.image || '',
-            value: option.value,
-          })),
-        );
-      } else {
-        // ✅ Không có variants → tạo 1 SKU mặc định từ basePrice
-        generatedSkus = [
-          {
-            price: values.basePrice,
-            image: finalImageUrls[0] || '',
-            value: values.name,
-          },
-        ];
-      }
-
-      const formData: CreateProductBodyType = {
-        ...values,
-        images: finalImageUrls,
-        variants,
-        skus: generatedSkus,
+      const body: CreateProductBodyType = {
+        name: values.name,
+        description: values.description ?? '',
+        basePrice: values.basePrice,
+        virtualPrice: values.virtualPrice,
+        images: finalImages,
+        categories: values.categories,
+        publishedAt: values.publishedAt,
+        variants: uploadedVariants,
+        skus,
       };
-      const resuft = await addProductMutation.mutateAsync(formData);
-      console.log('resuft:', resuft);
-      toast.success('Món ăn đã được thêm thành công!');
-      reset();
+
+      await addProductMutation.mutateAsync(body);
+      toast.success('Thêm món ăn thành công!');
+      handleOpenChange(false);
     } catch (error) {
-      console.error('Error:', error);
-      toast.error('Có lỗi xảy ra khi thêm món ăn');
+      console.error('[add-product] create failed', error);
+      toast.error(getApiErrorMessage(error, 'Có lỗi xảy ra khi thêm món ăn'));
     }
   };
 
+  const isSubmitting = addProductMutation.isPending;
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button size="sm" className="flex items-center gap-2">
           <PlusCircle className="h-4 w-4" />
@@ -275,39 +358,51 @@ export default function AddDish() {
               {/* Hình & Upload */}
               <div className="md:col-span-1 flex flex-col items-center gap-4">
                 <div className="grid grid-cols-2 gap-2">
-                  {previewImages.length > 0 ? (
-                    previewImages.map((src, idx) => (
-                      <div
-                        key={idx}
-                        className="relative w-32 h-32 rounded-lg overflow-hidden border"
+                  {images.map((src, idx) => (
+                    <div
+                      key={`uploaded-${src}-${idx}`}
+                      className="relative w-32 h-32 rounded-lg overflow-hidden border"
+                    >
+                      <img
+                        src={src}
+                        alt={`Ảnh ${idx + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                      <Button
+                        type="button"
+                        size="icon"
+                        variant="ghost"
+                        className="absolute top-1 right-1 p-0"
+                        onClick={() => removeUploadedImage(idx)}
                       >
-                        <img
-                          src={src}
-                          alt={`Preview ${idx + 1}`}
-                          className="w-full h-full object-cover"
-                        />
-                        <Button
-                          type="button"
-                          size="icon"
-                          variant="ghost"
-                          className="absolute top-1 right-1 p-0"
-                          onClick={() => {
-                            const newFiles = files.filter((_, i) => i !== idx);
-                            setFiles(newFiles);
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
 
-                            // Cập nhật cả images trong form
-                            const currentImages = form.getValues('images');
-                            const newImages = currentImages.filter(
-                              (_, i) => i !== idx,
-                            );
-                            form.setValue('images', newImages);
-                          }}
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    ))
-                  ) : (
+                  {pendingImages.map((item, idx) => (
+                    <div
+                      key={item.id}
+                      className="relative w-32 h-32 rounded-lg overflow-hidden border"
+                    >
+                      <img
+                        src={item.previewUrl}
+                        alt={`Ảnh chờ upload ${idx + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                      <Button
+                        type="button"
+                        size="icon"
+                        variant="ghost"
+                        className="absolute top-1 right-1 p-0"
+                        onClick={() => removePendingImage(idx)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+
+                  {images.length === 0 && pendingImages.length === 0 && (
                     <div className="relative w-32 h-32 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
                       <Upload className="h-8 w-8 text-gray-400" />
                     </div>
@@ -329,6 +424,9 @@ export default function AddDish() {
                 >
                   <Upload className="h-4 w-4 mr-1" /> Tải ảnh lên
                 </Button>
+                <p className="text-xs text-muted-foreground text-center">
+                  Tối đa 10 ảnh, mỗi ảnh &lt; 5MB
+                </p>
               </div>
 
               {/* Thông tin cơ bản */}
@@ -338,9 +436,29 @@ export default function AddDish() {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <Label htmlFor="name">Tên món ăn</Label>
+                      <FormLabel>Tên món ăn</FormLabel>
                       <FormControl>
-                        <Input id="name" {...field} />
+                        <Input placeholder="VD: Phở bò" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Mô tả</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          rows={2}
+                          maxLength={500}
+                          placeholder="Mô tả ngắn về món ăn (không bắt buộc)"
+                          {...field}
+                          value={field.value ?? ''}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -353,14 +471,20 @@ export default function AddDish() {
                     name="basePrice"
                     render={({ field }) => (
                       <FormItem>
-                        <Label htmlFor="price">Giá cơ bản</Label>
+                        <FormLabel>Giá cơ bản</FormLabel>
                         <FormControl>
                           <Input
-                            id="price"
+                            id="base-price"
                             type="number"
-                            {...field}
+                            min={0}
+                            step={1000}
+                            value={Number.isFinite(field.value) ? field.value : ''}
                             onChange={(e) =>
-                              field.onChange(parseInt(e.target.value))
+                              field.onChange(
+                                e.target.value === ''
+                                  ? 0
+                                  : Number(e.target.value),
+                              )
                             }
                           />
                         </FormControl>
@@ -374,14 +498,20 @@ export default function AddDish() {
                     name="virtualPrice"
                     render={({ field }) => (
                       <FormItem>
-                        <Label htmlFor="price">Giá Ảo</Label>
+                        <FormLabel>Giá ảo</FormLabel>
                         <FormControl>
                           <Input
-                            id="price"
+                            id="virtual-price"
                             type="number"
-                            {...field}
+                            min={0}
+                            step={1000}
+                            value={Number.isFinite(field.value) ? field.value : ''}
                             onChange={(e) =>
-                              field.onChange(parseInt(e.target.value))
+                              field.onChange(
+                                e.target.value === ''
+                                  ? 0
+                                  : Number(e.target.value),
+                              )
                             }
                           />
                         </FormControl>
@@ -392,7 +522,6 @@ export default function AddDish() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  {/* Categories */}
                   <FormField
                     control={form.control}
                     name="categories"
@@ -412,67 +541,13 @@ export default function AddDish() {
                     )}
                   />
 
-                  {/* <Controller
-                    name="publishedAt"
-                    control={form.control}
-                    render={({ field }) => {
-                      const isPublished = field.value !== null;
-                      const dateValue = field.value
-                        ? field.value instanceof Date
-                          ? field.value.toISOString().split('T')[0]
-                          : new Date(field.value).toISOString().split('T')[0]
-                        : new Date().toISOString().split('T')[0];
-
-                      return (
-                        <div className="flex flex-col gap-3">
-                          <div className="flex items-center justify-between">
-                            <div className="space-y-0.5 text-sm">
-                              <Label>Trạng thái công khai</Label>
-                              <p className="text-[12px] text-muted-foreground">
-                                {isPublished ? 'Đã công khai' : 'Riêng tư'}
-                              </p>
-                            </div>
-                            <Switch
-                              checked={isPublished}
-                              onCheckedChange={(checked) => {
-                                if (checked) {
-                                  field.onChange(new Date());
-                                } else {
-                                  field.onChange(null);
-                                }
-                              }}
-                            />
-                          </div>
-
-                          {isPublished && (
-                            <div className="grid gap-2">
-                              <Input
-                                id="publish-date"
-                                type="date"
-                                value={dateValue}
-                                onChange={(e) => {
-                                  field.onChange(
-                                    e.target.value
-                                      ? new Date(e.target.value)
-                                      : null,
-                                  );
-                                }}
-                              />
-                            </div>
-                          )}
-                        </div>
-                      );
-                    }}
-                  /> */}
                   <FormField
                     control={form.control}
                     name="publishedAt"
                     render={({ field }) => {
                       const isPublished = field.value !== null;
                       const dateValue = field.value
-                        ? field.value instanceof Date
-                          ? field.value.toISOString().split('T')[0]
-                          : new Date(field.value).toISOString().split('T')[0]
+                        ? new Date(field.value).toISOString().split('T')[0]
                         : new Date().toISOString().split('T')[0];
 
                       return (
@@ -488,13 +563,9 @@ export default function AddDish() {
                               <FormControl>
                                 <Switch
                                   checked={isPublished}
-                                  onCheckedChange={(checked) => {
-                                    if (checked) {
-                                      field.onChange(new Date());
-                                    } else {
-                                      field.onChange(null);
-                                    }
-                                  }}
+                                  onCheckedChange={(checked) =>
+                                    field.onChange(checked ? new Date() : null)
+                                  }
                                 />
                               </FormControl>
                             </div>
@@ -506,13 +577,13 @@ export default function AddDish() {
                                     id="publish-date"
                                     type="date"
                                     value={dateValue}
-                                    onChange={(e) => {
+                                    onChange={(e) =>
                                       field.onChange(
                                         e.target.value
                                           ? new Date(e.target.value)
                                           : null,
-                                      );
-                                    }}
+                                      )
+                                    }
                                   />
                                 </FormControl>
                               </div>
@@ -524,69 +595,19 @@ export default function AddDish() {
                     }}
                   />
                 </div>
-
-                {/* Categories */}
-                {/* <FormField
-                  control={form.control}
-                  name="categories"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Label>Danh mục</Label>
-                      <FormControl>
-                        <DialogCategory
-                          selectedCategories={field.value || []}
-                          setSelectedCategories={field.onChange}
-                          showCategoryDropdown={showCategoryDropdown}
-                          setShowCategoryDropdown={setShowCategoryDropdown}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                /> */}
-
-                {/* Publish */}
-                {/* <Controller
-                  name="publishedAt"
-                  control={form.control}
-                  render={({ field }) => (
-                    <div className="flex flex-col gap-2">
-                      <div className="flex items-center gap-2">
-                        <Label>Bật public</Label>
-                        <Switch
-                          checked={field.value !== null}
-                          onCheckedChange={(val) => {
-                            field.onChange(val);
-                            if (!val) form.setValue('publishedAt', null);
-                            else if (!form.getValues('publishedAt'))
-                              form.setValue('publishedAt', today);
-                          }}
-                        />
-                      </div>
-                      {form.watch('publishedAt') && (
-                        <Controller
-                          name="publishedAt"
-                          control={form.control}
-                          render={({ field }) => (
-                            <Input
-                              type="date"
-                              {...field}
-                              value={field.value || today}
-                              onChange={(e) => field.onChange(e.target.value)}
-                            />
-                          )}
-                        />
-                      )}
-                    </div>
-                  )}
-                /> */}
               </div>
             </div>
 
             {/* Biến thể */}
-            <div className="border rounded-lg p-4">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-medium text-lg">Biến thể</h3>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-medium">Biến thể</h3>
+                  <p className="text-xs text-muted-foreground">
+                    Không bắt buộc. Không có biến thể thì món dùng 1 SKU mặc định
+                    theo tên + giá cơ bản.
+                  </p>
+                </div>
                 <Button
                   type="button"
                   variant="outline"
@@ -598,111 +619,127 @@ export default function AddDish() {
               </div>
 
               {variants.length === 0 ? (
-                <div className="text-center py-6 text-gray-500">
+                <p className="text-sm text-muted-foreground">
                   Chưa có biến thể nào
-                </div>
+                </p>
               ) : (
-                variants.map((variant, vi) => (
-                  <div key={vi} className="border rounded-md p-4 mb-4">
-                    <div className="flex justify-between items-center mb-3">
-                      <div className="font-medium">Biến thể {vi + 1}</div>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleRemoveVariant(vi)}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                    </div>
-                    <Input
-                      placeholder="Tên biến thể"
-                      value={variant.value}
-                      onChange={(e) => handleVariantChange(vi, e.target.value)}
-                      className="mb-3"
-                    />
-                    {variant.valueOption.map((opt, oi) => (
-                      <div
-                        key={oi}
-                        className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end p-3 bg-gray-50 rounded-md mb-2"
-                      >
+                <div className="space-y-4">
+                  {variants.map((variant, variantIndex) => (
+                    <div
+                      key={variantIndex}
+                      className="border rounded-lg p-4 space-y-3"
+                    >
+                      <div className="flex items-center gap-2">
                         <Input
-                          placeholder="Giá trị"
-                          value={opt.value}
+                          placeholder="Tên biến thể (VD: Size)"
+                          value={variant.value}
                           onChange={(e) =>
-                            handleVariantOptionChange(
-                              vi,
-                              oi,
-                              'value',
-                              e.target.value,
-                            )
+                            handleVariantChange(variantIndex, e.target.value)
                           }
                         />
-                        <Input
-                          placeholder="Giá"
-                          type="number"
-                          value={opt.price}
-                          onChange={(e) =>
-                            handleVariantOptionChange(
-                              vi,
-                              oi,
-                              'price',
-                              parseInt(e.target.value),
-                            )
-                          }
-                        />
-                        <div className="flex items-end gap-2">
-                          <div className="relative w-full">
-                            {opt.image ? (
-                              <img
-                                src={opt.image}
-                                alt="preview"
-                                className="w-full h-20 object-cover rounded-md"
-                              />
-                            ) : (
-                              <div className="w-full h-20 flex items-center justify-center border border-dashed rounded-md text-gray-400">
-                                Chưa có ảnh
-                              </div>
-                            )}
-                            <input
-                              type="file"
-                              accept="image/*"
-                              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                              onChange={(e) => {
-                                const f = e.target.files?.[0];
-                                if (f)
-                                  handleVariantOptionChange(
-                                    vi,
-                                    oi,
-                                    'image',
-                                    URL.createObjectURL(f),
-                                  );
-                              }}
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleRemoveVariant(variantIndex)}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+
+                      <div className="space-y-2">
+                        {variant.valueOption.map((option, optionIndex) => (
+                          <div
+                            key={optionIndex}
+                            className="grid grid-cols-1 md:grid-cols-[1fr_140px_120px_auto] gap-2 items-center"
+                          >
+                            <Input
+                              placeholder="Giá trị (VD: L)"
+                              value={option.value}
+                              onChange={(e) =>
+                                handleVariantOptionChange(
+                                  variantIndex,
+                                  optionIndex,
+                                  'value',
+                                  e.target.value,
+                                )
+                              }
                             />
-                          </div>
-                          {variant.valueOption.length > 1 && (
+                            <Input
+                              type="number"
+                              min={0}
+                              step={1000}
+                              placeholder="Giá"
+                              value={Number.isFinite(option.price) ? option.price : 0}
+                              onChange={(e) =>
+                                handleVariantOptionChange(
+                                  variantIndex,
+                                  optionIndex,
+                                  'price',
+                                  e.target.value === ''
+                                    ? 0
+                                    : Number(e.target.value),
+                                )
+                              }
+                            />
+                            <label className="relative h-10 rounded-md border border-dashed border-gray-300 flex items-center justify-center overflow-hidden cursor-pointer">
+                              {option.image ? (
+                                <img
+                                  src={option.image}
+                                  alt="Ảnh tuỳ chọn"
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <span className="text-xs text-gray-400">
+                                  Ảnh
+                                </span>
+                              )}
+                              <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={(e) => {
+                                  const file = e.target.files?.[0];
+                                  if (file) {
+                                    handleVariantImagePick(
+                                      variantIndex,
+                                      optionIndex,
+                                      file,
+                                    );
+                                  }
+                                  e.target.value = '';
+                                }}
+                              />
+                            </label>
                             <Button
                               type="button"
                               variant="ghost"
-                              size="sm"
-                              onClick={() => handleRemoveVariantOption(vi, oi)}
+                              size="icon"
+                              disabled={variant.valueOption.length <= 1}
+                              onClick={() =>
+                                handleRemoveVariantOption(
+                                  variantIndex,
+                                  optionIndex,
+                                )
+                              }
                             >
                               <X className="h-4 w-4" />
                             </Button>
-                          )}
-                        </div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleAddVariantOption(vi)}
-                    >
-                      <Plus className="h-4 w-4 mr-1" /> Thêm tùy chọn
-                    </Button>
-                  </div>
-                ))
+
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleAddVariantOption(variantIndex)}
+                      >
+                        <Plus className="h-4 w-4 mr-1" /> Thêm tuỳ chọn
+                      </Button>
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
           </form>
@@ -712,12 +749,13 @@ export default function AddDish() {
           <Button
             type="button"
             variant="outline"
-            onClick={() => setOpen(false)}
+            onClick={() => handleOpenChange(false)}
+            disabled={isSubmitting}
           >
             Hủy
           </Button>
-          <Button type="submit" form="add-dish-form">
-            Thêm món ăn
+          <Button type="submit" form="add-dish-form" disabled={isSubmitting}>
+            {isSubmitting ? 'Đang lưu...' : 'Thêm món ăn'}
           </Button>
         </DialogFooter>
       </DialogContent>

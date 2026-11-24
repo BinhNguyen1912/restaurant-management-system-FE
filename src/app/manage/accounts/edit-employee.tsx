@@ -24,10 +24,6 @@ import {
 } from '@/components/ui/form';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Switch } from '@/components/ui/switch';
-import {
-  UpdateEmployeeAccountBody,
-  UpdateEmployeeAccountBodyType,
-} from '@/app/SchemaModel/account.schema';
 import { Role, RoleValues } from '@/app/constants/type';
 import {
   useGetEmployeeAccount,

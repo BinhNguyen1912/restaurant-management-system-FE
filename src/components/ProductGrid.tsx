@@ -3,6 +3,10 @@
 import React from 'react';
 import ProductCard from './ProductCard';
 
+/**
+ * Hình dạng tối thiểu ProductGrid cần. Khai báo lỏng (superset-friendly) để dùng được cả dữ liệu
+ * API thật (GetListProductsResType) lẫn mock — trước đây kiểu đóng khiến truyền dữ liệu thật báo lỗi TS.
+ */
 interface Product {
   id: number;
   name: string;
@@ -15,7 +19,7 @@ interface Product {
     valueOption: Array<{
       value: string;
       price: number;
-      image: string;
+      image?: string;
     }>;
   }>;
   skus: Array<{

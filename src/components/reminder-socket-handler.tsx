@@ -27,7 +27,6 @@ interface ReminderErrorData {
  * - Subscribe reminder-error (error handling)
  */
 export default function ReminderSocketHandler() {
-  console.log('🔵 ReminderSocketHandler component mounted');
 
   const socket = useAppStore((state) => state.socket);
   const [currentReminder, setCurrentReminder] =
@@ -104,17 +103,13 @@ export default function ReminderSocketHandler() {
 
   useEffect(() => {
     if (!socket) {
-      console.log('🔌 No socket instance');
       return;
     }
 
-    console.log(' Setting up reminder socket handlers...');
 
     // Handler cho reminder-triggered (broadcast event)
     function onReminderTriggered(data: ReminderEventData) {
-      console.log(' Reminder triggered (broadcast):', data);
 
-      console.log(' Showing reminder notification');
 
       if (!hasShownToastRef.current) {
         toast.info(`${data.title}`, { autoClose: 5000 });
@@ -127,9 +122,7 @@ export default function ReminderSocketHandler() {
 
     // Handler cho reminder-notification (targeted event)
     function onReminderNotification(data: ReminderEventData) {
-      console.log(' Reminder notification (targeted):', data);
 
-      console.log(' Showing reminder notification (targeted)');
       // Chỉ hiện 1 toast, không nhân đôi nếu cả 2 event cùng đến
       if (!hasShownToastRef.current) {
         toast.info(` ${data.title}`, { autoClose: 5000 });
@@ -151,26 +144,21 @@ export default function ReminderSocketHandler() {
     }
 
     // Subscribe events
-    console.log(' Subscribing to socket events...');
     socket.on('reminder-triggered', onReminderTriggered);
     socket.on('reminder-notification', onReminderNotification);
     socket.on('reminder-error', onReminderError);
     // Theo dõi trạng thái kết nối để debug
     socket.on('connect', () => {
-      console.log(' Socket connected (reminder):', socket.id);
     });
     socket.on('connect_error', (err: any) => {
       console.error(' Socket connect_error (reminder):', err?.message || err);
     });
     if (process.env.NODE_ENV !== 'production') {
       socket.onAny((event, ...args) => {
-        console.log(' Socket event received:', event, args?.[0]);
       });
     }
-    console.log(' All reminder socket events subscribed');
 
     return () => {
-      console.log(' Cleaning up reminder socket handlers...');
       socket.off('reminder-triggered', onReminderTriggered);
       socket.off('reminder-notification', onReminderNotification);
       socket.off('reminder-error', onReminderError);

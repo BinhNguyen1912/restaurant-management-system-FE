@@ -1,11 +1,13 @@
 import type { Metadata } from 'next';
 import { Manrope } from 'next/font/google';
+// Import CSS của react-toastify ở đây thay vì @import trong globals.css:
+// Turbopack (next dev --turbo) bắt lỗi "@import rules must precede all rules" khi @import nằm sau @tailwind.
+import 'react-toastify/dist/ReactToastify.css';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import AppProvider from '@/components/app-provider';
 import { ToastContainer } from 'react-toastify';
 import NextTopLoader from 'nextjs-toploader';
-import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: `B'Restaurant`,
@@ -21,16 +23,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <Script
-          src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"
-          strategy="afterInteractive"
-        />
-        <Script
-          src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.globe.min.js"
-          strategy="afterInteractive"
-        />
-      </head>
       <body className={manropo.className}>
         <ThemeProvider
           attribute="class"

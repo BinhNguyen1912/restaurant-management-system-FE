@@ -26,7 +26,7 @@ export default function UpdateProfileForm() {
   const [file, setFile] = useState<File | undefined>(undefined);
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const { data, refetch } = useMeProfile();
-  const role = data?.payload.role.name ?? '...';
+  const role = data?.payload?.role?.name ?? '...';
   const form = useForm<UpdateMeBodyType>({
     resolver: zodResolver(UpdateMeBodySchema),
     defaultValues: {
@@ -37,12 +37,12 @@ export default function UpdateProfileForm() {
   });
 
   useEffect(() => {
-    if (data) {
-      const { name, avatar, phoneNumber } = data.payload;
+    const profile = data?.payload;
+    if (profile) {
       form.reset({
-        name,
-        avatar: avatar ?? undefined,
-        phoneNumber,
+        name: profile.name,
+        avatar: profile.avatar ?? undefined,
+        phoneNumber: profile.phoneNumber ?? '',
       });
     }
   }, [data, form]);
@@ -71,11 +71,14 @@ export default function UpdateProfileForm() {
         formData.append('files', file);
 
         const upload = await mediaApiRequest.upload(formData);
-        console.log('upload', upload);
-
+        const uploadedUrl = upload.payload?.data?.[0]?.url;
+        if (!uploadedUrl) {
+          toast.error('Upload ảnh đại diện thất bại');
+          return;
+        }
         body = {
           ...values,
-          avatar: upload.payload.data[0].url,
+          avatar: uploadedUrl,
         };
       }
       const resuft = await updateMutation.mutateAsync(body);

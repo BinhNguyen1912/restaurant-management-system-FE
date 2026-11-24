@@ -83,20 +83,20 @@ export default function MenuOrderPage() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [showCart, setShowCart] = useState(false);
 
-  const products = useMemo(() => data?.data || [], [data]);
+  const products = useMemo(() => data?.payload?.data || [], [data]);
 
   // Filter products by selected category
   const filteredProducts = useMemo(() => {
     if (!selectedCategory) return products;
     // Assuming products have categoryId field - adjust based on your API
-    return products.filter((product) => product.categoryId === selectedCategory);
+    return products.filter((product: any) => product.categoryId === selectedCategory);
   }, [products, selectedCategory]);
 
   const handleAddToCart = (productId: number, skuId: number) => {
-    const product = products.find(p => p.id === productId);
+    const product = products.find((p: any) => p.id === productId);
     if (!product) return;
 
-    const sku = product.skus.find(s => s.id === skuId);
+    const sku = product.skus.find((s: any) => s.id === skuId);
     if (!sku) return;
 
     setCartItems(prev => {

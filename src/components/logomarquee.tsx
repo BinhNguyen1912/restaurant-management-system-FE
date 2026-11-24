@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import React from 'react';
-import SlideInView from '@/components/SlideInText ';
+import SlideInView from '@/components/SlideInText';
 // SVG Logo Components (as provided in the user request)
 const ReactLogo = () => (
   <svg viewBox="175.7 78 490.6 436.9" xmlns="http://www.w3.org/2000/svg">

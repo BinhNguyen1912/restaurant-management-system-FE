@@ -11,14 +11,9 @@ import { z } from 'zod';
 
 export const ProductTranslationSchema = z.object({
   id: z.number(),
-  name: z
-    .string()
-    .min(2, { message: 'Error.TooShort' })
-    .max(100, { message: 'Error.TooLong' }),
-  description: z
-    .string()
-    .min(2, { message: 'Error.TooShort' })
-    .max(100, { message: 'Error.TooLong' }),
+  // Output schema: không siết min (dữ liệu cũ có thể rỗng/ngắn)
+  name: z.string().max(500),
+  description: z.string().max(2000),
   languageId: z.string(),
   productId: z.number(),
 
@@ -337,6 +332,9 @@ export function GenerateSKU(
   variants: VariantType[],
   prop?: { basePrice: number; image: string },
 ): UpsertSKUBody[] {
+  // Không có biến thể => không sinh SKU tổ hợp nào (khớp với BE: SKU mặc định do service tạo)
+  if (!variants || variants.length === 0) return [];
+
   function getCombine(
     arr: {
       value: string;
@@ -443,6 +441,59 @@ export const GetProductDetailSchema = ProductSchema.extend({
   categories: z.array(CategoryIncludeTranslationSchema),
 });
 
+/** Tên món: bắt buộc, 2-100 ký tự (khớp BE) */
+export const ProductNameInputSchema = z
+  .string()
+  .trim()
+  .min(2, 'Tên món phải có ít nhất 2 ký tự')
+  .max(100, 'Tên món tối đa 100 ký tự');
+
+/** Ảnh phải là URL http(s) — chặn blob: khi upload thất bại */
+export const ProductImagesInputSchema = z
+  .array(
+    z
+      .string()
+      .regex(/^https?:\/\/.+/i, 'Ảnh phải là URL http(s) hợp lệ')
+      .max(500, 'URL ảnh quá dài'),
+  )
+  .max(10, 'Tối đa 10 ảnh');
+
+export const ProductDescriptionInputSchema = z
+  .string()
+  .trim()
+  .max(500, 'Mô tả tối đa 500 ký tự')
+  .default('');
+
+export const ProductPriceInputSchema = z
+  .number()
+  .positive('Giá phải lớn hơn 0');
+
+/**
+ * Schema dùng cho form thêm món ở FE.
+ * Không chứa `skus` vì SKU được sinh từ biến thể lúc submit — tránh việc form báo lỗi
+ * "sai số lượng SKU" trong lúc người dùng đang nhập.
+ */
+export const CreateProductFormSchema = z.object({
+  name: ProductNameInputSchema,
+  description: z.string().trim().max(500, 'Mô tả tối đa 500 ký tự'),
+  basePrice: ProductPriceInputSchema,
+  virtualPrice: ProductPriceInputSchema,
+  images: ProductImagesInputSchema,
+  categories: z.array(z.number().int().positive()),
+  publishedAt: z.date().nullable(),
+  variants: z.array(VariantSchema),
+});
+
+export type CreateProductFormType = z.infer<typeof CreateProductFormSchema>;
+
+/**
+ * Form sửa món dùng chung hình dạng với form thêm món (không có `skus`: SKU luôn được
+ * sinh lại từ biến thể lúc submit). Dùng riêng `UpdateProductBodySchema` cho payload API.
+ */
+export const UpdateProductFormSchema = CreateProductFormSchema;
+
+export type UpdateProductFormType = z.infer<typeof UpdateProductFormSchema>;
+
 export const CreateProductBodySchema = ProductSchema.pick({
   basePrice: true,
   virtualPrice: true,
@@ -452,22 +503,29 @@ export const CreateProductBodySchema = ProductSchema.pick({
   images: true,
 })
   .extend({
+    name: ProductNameInputSchema,
+    images: ProductImagesInputSchema,
+    description: ProductDescriptionInputSchema,
     categories: z.array(z.coerce.number().int().positive()),
     skus: z.array(UpsertSKUBodySchema),
   })
   .strict()
-  .superRefine(({ variants, skus, basePrice, images }, ctx) => {
-    //Kiểm tra xem số lượng sku có hợp lệ không
-    if (skus.length === 0) {
-      const generatedSkus = GenerateSKU(variants, {
-        basePrice,
-        image: images[0],
-      });
-      if (generatedSkus.length > 0) {
+  .superRefine(({ variants, skus, basePrice, images, name }, ctx) => {
+    // Không có biến thể: chỉ cần 0 hoặc 1 SKU mặc định (value = tên món)
+    if (variants.length === 0) {
+      if (skus.length > 1) {
         ctx.addIssue({
           code: 'custom',
           path: ['skus'],
-          message: `Số lượng SKUS nên là ${generatedSkus.length}. Vùi lòng kiểm tra lại`,
+          message: 'Sản phẩm không có biến thể chỉ cần 1 SKU mặc định',
+        });
+        return;
+      }
+      if (skus.length === 1 && skus[0].value !== '' && skus[0].value !== name) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['skus', 0, 'value'],
+          message: `Khi không có biến thể, SKU phải có value = "${name}"`,
         });
       }
       return;
@@ -482,24 +540,19 @@ export const CreateProductBodySchema = ProductSchema.pick({
       ctx.addIssue({
         code: 'custom',
         path: ['skus'],
-        message: `Số lượng SKUS nên là ${skuValueArray.length}. Vùi lòng kiểm tra lại`,
+        message: `Cần ${skuValueArray.length} SKU theo biến thể, đang có ${skus.length}. Vui lòng kiểm tra lại`,
       });
       return;
     }
 
-    //kiểm tra xem từng Sku có hợp lệ hay không
-    let wrongSKUIndex = -1;
-    const isValidSKUs = skus.every((sku, index) => {
-      const isValid = sku.value === skuValueArray[index].value;
-      if (!isValid) wrongSKUIndex = index;
-      return isValid;
-    });
-
-    if (!isValidSKUs) {
+    const wrongSKUIndex = skus.findIndex(
+      (sku, index) => sku.value !== skuValueArray[index].value,
+    );
+    if (wrongSKUIndex !== -1) {
       ctx.addIssue({
         code: 'custom',
-        path: ['skus', wrongSKUIndex],
-        message: `Giá trị SKU index ${wrongSKUIndex} không hợp lệ. Vui lòng kiểm tra lại `,
+        path: ['skus', wrongSKUIndex, 'value'],
+        message: `Giá trị SKU index ${wrongSKUIndex} không hợp lệ. Vui lòng kiểm tra lại`,
       });
     }
   });
@@ -514,14 +567,15 @@ export const UpdateProductBodySchema = ProductSchema.pick({
   images: true,
 })
   .extend({
+    name: ProductNameInputSchema,
+    images: ProductImagesInputSchema,
+    // Update: không bắt buộc gửi mô tả — không gửi thì BE giữ nguyên mô tả cũ
+    description: z.string().trim().max(500, 'Mô tả tối đa 500 ký tự').optional(),
     categories: z.array(z.coerce.number().int().positive()),
     skus: z.array(UpsertSKUBodySchema),
   })
   .strict()
   .superRefine(({ variants, skus, basePrice, images, name }, ctx) => {
-    console.log('variants', variants);
-    console.log('skus', skus);
-
     if (variants.length === 0) {
       if (skus.length !== 1) {
         ctx.addIssue({
@@ -556,9 +610,6 @@ export const UpdateProductBodySchema = ProductSchema.pick({
     });
 
     if (skus.length !== generatedSkus.length) {
-      console.log('skus.length', skus);
-      console.log('generatedSkus.length', generatedSkus);
-
       ctx.addIssue({
         code: 'custom',
         path: ['skus'],

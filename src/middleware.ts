@@ -20,7 +20,6 @@ const privatePaths = [...managePaths, ...guestPaths];
 const publicPaths = ['/auth'];
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  console.log(`Middleware check ${pathname} ...`);
 
   const accessToken = request.cookies.get('accessToken')?.value;
 
