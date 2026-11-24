@@ -42,6 +42,12 @@ const menuItems = [
     roles: [Role.ADMIN],
   },
   {
+    title: 'Nhật ký thao tác',
+    Icon: ScrollText,
+    href: '/manage/audit-logs',
+    roles: [Role.ADMIN],
+  },
+  {
     title: 'Đối soát',
     Icon: Landmark,
     href: '/manage/reconciliation',
