@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* React Toastify CSS */
-@import 'react-toastify/dist/ReactToastify.css';
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;

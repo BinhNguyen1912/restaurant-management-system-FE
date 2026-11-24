@@ -34,3 +34,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# output của `npm run build` (tách khỏi .next của dev)
+.next-build
+# log của dev server (npm run dev > fe.log)
+*.log

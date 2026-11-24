@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
 import { Manrope } from 'next/font/google';
+// Import CSS của react-toastify ở đây thay vì @import trong globals.css:
+// Turbopack (next dev --turbo) bắt lỗi "@import rules must precede all rules" khi @import nằm sau @tailwind.
+import 'react-toastify/dist/ReactToastify.css';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import AppProvider from '@/components/app-provider';
