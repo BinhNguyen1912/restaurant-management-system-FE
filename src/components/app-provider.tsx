@@ -12,8 +12,6 @@ import React, {
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import RefreshToken from '@/components/refresh-token';
-import MessageSocketHandler from '@/components/message-socket-handler';
-import ReminderSocketHandler from '@/components/reminder-socket-handler';
 import { create } from 'zustand';
 import {
   generateSocketIo,
@@ -24,8 +22,16 @@ import type { Socket } from 'socket.io-client';
 import { RoleType } from '@/types/jwt.types';
 import { set } from 'zod';
 import { decode } from '@/lib/jwt';
-import ListenLogoutSocket from '@/components/listen-logout-socket';
-import NewOrderSound from '@/components/newOrderSound';
+
+/**
+ * 4 component realtime (socket + âm thanh + logout) tách chunk riêng:
+ * trước đây import tĩnh nên socket.io-client và logic của chúng nằm trong First Load JS
+ * của MỌI trang, dù trang public (home, /about) không cần.
+ */
+const MessageSocketHandler = dynamic(() => import('@/components/message-socket-handler'), { ssr: false });
+const ReminderSocketHandler = dynamic(() => import('@/components/reminder-socket-handler'), { ssr: false });
+const ListenLogoutSocket = dynamic(() => import('@/components/listen-logout-socket'), { ssr: false });
+const NewOrderSound = dynamic(() => import('@/components/newOrderSound'), { ssr: false });
 
 const ReactQueryDevtoolsLazy = dynamic(
   () => import('@tanstack/react-query-devtools').then((mod) => mod.ReactQueryDevtools),

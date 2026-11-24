@@ -14,22 +14,17 @@ export default function MessageSocketHandler() {
 
   useEffect(() => {
     if (!socket?.connected) {
-      console.log('🔌 Socket not connected for message handler');
       return;
     }
 
-    console.log('💬 Setting up message socket handlers...');
-    console.log('👤 Current role:', role);
 
     // Admin joins manager room to receive messages
     if (role === Role.ADMIN || role === Role.STAFF) {
-      console.log('🎧 Admin joining manager room...');
       socket.emit('join-manager-room');
     }
 
     // Listen for message sent confirmation
     function onMessageSent(data: any) {
-      console.log('✅ Message sent confirmation:', data);
     }
 
     // Listen for message errors

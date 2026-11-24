@@ -4,14 +4,33 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { endOfDay, format, startOfDay } from 'date-fns';
 import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { useDashBoardIndicators } from '@/app/queries/useIndicator';
 import { formatCurrency } from '@/lib/utils';
 import { useAppStore } from '@/components/app-provider';
+
+/**
+ * Biểu đồ dùng recharts (~112kB) chỉ cần khi dashboard vẽ số liệu:
+ * tách sang chunk riêng, không nằm trong First Load JS của trang.
+ */
+const RevenueAreaChart = dynamic(
+  () => import('@/app/manage/dashboard/revenue-line-chart').then((mod) => mod.RevenueAreaChart),
+  {
+    ssr: false,
+    loading: () => <div className="h-[300px] w-full animate-pulse rounded-md bg-muted" />,
+  },
+);
+const DishBarChart = dynamic(
+  () => import('@/app/manage/dashboard/dish-bar-chart').then((mod) => mod.DishBarChart),
+  {
+    ssr: false,
+    loading: () => <div className="h-[300px] w-full animate-pulse rounded-md bg-muted" />,
+  },
+);
 import { toast } from 'react-toastify';
 import NewOrderSound from '@/components/newOrderSound';
 import LowStockWarningDialog from '@/components/lowStockWarningDialog';
-import { DishBarChart } from '@/app/manage/dashboard/dish-bar-chart';
-import { RevenueAreaChart } from '@/app/manage/dashboard/revenue-line-chart';
+
 import {
   GuestCreateNewOrderType,
   OrderResType,
