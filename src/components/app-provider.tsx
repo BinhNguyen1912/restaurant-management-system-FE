@@ -89,29 +89,17 @@ export default function AppProvider({
     //Neu ma co access token thi sao ?
     if (count.current === 0) {
       const accessToken = getAccessTokenFormLocalStorage();
-      console.log(
-        '🔐 Access token from localStorage:',
-        accessToken ? 'Present' : 'Missing',
-      );
-      console.log('🔐 Access token value:', accessToken);
 
       if (accessToken && accessToken !== undefined && accessToken !== '') {
         const payload = decode(accessToken);
-        console.log('🔐 Decoded payload:', payload);
 
         if (payload && payload.roleName) {
-          console.log(
-            '🔐 Setting role and initializing socket...',
-            payload.roleName,
-          );
           setRole(payload.roleName);
           const newSocket = generateSocketIo(accessToken);
-          console.log('🔌 Generated socket:', newSocket);
           setSocket(newSocket);
 
           // Connect socket một lần duy nhất
           if (!newSocket.connected) {
-            console.log('🔌 Connecting socket...');
             newSocket.connect();
           }
         } else {

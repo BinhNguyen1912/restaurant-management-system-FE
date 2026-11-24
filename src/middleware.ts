@@ -4,7 +4,18 @@ import { decode } from '@/lib/jwt';
 
 const managePaths = ['/manage'];
 const guestPaths = ['/guest'];
-const onlyOwnerPaths = ['/manage/owner'];
+// Cac path CHI ADMIN duoc vao. Phai khop voi `roles: [Role.ADMIN]` trong
+// src/app/manage/menuItems.ts (accounts, setting-table). Chi liet ke path CO THAT
+// trong src/app/manage, neu khong la config chet.
+const onlyOwnerPaths = [
+  '/manage/setting-table',
+  '/manage/accounts',
+  '/manage/products',
+  '/manage/ledger-accounts',
+];
+
+// /manage chi danh cho nhan vien van hanh va quan tri (khach hang vao /manage la sai luong).
+const manageAllowedRoles = [Role.ADMIN, Role.STAFF];
 const privatePaths = [...managePaths, ...guestPaths];
 const publicPaths = ['/auth'];
 export function middleware(request: NextRequest) {
@@ -64,13 +75,15 @@ export function middleware(request: NextRequest) {
       role !== Role.ADMIN &&
       onlyOwnerPaths.some((path) => pathname.startsWith(path));
 
-    const isNotAdminGoToSettingTable =
-      role !== Role.ADMIN && '/manage/setting-table' == pathname;
+    const isNotStaffGoToManagePath =
+      !manageAllowedRoles.map(String).includes(String(role)) &&
+      managePaths.some((path) => pathname.startsWith(path));
+
     if (
       isGuestToManagePath ||
       isNotGuestToGuestPath ||
       iNotOwnerGotoOwnerPath ||
-      isNotAdminGoToSettingTable
+      isNotStaffGoToManagePath
     ) {
       return NextResponse.redirect(new URL('/', request.url));
     }
