@@ -1,109 +1,20 @@
-(cộng thêm)
-(đã gồm trong giá)
--- Không có --
-1 người
-AccessToken không hợp lệ hoặc thiếu roleName
-Bàn 1
-Bàn 2
-Bàn bị hỏng
-Bàn tròn 4 ghế
-Bàn tròn 8 ghế
-Bàn vuông 2 ghế
-Bàn vuông 4 ghế
-Bàn đang có khách
-Bàn đã chọn
-Bàn đã đặt trước
 Bánh Xèo
 Bánh bao
 Bánh quê
-Bình Thường
 Bò Quê
 Bò Tươi
 Bún Bò Huế
 Bún Chả Hà Nội
-Bút toán đảo
-Bạn buộc đăng xuất ra khỏi hệ thống!
-Bạn có chắc chắn muốn xóa công thức này?
-Bạn có chắc muốn xóa khu vực này?
-Bạn có muốn đăng xuất không
-Bật
-Bật cảnh báo
-Ca & két tiền
-Chi phí
-Chi tiền ra khỏi két
-Chưa chọn
-Chưa chọn bàn
-Chưa có
-Chưa có lần đối soát nào — bấm "Chạy đối soát & lưu".
-Chưa có mã nào
-Chưa có mã nào. Bấm Tạo mã để bắt đầu.
-Chưa có thao tác nhạy cảm nào được ghi
-Chưa gồm VAT — cộng thuế lên trên
 Chả Cá Lã Vọng
 Chả giò
-Chỉ dùng chữ, số, gạch ngang/gạch dưới
-Chỉnh sửa công thức
-Chọn danh mục
-Chọn thời gian bắt đầu
-Chọn thời gian kết thúc
-Chọn từ khách hàng có sẵn
-Chốt cọc
-Chờ thanh toán
-Chờ xử lý
-Chủ Nhật
-Chủ cửa hàng
-Chủ hệ thống
-Chức năng xem sơ đồ theo bàn
-Combo 2 người
-Combo 5 người
-Combo đặc biệt
-Các gói combo tiết kiệm
-Các món nên thử
 Cây chuối truyền thống Việt Nam
-Có khách
-Có lỗi xảy ra
-Có lỗi xảy ra khi cập nhật lời nhắc!
-Có lỗi xảy ra khi cập nhật món ăn
-Có lỗi xảy ra khi thêm món ăn
-Có lỗi xảy ra khi tạo lời nhắc!
-Có lỗi xảy ra khi xóa lời nhắc
-Có lỗi xảy ra khi đánh dấu hoàn thành
-Có lỗi xảy ra, vui lòng thử lại
-Có sẵn
-Công thức truyền thống được bảo tồn
 Cơm Quê
 Cơm Quê Dượng Bầu
 Cơm Tấm Sài Gòn
 Cơm quê
-Cập nhật bàn thất bại
-Cập nhật công thức
-Cọc đặt bàn
-Cửa
-Cửa chính
-Danh sách variant có giá trị bị trùng lặp. Vui lòng kiểm tra lại.
-Ghi trùng
-Gia vị
-Giao dịch này đã được ghi trước đó (không ghi lặp)
 Già Tiềm
-Giá Gốc
-Giá Hiển Thị
-Giá cả
-Giá phải lớn hơn 0
-Giá trị giảm phải lớn hơn 0
-Giá trị giảm quá lớn
-Giá vốn
-Giảm (%)
-Giảm (đ)
-Giảm theo % không được vượt 100
 Gà hầm
 Gỏi Cuốn
-Hoàn tiền
-Hoàn tất
-Huỷ đơn
-Hàng ngày
-Hàng năm
-Hàng tháng
-Hàng tuần
 Hào Khí Việt
 Há cảo
 Hương Vị Quê Hương
@@ -111,241 +22,20 @@ Hương Vị Việt
 Hương vị truyền thống, tinh hoa đất Việt
 Hương vị đậm đà, đặc trưng Việt Nam
 Hồn Việt
-ID phải là số
-Khai vị
-Khác
-Khách hàng vãng lai
-Khách vãng lai
-Không có mã nào khớp bộ lọc.
-Không có sẵn
-Không ghi được bút toán đối soát
-Không ghi được thu/chi
-Không làm mới được phiên đăng nhập
-Không lưu được cấu hình
-Không lưu được mã giảm giá
-Không lặp lại
-Không mở được ca
-Không thể xóa khu vực cuối cùng!
-Không tìm thấy
-Không tìm thấy AccessToken hoặc RefreshToken
-Không tìm thấy Refresh Token
-Không tìm thấy Tokens
-Không tải được danh sách mã
-Không xoá được mã
-Không xoá được tài khoản
-Không xác định
-Không đóng được ca
-Không đổi được trạng thái
-Không đổi được tên
-Không đủ số dư để thực hiện giao dịch
-Khớp
-Kết thúc phải sau bắt đầu
-Kỳ này chưa có bút toán thu tiền nào
-Kỳ này không có giao dịch nào
-Limit phải là số
-Lưu bố cục thất bại
-Lưu công thức
-Lưu đơn vị
 Lẩu
 Lẩu ngon
-Lặp lại
-Lệch két
-Lệch số tiền
-Lọ hoa
-Lỗi
-Lỗi hệ thống
-Lỗi khi gọi api
-Lỗi khi gọi từ Server Backend
-Lỗi khi thêm khu vực
-Lỗi khi đăng nhập với google
-Lỗi thực thể
-Lỗi tạo tài khoản
-Lời Nhắc
-Menu à la carte
-Mã chỉ gồm A-Z, 0-9, _ và bắt đầu bằng chữ cái
-Mã tối thiểu 3 ký tự
-Mã tối đa 50 ký tự
-Mã đối soát quá ngắn
 Mì Quảng
-Món chính
-Món khai vị
-Mô tả tối đa 500 ký tự
-Mất kết nối
-Mật khẩu xác nhận không khớp.
-Một lần
-Mức Cảnh Báo
 Nem Nướng Nha Trang
 Nem rán
-Nguyên bản -
-Nguyên liệu tươi ngon từ vùng miền
-Người dùng
-Người nhận
-Người xử lý
-Ngừng hoạt động
 Nhà hàng Bắc Kim Thang
-Nhân viên
-Nhập tên tài khoản
-Nhật ký sổ cái
-Nước giải khát
-Nợ phải trả
-Page phải là số
-Phí phục vụ
-Phí phục vụ không âm
-Phí phục vụ tối đa 100%
-Phải có ít nhất 1 nguyên liệu
-Phải ghi lý do thu/chi
-Phần
 Phở
 Phở Bò Tái
 Phở Gà
-Quản Lý Định Lượng
-Quầy
-Quầy bar
-Riêng tư
-SL Còn Lại
-Sản phẩm
 Sản phẩm cao cấp với thiết kế hiện đại và chất liệu bền bỉ. Hoàn hảo cho mọi không gian sống.
-Sản phẩm không có biến thể chỉ cần 1 SKU mặc định
-Sẵn sàng lên món
-Số chỗ ngồi
-Số lượng phải lớn hơn 0
-Số lượt phải là số nguyên dương, tối đa 1.000.000 (để trống = không giới hạn)
-Số tiền phải lớn hơn 0
-Sổ cái
-Thanh toán
-Thanh toán không thành công. Vui lòng thử lại hoặc chọn phương thức khác.
-Thanh toán thành công!
-Thiếu bút toán
-Thu tiền vào két
-Thuế & phí
-Thành công
-Thêm bàn thành công
-Thêm khu vực thành công!
-Thêm mới
-Thất bại
-Thẻ/Tài khoản bị khóa
-Thẻ/Tài khoản chưa đăng ký dịch vụ InternetBanking
-Thẻ/Tài khoản đã vượt quá hạn mức giao dịch trong ngày
-Thịt thái lát
-Thời gian
-Thời gian nhắc nhở phải ở định dạng HH:MM
-Thứ 2
-Thứ 3
-Thứ 4
-Thứ 5
-Thứ 6
-Thứ 7
 Tinh Hoa Việt
-Tiêu đề
-Tiếng Việt
-Tiền lẻ đầu ca không âm
-Tiền lẻ đầu ca quá lớn
-Tiền món
-Tiền mặt
-Tiền đếm được không âm
-Tiền đếm được quá lớn
-Token không đúng định dạng JWT
-Trang trí
-Trái cây
-Tráng Miệng
-Trạng thái đơn hàng đã được cập nhật
-Trống
-Trừ thẻ bị nghi ngờ gian lận
-Tài khoản hệ thống không tắt được
-Tài khoản hệ thống không xoá được
-Tài sản
-Tên món phải có ít nhất 2 ký tự
-Tên món tối đa 100 ký tự
-Tại bàn
-Tạo công thức mới
-Tạo khách hàng mới
-Tạo mã
-Tạo mã giảm giá
-Tải chứng từ thất bại
-Tất cả loại
-Tắt
-Tắt cảnh báo
-Tối đa 10 ảnh
-Tối đa 5 chứng từ
-TỔNG
-Từ chối
 Tự Hào Dân Tộc
-URL ảnh quá dài
-VAT không âm
-VAT tối đa 100%
-VNPay báo khác
-Vui lòng chọn SKU
-Vui lòng chọn nguyên liệu
-Vui lòng chọn đơn vị
-Vui lòng nhập đầy đủ mật khẩu mới và xác nhận.
-Vách ngăn
-Vô Danh
 Vị Ngon Quê Nhà
 Vị Quê Hương
-Vốn chủ
-Xoá tài khoản
-Xác nhận món
-Xác thực thông tin thẻ/Tài khoản không đúng quá 3 lần
-Xóa công thức
-Xóa tất cả
-accessToken bị thiếu ở http nè cha
-chứng từ
-cộng thêm
-gia đình
-hủy
-khách hàng
-không xác định
-sai số lượng SKU
-thanh toán
-tiền lẻ + thu − chi
-với orders:
-Đang cập nhật...
-Đang kết nối...
-Đang lưu...
-Đang lưu…
-Đang nấu
-Đang thêm...
-Đang tải…
-Đang xóa...
-Đang xử lý...
-Đây là tài khoản hệ thống: chỉ sửa được tên.
-Đã bỏ qua
-Đã bỏ qua sai lệch
-Đã có bút toán, chỉ được tắt
-Đã công khai
-Đã ghi bút toán chuyển tiền VNPay về ngân hàng
-Đã ghi chi tiền
-Đã ghi thu tiền
-Đã gồm VAT — thuế trích ra từ hoá đơn
-Đã hết hạn chờ thanh toán
-Đã kết nối
-Đã phục vụ
-Đã xảy ra lỗi trong quá trình thanh toán
-Đã xử lý
-Đã đánh dấu xử lý
-Đã đặt
-Đính kèm ảnh/video chứng từ
-Đăng ký thất bại
-Đơn
-Đơn hàng của bạn đã được thanh toán thành công!
-Đơn thanh toán
-Đơn vị tính
-Đặc Biệt
-Đặc biệt
-Đặc sản được gợi ý
-Đặt trước
-Đối soát
-Đồ uống
-Đổi giá sản phẩm
-Đổi giá đơn
-Đổi giảm giá
-đang mở
-đã gồm trong giá
-đã đóng
-Ưu đãi hôm nay
-Ảnh phải là URL http(s) hợp lệ
-Ảnh tuỳ chọn
-Ẩn
 ✅ Đã tạo khách hàng mới với ID:
 ❌ Lỗi khi tạo đơn hàng:
 👤 Sử dụng khách hàng có sẵn với ID:

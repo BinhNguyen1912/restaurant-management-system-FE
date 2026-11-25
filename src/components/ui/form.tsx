@@ -14,6 +14,7 @@ import {
 
 import { cn } from "@/lib/utils"
 import { Label } from "@/components/ui/label"
+import { useI18n } from '@/i18n/locale-provider'
 
 const Form = FormProvider
 
@@ -147,7 +148,10 @@ const FormMessage = React.forwardRef<
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, children, ...props }, ref) => {
   const { error, formMessageId } = useFormField()
-  const body = error ? String(error?.message ?? "") : children
+  // Message validate của zod sinh ra lúc khai báo schema (chưa biết ngôn ngữ hiện tại),
+  // nên dịch tại chỗ hiển thị: key chính là câu tiếng Việt.
+  const { t } = useI18n()
+  const body = error ? t(String(error?.message ?? "")) : children
 
   if (!body) {
     return null
