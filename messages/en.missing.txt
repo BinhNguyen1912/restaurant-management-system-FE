@@ -213,15 +213,7 @@ Phần
 Phở
 Phở Bò Tái
 Phở Gà
-Quyền sở hữu trí tuệ
-Quý khách đợi xíu, nhân viên sẽ đến ngay!
 Quản Lý Định Lượng
-Quản lý bàn ăn
-Quản lý món ăn
-Quản lý nguyên liệu
-Quản lý tài khoản nhân viên
-Quản lý đơn hàng
-Quản lý định lượng
 Quầy
 Quầy bar
 Riêng tư
@@ -229,67 +221,23 @@ SL Còn Lại
 Sản phẩm
 Sản phẩm cao cấp với thiết kế hiện đại và chất liệu bền bỉ. Hoàn hảo cho mọi không gian sống.
 Sản phẩm không có biến thể chỉ cần 1 SKU mặc định
-Sắp xếp vị trí
 Sẵn sàng lên món
-Số bàn
 Số chỗ ngồi
-Số dư
-Số ghế
-Số giao dịch
-Số hiệu bàn
-Số lượng
-Số lượng nhập
 Số lượng phải lớn hơn 0
 Số lượt phải là số nguyên dương, tối đa 1.000.000 (để trống = không giới hạn)
-Số tiền
-Số tiền (đ)
-Số tiền báo có
 Số tiền phải lớn hơn 0
-Số tiền:
-Số điện thoại
-Số đơn
 Sổ cái
-Sổ cái — Danh mục tài khoản
-Sổ cái — nhật ký & kiểm tra cân đối
-Sử dụng dịch vụ
-Sửa
-Tham chiếu
 Thanh toán
 Thanh toán không thành công. Vui lòng thử lại hoặc chọn phương thức khác.
 Thanh toán thành công!
-Thao tác
-Thay đổi
-Thay đổi điều khoản
-Theo ngày và chi nhánh
-Thiết kế bàn ăn
 Thiếu bút toán
-Thu / chi tiền mặt
-Thu tiền mặt
-Thu tiền mặt trong ca
 Thu tiền vào két
-Thu vào
 Thuế & phí
-Thuế & phí phục vụ
-Thuế phải nộp (VAT)
 Thành công
-Thành tiền
 Thêm
-Thêm bàn
 Thêm bàn thành công
-Thêm danh mục mới
-Thêm ghi chú
 Thêm khu vực thành công!
-Thêm món mới
-Thêm món ăn
-Thêm món ăn thành công!
 Thêm mới
-Thêm nguyên liệu
-Thêm tài khoản chi tiết
-Thêm vào giỏ
-Thông tin cá nhân
-Thông tin cơ bản
-Thông tin thanh toán
-Thông tin đơn hàng
 Thất bại
 Thẻ/Tài khoản bị khóa
 Thẻ/Tài khoản chưa đăng ký dịch vụ InternetBanking
@@ -297,123 +245,57 @@ Thẻ/Tài khoản đã vượt quá hạn mức giao dịch trong ngày
 Thịt thái lát
 Thời gian
 Thời gian nhắc nhở phải ở định dạng HH:MM
-Thời gian:
-Thời điểm
 Thứ 2
 Thứ 3
 Thứ 4
 Thứ 5
 Thứ 6
 Thứ 7
-Thực tế
-Tin nhắn từ khách hàng
-Tin nhắn với khách hàng
 Tinh Hoa Việt
 Tiêu đề
-Tiêu đề lời nhắc *
-Tiêu đề:
 Tiếng Việt
-Tiền lẻ đầu ca
 Tiền lẻ đầu ca không âm
 Tiền lẻ đầu ca quá lớn
 Tiền món
 Tiền mặt
-Tiền mặt thực đếm
-Tiền điện
-Tiền đã thu
 Tiền đếm được không âm
 Tiền đếm được quá lớn
 Token không đúng định dạng JWT
 Trang trí
 Trái cây
 Tráng Miệng
-Trước
-Trạng thái
-Trạng thái công khai
 Trạng thái đơn hàng đã được cập nhật
-Trạng thái:
-Trải nghiệm đặt món thông minh tại bàn
 Trống
 Trừ thẻ bị nghi ngờ gian lận
-Tài khoản
-Tài khoản (mã)
 Tài khoản hệ thống không tắt được
 Tài khoản hệ thống không xoá được
-Tài khoản nhận tiền
 Tài sản
-Tên
-Tên biến thể
-Tên biến thể (VD: Size)
-Tên biến thể không được để trống
-Tên bàn
-Tên bàn:
-Tên hiển thị
-Tên hoặc ID
-Tên khu vực
-Tên khách
-Tên khách hàng
-Tên khách hàng :
 Tên món phải có ít nhất 2 ký tự
 Tên món tối đa 100 ký tự
-Tên món ăn
-Tên nguyên liệu
-Tên:
-Tìm
-Tìm danh mục...
-Tìm theo mã hoặc tên…
-Tìm theo mã…
-Tính năng 1
-Tính năng 2
-Tính năng 3
 Tại bàn
-Tạm tính
 Tạo công thức mới
-Tạo công thức mới thành công!
 Tạo khách hàng mới
-Tạo lời nhắc
 Tạo mã
 Tạo mã giảm giá
 Tạo tài khoản thành công
 Tạo đơn hàng thành công!
-Tạo/Cập nhật
 Tải chứng từ thất bại
-Tất cả
 Tất cả loại
 Tắt
 Tắt cảnh báo
 Tối đa 10 ảnh
 Tối đa 5 chứng từ
 TỔNG
-Tổng Có
-Tổng Có (Credit)
-Tổng Nợ
-Tổng Nợ (Debit)
-Tổng Nợ = Tổng Có
-Tổng cộng
-Tổng cộng:
-Tổng kỳ
-Tổng số tiền
-Tổng:
-Từ
 Từ chối
-Từ ngày
 Tự Hào Dân Tộc
-URL gọi món
 URL ảnh quá dài
-Upload ảnh thất bại
-Upload ảnh đại diện thất bại
-VAT = (tiền món − giảm giá + phí phục vụ) × tỷ lệ
 VAT không âm
 VAT tối đa 100%
-VAT được tính ở đâu?
-VD: Phở bò
 VNPay báo khác
-VNPay chờ về
 Vai trò
 Vui lòng chọn SKU
 Vui lòng chọn bàn
 Vui lòng chọn nguyên liệu
-Vui lòng chọn tin nhắn để đánh dấu đã đọc
 Vui lòng chọn ít nhất một món
 Vui lòng chọn đơn vị
 Vui lòng nhập tên khách hàng
@@ -423,52 +305,30 @@ Vô Danh
 Vị Ngon Quê Nhà
 Vị Quê Hương
 Vốn chủ
-Xem trước
 Xoá tài khoản
 Xác nhận
 Xác nhận món
-Xác nhận xóa
-Xác nhận xóa tất cả bàn
 Xác thực thông tin thẻ/Tài khoản không đúng quá 3 lần
 Xóa
 Xóa bàn thành công
-Xóa bàn thất bại
 Xóa công thức
-Xóa công thức thành công!
-Xóa khu vực thành công
-Xóa khu vực thất bại
 Xóa lời nhắc thành công
 Xóa món thành coong
 Xóa nguyên liệu thành công
 Xóa thành công
 Xóa tất cả
-Xếp hạng món ăn
-Xử lý
 accessToken bị thiếu ở http nè cha
-chi tiết
-chưa gồm
 chứng từ
 cộng thêm
 gia đình
-hệ thống
 hủy
 khách hàng
-không làm sai đơn cũ
 không xác định
-mua đá, trả tiền rau…
-phí phục vụ +
 sai số lượng SKU
 thanh toán
-thì thuế được
-tiền (CASH/VNPAY) =
 tiền lẻ + thu − chi
-trích ra
-tài khoản VNPAY_CLEARING
 với orders:
-Đang bật
-Đang chạy
 Đang cập nhật...
-Đang dùng
 Đang hoạt động
 Đang kết nối...
 Đang làm mới dữ liệu...
@@ -476,95 +336,51 @@ với orders:
 Đang lưu…
 Đang nấu
 Đang thêm...
-Đang tải khu vực...
-Đang tải kết quả thanh toán...
-Đang tải thông tin món ăn...
-Đang tải...
 Đang tải…
 Đang xóa...
 Đang xử lý...
 Đây là tài khoản hệ thống: chỉ sửa được tên.
-Đã bị xóa
 Đã bỏ qua
 Đã bỏ qua sai lệch
 Đã có bút toán, chỉ được tắt
 Đã công khai
-Đã cập nhật bàn
-Đã cập nhật lời nhắc thành công!
-Đã dùng
 Đã ghi bút toán chuyển tiền VNPay về ngân hàng
 Đã ghi chi tiền
 Đã ghi thu tiền
 Đã gồm VAT — thuế trích ra từ hoá đơn
 Đã hết hạn chờ thanh toán
 Đã kết nối
-Đã lưu bố cục bàn!
-Đã mở ca
 Đã phục vụ
-Đã thanh toán
-Đã thanh toán:
-Đã thêm nguyên liệu mới!
 Đã tạo lời nhắc thành công!
-Đã tắt
-Đã xóa bàn
-Đã xóa nguyên liệu!
 Đã xảy ra lỗi trong quá trình thanh toán
 Đã xử lý
-Đã đánh dấu lời nhắc hoàn thành!
 Đã đánh dấu xử lý
-Đã đánh dấu đã đọc!
 Đã đặt
-Đã đổi tên tài khoản
 Đính kèm ảnh/video chứng từ
-Đóng
-Đóng ca — đếm két
-Đóng ca: két khớp
 Đăng ký thất bại
-Đăng nhập gọi món
 Đăng nhập thành công
 Đăng nhập thất bại
-Đăng xuất
 Đơn
-Đơn giá
-Đơn hàng
 Đơn hàng của bạn đã được thanh toán thành công!
-Đơn hàng:
 Đơn thanh toán
-Đơn vị
 Đơn vị tính
-Đầu ca
 Đằng xuất thành công
 Đặc Biệt
 Đặc biệt
 Đặc sản được gợi ý
-Đặt món thành công!
 Đặt trước
-Đếm được
-Đến
-Đến ngày
 Đối soát
-Đối soát thanh toán ↔ sổ cái
-Đối tượng
 Đồ uống
-Đổi QR Code
 Đổi giá sản phẩm
 Đổi giá đơn
 Đổi giảm giá
-Đổi mật khẩu
 đang mở
-đã gồm VAT
 đã gồm trong giá
-đã tắt
 đã đóng
-đơn hàng
-đơn tạo mới
-đồng nguyên
 Ưu đãi hôm nay
-Ảnh
 Ảnh phải là URL http(s) hợp lệ
 Ảnh tuỳ chọn
 Ẩn
-► Bỏ qua
 ✅ Đã tạo khách hàng mới với ID:
 ❌ Lỗi khi tạo đơn hàng:
 👤 Sử dụng khách hàng có sẵn với ID:
