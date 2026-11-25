@@ -1,7 +1,8 @@
-'use client';
-
 /**
  * Ngôn ngữ hiển thị: cookie `locale` (một nguồn duy nhất), mặc định `vi`.
+ * KHÔNG đánh dấu 'use client': `lib/http.ts` (server route handler) và `i18n/server.ts`
+ * (server component) cũng import module này — thêm 'use client' sẽ biến các export thành
+ * client reference và gọi từ server sẽ nổ "is not a function" (đã xảy ra với /api/auth/login).
  * Đổi ngôn ngữ = ghi cookie + `router.refresh()`; không đụng token, không mất giỏ hàng.
  */
 export const SUPPORTED_LOCALES = ['vi', 'en'] as const;

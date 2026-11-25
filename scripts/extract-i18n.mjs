@@ -3,7 +3,7 @@
  * Chạy lại sau khi thêm màn hình mới: `node scripts/extract-i18n.mjs`
  * `messages/en.json` KHÔNG bị ghi đè (bản dịch do người/agent điền).
  */
-import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, statSync, unlinkSync } from 'node:fs';
 import { join } from 'node:path';
 
 const VN = /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i;
@@ -36,10 +36,26 @@ for (const file of walk('src')) {
 }
 
 const existing = JSON.parse(readFileSync('messages/vi.json', 'utf8'));
-const next = {};
+const en = JSON.parse(readFileSync('messages/en.json', 'utf8'));
+
+// GIỮ key cũ: một chuỗi không còn xuất hiện trong code vẫn nằm lại để bản dịch en không bị mồ côi
+const next = { ...existing };
+let added = 0;
 for (const [value, files] of [...found].sort(([a], [b]) => a.localeCompare(b, 'vi'))) {
-  next[value] = existing[value] ?? value;
-  if (!existing[value]) console.log('NEW:', value, '->', [...files][0]);
+  if (!next[value]) {
+    next[value] = value;
+    added += 1;
+    console.log('NEW:', value, '->', [...files][0]);
+  }
 }
+
+const missing = Object.keys(next).filter((key) => !en[key] || !en[key].trim());
 writeFileSync('messages/vi.json', JSON.stringify(next, null, 1) + '\n', 'utf8');
-console.log(`messages/vi.json: ${Object.keys(next).length} chuỗi (thêm ${Object.keys(next).length - Object.keys(existing).length})`);
+console.log(`messages/vi.json: ${Object.keys(next).length} chuỗi (thêm ${added})`);
+console.log(`messages/en.json: đã dịch ${Object.keys(next).length - missing.length}/${Object.keys(next).length}`);
+if (missing.length) {
+  writeFileSync('messages/en.missing.txt', missing.join('\n') + '\n', 'utf8');
+  console.log(`-> ${missing.length} chuỗi chưa dịch, xem messages/en.missing.txt`);
+} else {
+  try { unlinkSync('messages/en.missing.txt'); } catch {}
+}

@@ -30,12 +30,12 @@ export function LocaleProvider({
   const router = useRouter();
   const [locale, setLocaleState] = useState<Locale>(() => initialLocale ?? DEFAULT_LOCALE);
 
+  // Luôn lấy từ điển theo locale đang chọn. Trước đây ưu tiên prop `messages` (luôn có 503 key
+  // tiếng Việt) nên bấm EN xong vẫn hiện tiếng Việt.
   const dictionary = useMemo(() => {
-    // messages truyền từ server là ngôn ngữ hiện tại; sau khi đổi cookie thì client tự nạp
-    // bộ từ điển tương ứng để không phải chờ refresh
-    const clientMessages = messages && Object.keys(messages).length ? messages : getDictionary(locale);
-    return clientMessages;
-  }, [messages, locale]);
+    if (locale === initialLocale && messages && Object.keys(messages).length) return messages;
+    return getDictionary(locale);
+  }, [initialLocale, messages, locale]);
 
   const setLocale = useCallback(
     (next: Locale) => {
