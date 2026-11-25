@@ -18,6 +18,7 @@ import {
   FolderTree,
   Wallet2,
   Building2,
+  ShieldCheck,
 } from 'lucide-react';
 
 const menuItems = [
@@ -144,6 +145,13 @@ const menuItems = [
     title: 'Chi nhánh',
     Icon: Building2,
     href: '/manage/branches',
+    group: 'Vận hành',
+    roles: [Role.ADMIN],
+  },
+  {
+    title: 'Phân quyền',
+    Icon: ShieldCheck,
+    href: '/manage/roles',
     group: 'Vận hành',
     roles: [Role.ADMIN],
   },

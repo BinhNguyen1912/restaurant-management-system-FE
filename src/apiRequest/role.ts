@@ -22,3 +22,26 @@ export const roleRequestApi = {
   //     http.put<TableDetailResType>(`${prefix}/${id}`, data),
   //   delete: (id: number) => http.delete<TableDetailResType>(`${prefix}/${id}`),
 };
+
+export type RolePermissionItem = {
+  id: number;
+  method: string;
+  path: string;
+  module: string;
+  granted: boolean;
+};
+
+export type RolePermissionMatrixType = {
+  message: string;
+  data: {
+    role: { id: number; name: string; isLocked: boolean };
+    permissions: RolePermissionItem[];
+  };
+};
+
+export const rolePermissionApiRequest = {
+  matrix: (roleId: number) =>
+    http.get<RolePermissionMatrixType>(`/role/${roleId}/permissions`),
+  save: (roleId: number, permissionIds: number[]) =>
+    http.put<{ message: string }>(`/role/${roleId}/permissions`, { permissionIds }),
+};
