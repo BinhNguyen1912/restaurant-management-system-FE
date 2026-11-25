@@ -115,6 +115,22 @@ export const columns: ColumnDef<AccountItem>[] = [
     ),
   },
   {
+    // chi nhánh nhân viên làm việc: đây là thứ quyết định dữ liệu họ nhìn thấy
+    accessorKey: 'branch',
+    header: tr('Chi nhánh'),
+    cell: ({ row }) => {
+      const branch = row.original.branch as { name: string; code: string } | null | undefined;
+      return branch ? (
+        <div className="grid gap-0.5">
+          <span>{branch.name}</span>
+          <span className="font-mono text-xs text-muted-foreground">{branch.code}</span>
+        </div>
+      ) : (
+        <span className="text-muted-foreground">{tr('Chưa gán')}</span>
+      );
+    },
+  },
+  {
     accessorKey: 'phoneNumber',
     header: 'Số điện thoại',
     cell: ({ row }) => (

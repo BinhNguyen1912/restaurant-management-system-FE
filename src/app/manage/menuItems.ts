@@ -17,6 +17,7 @@ import {
   TicketPercent,
   FolderTree,
   Wallet2,
+  Building2,
 } from 'lucide-react';
 
 const menuItems = [
@@ -138,6 +139,13 @@ const menuItems = [
     href: '/manage/recipes',
     group: 'Thực đơn',
     roles: [Role.ADMIN, Role.STAFF],
+  },
+  {
+    title: 'Chi nhánh',
+    Icon: Building2,
+    href: '/manage/branches',
+    group: 'Vận hành',
+    roles: [Role.ADMIN],
   },
   {
     title: 'Nhân viên',

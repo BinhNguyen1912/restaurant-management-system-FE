@@ -28,6 +28,7 @@ import {
 } from '@/app/ValidationSchemas/user.schema';
 import { useGetRoleListQuery } from '@/app/queries/useRole';
 import { useI18n } from '@/i18n/locale-provider';
+import { useGetBranches } from '@/app/queries/useBranch';
 import { T } from '@/components/t';
 
 type CreateUserForm = UserBodyType & {
@@ -43,6 +44,7 @@ export default function AddEmployee() {
   const avatarInputRef = useRef<HTMLInputElement | null>(null);
   const addEmployeeMutation = useAddEmployeeAccount();
   const roles = useGetRoleListQuery().data?.payload?.data || [];
+  const branches = useGetBranches().data?.payload?.data || [];
   const form = useForm<CreateUserForm>({
     resolver: zodResolver(UserBodySchema as any),
     defaultValues: {
@@ -52,6 +54,7 @@ export default function AddEmployee() {
       password: '',
       phoneNumber: '',
       roleId: 0,
+      branchId: null,
       status: 'INACTIVE',
     } as any,
   });
@@ -77,6 +80,7 @@ export default function AddEmployee() {
         phoneNumber: value.phoneNumber,
         name: value.name,
         roleId: Number(value.roleId),
+        branchId: (value as any).branchId ? Number((value as any).branchId) : null,
         status: value.status,
       };
       if (file) {
@@ -91,8 +95,6 @@ export default function AddEmployee() {
       } else if (typeof value.avatar === 'string') {
         body.avatar = value.avatar;
       }
-
-      console.log('body', body);
 
       await addEmployeeMutation.mutate(body, {
         onSuccess: () => {
@@ -255,6 +257,40 @@ export default function AddEmployee() {
                             );
                           })}
                         </select>
+                        <FormMessage />
+                      </div>
+                    </div>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name={'branchId' as any}
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="grid grid-cols-4 items-center justify-items-start gap-4">
+                      <Label htmlFor="branchId">{t('Chi nhánh')}</Label>
+                      <div className="col-span-3 w-full space-y-2">
+                        <select
+                          id="branchId"
+                          className="w-full border rounded px-2 py-1"
+                          value={String(field.value ?? '')}
+                          onChange={(e) =>
+                            field.onChange(e.target.value ? Number(e.target.value) : null)
+                          }
+                        >
+                          <option value="">{t('Chưa gán chi nhánh')}</option>
+                          {branches.map((branch: any) => (
+                            <option key={branch.id} value={branch.id}>
+                              {branch.name} ({branch.code})
+                              {branch.isActive ? '' : ' — ngừng hoạt động'}
+                            </option>
+                          ))}
+                        </select>
+                        <p className="text-xs text-muted-foreground">
+                          {t('Nhân viên đăng nhập sẽ thấy dữ liệu của chi nhánh này.')}
+                        </p>
                         <FormMessage />
                       </div>
                     </div>

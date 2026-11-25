@@ -10,6 +10,7 @@ Hương Vị Quê Hương
 Hương Vị Việt
 Hồn Việt
 Lẩu ngon
+Mã chi nhánh tối đa 50 ký tự
 Mì Quảng
 Nhà hàng Bắc Kim Thang
 Phở
@@ -18,3 +19,4 @@ Tinh Hoa Việt
 Tự Hào Dân Tộc
 Vị Ngon Quê Nhà
 Vị Quê Hương
+ngừng hoạt động
