@@ -19,7 +19,7 @@ export default function RemindersPage() {
           <CardHeader>
             <CardTitle><T>Lời nhắc</T></CardTitle>
             <CardDescription>
-              Quản lý các lời nhắc và công việc cần thực hiện
+              <T>Quản lý các lời nhắc và công việc cần thực hiện</T>
             </CardDescription>
           </CardHeader>
           <CardContent>

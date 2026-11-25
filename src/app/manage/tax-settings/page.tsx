@@ -8,7 +8,7 @@ export default function TaxSettingsPage() {
       <div>
         <h1 className="text-lg font-semibold md:text-2xl"><T>Thuế & phí phục vụ</T></h1>
         <p className="text-sm text-muted-foreground">
-          Cấu hình VAT và phí phục vụ của từng chi nhánh. Đơn cũ giữ nguyên thuế suất đã bán.
+          <T>Cấu hình VAT và phí phục vụ của từng chi nhánh. Đơn cũ giữ nguyên thuế suất đã bán.</T>
         </p>
       </div>
       <Suspense>

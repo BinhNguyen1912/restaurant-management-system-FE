@@ -18,6 +18,7 @@ import { formatDateTimeToTimeString } from '@/lib/utils';
 import { ConversationResponseType } from '@/app/ValidationSchemas/message.schema';
 import { cn } from '@/lib/utils';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 export default function GuestMessageDialog() {
   const { t } = useI18n();
@@ -121,7 +122,7 @@ export default function GuestMessageDialog() {
               <MessageSquare className="w-10 h-10 mx-auto mb-3 opacity-50" />
               <p className="text-sm">{t("Chưa có tin nhắn")}</p>
               <p className="text-xs mt-1">
-                Gửi tin nhắn để được hỗ trợ từ nhân viên
+                <T>Gửi tin nhắn để được hỗ trợ từ nhân viên</T>
               </p>
             </div>
           ) : (

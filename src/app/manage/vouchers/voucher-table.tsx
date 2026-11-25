@@ -33,6 +33,7 @@ import {
 } from '@/components/ui/table';
 import { CreateVoucherBody, VoucherResType } from '@/app/ValidationSchemas/voucher.schema';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 import {
   useCreateVoucher,
   useDeleteVoucher,
@@ -264,7 +265,7 @@ export default function VoucherTable() {
               {isLoading && (
                 <TableRow>
                   <TableCell colSpan={6} className="text-center text-muted-foreground">
-                    Đang tải…
+                    <T>Đang tải…</T>
                   </TableCell>
                 </TableRow>
               )}
@@ -324,7 +325,7 @@ export default function VoucherTable() {
             </span>
             <div className="flex gap-2">
               <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage(page - 1)}>
-                Trước
+                <T>Trước</T>
               </Button>
               <Button
                 variant="outline"
@@ -344,7 +345,7 @@ export default function VoucherTable() {
           <DialogHeader>
             <DialogTitle>{editing ? `Sửa mã ${editing.code}` : 'Tạo mã giảm giá'}</DialogTitle>
             <DialogDescription>
-              Giảm theo % áp lên phần tạm tính của đơn; để trống số lượt nghĩa là không giới hạn.
+              <T>Giảm theo % áp lên phần tạm tính của đơn; để trống số lượt nghĩa là không giới hạn.</T>
             </DialogDescription>
           </DialogHeader>
 
@@ -427,7 +428,7 @@ export default function VoucherTable() {
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setOpen(false)}>
-              Huỷ
+              <T>Huỷ</T>
             </Button>
             <Button onClick={submit} disabled={creating || updating}>
               {editing ? 'Lưu thay đổi' : 'Tạo mã'}
@@ -447,10 +448,10 @@ export default function VoucherTable() {
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteTarget(null)}>
-              Giữ lại
+              <T>Giữ lại</T>
             </Button>
             <Button variant="destructive" onClick={confirmDelete}>
-              Xoá
+              <T>Xoá</T>
             </Button>
           </DialogFooter>
         </DialogContent>

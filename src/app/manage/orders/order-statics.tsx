@@ -139,7 +139,7 @@ export default function OrderStatics({
             {isLoadingTableOrders ? (
               <div className="flex justify-center items-center py-8">
                 <div className="text-sm text-muted-foreground">
-                  Đang tải đơn hàng...
+                  <T>Đang tải đơn hàng...</T>
                 </div>
               </div>
             ) : tableOrdersData?.payload?.data?.length ? (
@@ -153,7 +153,7 @@ export default function OrderStatics({
                 if (!orders || orders.length === 0) {
                   return (
                     <div className="text-center py-4 text-sm text-muted-foreground">
-                      Không có đơn hàng
+                      <T>Không có đơn hàng</T>
                     </div>
                   );
                 }
@@ -168,7 +168,7 @@ export default function OrderStatics({
                 if (guestOrderGroups.length === 0) {
                   return (
                     <div className="text-center py-4 text-sm text-muted-foreground">
-                      Không tìm thấy thông tin khách hàng trong đơn hàng
+                      <T>Không tìm thấy thông tin khách hàng trong đơn hàng</T>
                     </div>
                   );
                 }
@@ -205,7 +205,7 @@ export default function OrderStatics({
             ) : (
               <div className="flex justify-center items-center py-8">
                 <div className="text-sm text-muted-foreground">
-                  Không có đơn hàng nào tại bàn này
+                  <T>Không có đơn hàng nào tại bàn này</T>
                 </div>
               </div>
             )}
@@ -216,7 +216,7 @@ export default function OrderStatics({
       {isLoading ? (
         <div className="flex justify-center items-center py-8">
           <div className="text-sm text-muted-foreground">
-            Đang tải danh sách bàn...
+            <T>Đang tải danh sách bàn...</T>
           </div>
         </div>
       ) : tableList.length === 0 ? (
@@ -333,7 +333,7 @@ export default function OrderStatics({
                     <div className="flex justify-between items-center text-sm">
                       <div className="flex flex-col items-center justify-center">
                         <div className="text-xs text-muted-foreground">
-                          Trạng thái
+                          <T>Trạng thái</T>
                         </div>
                         <Badge variant="outline" className="mt-1">
                           {table.status === 'AVAILABLE'

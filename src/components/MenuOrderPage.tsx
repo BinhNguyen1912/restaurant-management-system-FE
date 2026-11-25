@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/lib/utils';
 import { ShoppingCart, X } from 'lucide-react';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 interface Category {
   id: number;
@@ -159,7 +160,7 @@ export default function MenuOrderPage() {
       <div className="bg-white shadow-sm sticky top-0 z-30">
         <div className="px-4 py-3 flex items-center justify-between">
           <h1 className="text-lg font-bold text-gray-900">
-            Nhà hàng AI - Cửa hàng
+            <T>Nhà hàng AI - Cửa hàng</T>
           </h1>
           <div className="flex items-center gap-2">
             <button
@@ -271,7 +272,7 @@ export default function MenuOrderPage() {
                 <span className="text-lg font-bold text-red-600">{formatCurrency(totalPrice)}</span>
               </div>
               <Button className="w-full h-12 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg">
-                Đặt hàng
+                <T>Đặt hàng</T>
               </Button>
             </div>
           </div>

@@ -24,6 +24,7 @@ import { ConversationResponseType } from '@/app/ValidationSchemas/message.schema
 import { cn } from '@/lib/utils';
 import { useAppStore } from '@/components/app-provider';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 export default function AdminConversationDialog() {
   const { t } = useI18n();
@@ -225,7 +226,7 @@ export default function AdminConversationDialog() {
               <Badge variant="secondary">{unreadCountLocal} chưa đọc</Badge>
             </DialogTitle>
             <DialogDescription>
-              Chọn khách hàng để xem và trả lời tin nhắn
+              <T>Chọn khách hàng để xem và trả lời tin nhắn</T>
             </DialogDescription>
           </DialogHeader>
 

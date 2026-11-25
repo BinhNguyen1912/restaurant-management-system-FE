@@ -16,6 +16,7 @@ import { handleErrorApi } from '@/lib/utils';
 import { useMeProfile } from '@/app/queries/useAccount';
 import { useAppStore } from '@/components/app-provider';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 export default function DropdownAvatar() {
   const { t } = useI18n();
@@ -64,7 +65,7 @@ export default function DropdownAvatar() {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href={'/manage/setting'} className="cursor-pointer">
-            Cài đặt
+            <T>Cài đặt</T>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem>{t("Hỗ trợ")}</DropdownMenuItem>

@@ -57,6 +57,7 @@ import { RepeatModeType } from '@/app/constants/reminder.constant';
 import { useGetRoleListQuery } from '@/app/queries/useRole';
 import { useI18n } from '@/i18n/locale-provider';
 import { tr } from '@/i18n/tr';
+import { T } from '@/components/t';
 
 type ReminderItem = ReminderResType;
 
@@ -260,11 +261,11 @@ export const columns: ColumnDef<ReminderItem>[] = [
             </DropdownMenuItem>
             <DropdownMenuItem onClick={openEdit}>
               <Edit className="mr-2 h-4 w-4" />
-              Sửa
+              <T>Sửa</T>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={openDelete} className="text-destructive">
               <Trash2 className="mr-2 h-4 w-4" />
-              Xóa
+              <T>Xóa</T>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -326,7 +327,7 @@ function AlertDialogDeleteReminder({
             onClick={deleteReminder}
             className="bg-destructive text-destructive-foreground"
           >
-            Xóa
+            <T>Xóa</T>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -516,7 +517,7 @@ export default function ReminderTable() {
                     colSpan={columns.length}
                     className="h-24 text-center"
                   >
-                    Không có lời nhắc nào.
+                    <T>Không có lời nhắc nào.</T>
                   </TableCell>
                 </TableRow>
               )}
@@ -534,7 +535,7 @@ export default function ReminderTable() {
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
-              Trước
+              <T>Trước</T>
             </Button>
             <Button
               variant="outline"

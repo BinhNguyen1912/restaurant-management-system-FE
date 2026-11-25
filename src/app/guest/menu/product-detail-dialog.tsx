@@ -17,6 +17,7 @@ import { GuestCreateNewOrderType } from '@/app/ValidationSchemas/order.schema';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 interface ProductDetailDialogProps {
   productId: number | null;
@@ -170,7 +171,7 @@ export default function ProductDetailDialog({
               style={{ transitionDelay: entered ? '80ms' : '0ms' }}
             >
               <DialogTitle className="text-lg md:text-xl font-semibold">
-                Thêm món mới
+                <T>Thêm món mới</T>
               </DialogTitle>
               <Button
                 variant="ghost"
@@ -196,7 +197,7 @@ export default function ProductDetailDialog({
             >
               <div className="absolute top-3 left-3 z-10">
                 <span className="bg-orange-500/90 text-white text-[10px] md:text-xs font-medium px-2 py-1 rounded-full shadow">
-                  Độc quyền
+                  <T>Độc quyền</T>
                 </span>
               </div>
               <SafeImage
@@ -350,7 +351,7 @@ export default function ProductDetailDialog({
                   selectedSKUs.every((s) => s.quantity === 0)
                 }
               >
-                Đặt đơn hàng
+                <T>Đặt đơn hàng</T>
               </Button>
               <Button
                 className="h-11 px-4 md:px-6 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg shadow-sm transition text-sm"
@@ -360,7 +361,7 @@ export default function ProductDetailDialog({
                   selectedSKUs.every((s) => s.quantity === 0)
                 }
               >
-                Thêm vào giỏ hàng
+                <T>Thêm vào giỏ hàng</T>
               </Button>
             </div>
           </div>

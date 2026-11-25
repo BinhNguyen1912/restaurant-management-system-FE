@@ -47,6 +47,7 @@ import type { UpdateReminderType } from '@/app/ValidationSchemas/reminder.schema
 import { roleName } from '@/app/constants/role.constant';
 import { getVietnameseRoleStatus } from '@/lib/utils';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 export default function EditReminder({
   id,
@@ -336,7 +337,7 @@ export default function EditReminder({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Bell className="h-5 w-5" />
-            Chỉnh sửa lời nhắc
+            <T>Chỉnh sửa lời nhắc</T>
           </DialogTitle>
           <DialogDescription>{t("Cập nhật thông tin lời nhắc")}</DialogDescription>
         </DialogHeader>
@@ -374,7 +375,7 @@ export default function EditReminder({
                         className="flex items-center gap-1"
                       >
                         <Clock className="h-4 w-4" />
-                        Thời gian *
+                        <T>Thời gian *</T>
                       </Label>
                       <Input
                         id="edit-time"
@@ -394,7 +395,7 @@ export default function EditReminder({
                         className="flex items-center gap-1"
                       >
                         <Calendar className="h-4 w-4" />
-                        Ngày nhắc (tùy chọn)
+                        <T>Ngày nhắc (tùy chọn)</T>
                       </Label>
                       <Input
                         id="edit-scheduled_date"
@@ -438,7 +439,7 @@ export default function EditReminder({
                         className="flex items-center gap-1"
                       >
                         <Calendar className="h-4 w-4" />
-                        Lặp lại
+                        <T>Lặp lại</T>
                       </Label>
                       <Select
                         value={formData.repeat_mode || RepeatModeType.ONCE}
@@ -469,7 +470,7 @@ export default function EditReminder({
                         className="flex items-center gap-1"
                       >
                         <Bell className="h-4 w-4" />
-                        Trạng thái
+                        <T>Trạng thái</T>
                       </Label>
                       <Switch
                         id="edit-is_active"
@@ -536,7 +537,7 @@ export default function EditReminder({
                                 }
                               />
                               <Label className="font-normal cursor-pointer flex-1">
-                                Tất cả
+                                <T>Tất cả</T>
                               </Label>
                             </div>
                             {roles.map((role) => {
@@ -812,7 +813,7 @@ export default function EditReminder({
                 disabled={updateReminderMutation.isPending}
                 className="flex-1"
               >
-                Hủy bỏ
+                <T>Hủy bỏ</T>
               </Button>
               <Button
                 type="submit"
@@ -829,12 +830,12 @@ export default function EditReminder({
                 {updateReminderMutation.isPending ? (
                   <>
                     <div className="animate-spin rounded-full h-4 w-4 border-2 border-current border-t-transparent" />
-                    Đang cập nhật...
+                    <T>Đang cập nhật...</T>
                   </>
                 ) : (
                   <>
                     <Save className="h-4 w-4" />
-                    Cập nhật lời nhắc
+                    <T>Cập nhật lời nhắc</T>
                   </>
                 )}
               </Button>

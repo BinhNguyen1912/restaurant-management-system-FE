@@ -13,6 +13,7 @@ import { accountApiRequests } from '@/apiRequest/account';
 import { toast } from 'react-toastify';
 import { handleErrorApi } from '@/lib/utils';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 import {
   ChangePassWordBodySchema,
   ChangePasswordBodyType,
@@ -105,7 +106,7 @@ export default function ChangePasswordForm() {
                   <FormItem>
                     <div className="grid gap-3">
                       <Label htmlFor="confirmPassword">
-                        Nhập lại mật khẩu mới
+                        <T>Nhập lại mật khẩu mới</T>
                       </Label>
                       <Input
                         id="confirmPassword"
@@ -121,10 +122,10 @@ export default function ChangePasswordForm() {
               />
               <div className=" items-center gap-2 md:ml-auto flex">
                 <Button variant="outline" size="sm" type="reset">
-                  Hủy
+                  <T>Hủy</T>
                 </Button>
                 <Button size="sm" type="submit">
-                  Lưu thông tin
+                  <T>Lưu thông tin</T>
                 </Button>
               </div>
             </div>

@@ -18,6 +18,7 @@ import { toast } from 'react-toastify';
 import { useAppStore } from '@/components/app-provider';
 import { formatDateTimeToLocaleString } from '@/lib/utils';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 export default function AdminMessageNotifications() {
   const { t } = useI18n();
@@ -135,7 +136,7 @@ export default function AdminMessageNotifications() {
               <Badge variant="secondary">{unreadCountLocal} chưa đọc</Badge>
             </DialogTitle>
             <DialogDescription>
-              Các tin nhắn yêu cầu hỗ trợ từ khách hàng
+              <T>Các tin nhắn yêu cầu hỗ trợ từ khách hàng</T>
             </DialogDescription>
           </DialogHeader>
 
@@ -195,7 +196,7 @@ export default function AdminMessageNotifications() {
                   onClick={() => handleMarkAsRead()}
                   disabled={markAsRead.isPending}
                 >
-                  Đánh dấu đã đọc
+                  <T>Đánh dấu đã đọc</T>
                 </Button>
               )}
               <Button
@@ -203,7 +204,7 @@ export default function AdminMessageNotifications() {
                 size="sm"
                 onClick={() => setOpen(false)}
               >
-                Đóng
+                <T>Đóng</T>
               </Button>
             </div>
           </div>

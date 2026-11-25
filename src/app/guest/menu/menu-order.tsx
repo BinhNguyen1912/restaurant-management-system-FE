@@ -30,6 +30,7 @@ import { ProductStatus } from '@/app/constants/product.constant';
 import ProductDetailDialog from './product-detail-dialog';
 import MobileCartModal from '@/components/MobileCartModal';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 interface SkuSelection {
   skuId: number;
@@ -320,7 +321,7 @@ export default function MenuOrder() {
                       {isUnavailable && (
                         <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
                           <span className="text-white text-xs font-medium bg-red-500 px-2 py-1 rounded">
-                            Hết hàng
+                            <T>Hết hàng</T>
                           </span>
                         </div>
                       )}
@@ -333,7 +334,7 @@ export default function MenuOrder() {
 
                       <div className="absolute top-2 left-2">
                         <span className="bg-orange-500 text-white text-xs font-medium px-2 py-1 rounded-full">
-                          Đặc biệt
+                          <T>Đặc biệt</T>
                         </span>
                       </div>
                     </div>
@@ -508,7 +509,7 @@ export default function MenuOrder() {
             <div className="mb-3 xl:mb-4">
               <div className="mb-2 grid gap-1">
                 <label htmlFor="voucher-code" className="text-xs text-muted-foreground">
-                  Mã giảm giá (không bắt buộc)
+                  <T>Mã giảm giá (không bắt buộc)</T>
                 </label>
                 <Input
                   id="voucher-code"
@@ -550,7 +551,7 @@ export default function MenuOrder() {
               disabled={orders.length === 0}
               variant="default"
             >
-              Đặt món
+              <T>Đặt món</T>
             </Button>
           </div>
         </aside>
@@ -571,7 +572,7 @@ export default function MenuOrder() {
                 >
                   <Bell className="h-4 w-4 md:h-5 md:w-5" />
                   <span className="hidden sm:inline ml-2 text-xs md:text-sm">
-                    Gọi nhân viên
+                    <T>Gọi nhân viên</T>
                   </span>
                 </Button>
               </TooltipTrigger>

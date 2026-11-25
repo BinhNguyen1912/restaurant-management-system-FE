@@ -37,6 +37,7 @@ import AddIngredient from '@/app/manage/ingredients/add-ingredient';
 import { useGetListIngredientMutation } from '@/app/queries/useIngredient';
 import { toast } from 'react-toastify';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 const recipeSchema = z.object({
   skuId: z.number().min(1, 'Vui lòng chọn SKU'),
@@ -269,7 +270,7 @@ export default function RecipeManagement() {
         <Card>
           <CardHeader>
             <CardTitle className="text-md font-bold">
-              Danh sách sản phẩm
+              <T>Danh sách sản phẩm</T>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">

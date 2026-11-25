@@ -29,6 +29,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 export default function OTPDialog() {
   const { t } = useI18n();
@@ -59,7 +60,7 @@ export default function OTPDialog() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="link" onSubmit={() => setOpen(true)}>
-          Lấy mã code
+          <T>Lấy mã code</T>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
@@ -70,7 +71,7 @@ export default function OTPDialog() {
             onSubmit={form.handleSubmit(onSubmit)}
           >
             <DialogDescription>
-              Nhập địa chỉ Email bên dưới đã nhận mã OTP
+              <T>Nhập địa chỉ Email bên dưới đã nhận mã OTP</T>
             </DialogDescription>
 
             <FormField

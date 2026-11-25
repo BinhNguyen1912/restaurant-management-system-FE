@@ -72,6 +72,7 @@ import AddIngredient from '@/app/manage/ingredients/add-ingredient';
 import EditIngredient from '@/app/manage/ingredients/edit-ingredient';
 import { useI18n } from '@/i18n/locale-provider';
 import { tr } from '@/i18n/tr';
+import { T } from '@/components/t';
 
 type ingredientItem = GetAllIngredientResType['data'][0];
 
@@ -201,13 +202,13 @@ export const columns: ColumnDef<GetAllIngredientResType['data'][0]>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={openEditIngredient}>
-              Sửa
+              <T>Sửa</T>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={openDeleteIngredient}>
-              Xóa
+              <T>Xóa</T>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={openDeleteIngredient}>
-              Xem chi tiết
+              <T>Xem chi tiết</T>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

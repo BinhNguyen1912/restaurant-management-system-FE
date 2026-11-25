@@ -34,6 +34,7 @@ import { useCreateTableMutation } from '@/app/useTable';
 import { toast } from 'react-toastify';
 import { TableStatus, TableStatusValues } from '@/app/constants/table.constant';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 import {
   CreateTableBodySchema,
   CreateTableBodyType,
@@ -77,7 +78,7 @@ export default function AddTable() {
         <Button size="sm" className="h-7 gap-1">
           <PlusCircle className="h-3.5 w-3.5" />
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            Thêm bàn
+            <T>Thêm bàn</T>
           </span>
         </Button>
       </DialogTrigger>
@@ -176,7 +177,7 @@ export default function AddTable() {
             form="add-table-form"
             onClick={form.handleSubmit(onSubmit)}
           >
-            Thêm
+            <T>Thêm</T>
           </Button>
         </DialogFooter>
       </DialogContent>

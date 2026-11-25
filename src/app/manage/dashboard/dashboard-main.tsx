@@ -31,6 +31,7 @@ import { toast } from 'react-toastify';
 import NewOrderSound from '@/components/newOrderSound';
 import LowStockWarningDialog from '@/components/lowStockWarningDialog';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 import {
   GuestCreateNewOrderType,
@@ -177,7 +178,7 @@ export default function DashboardMain() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Tổng doanh thu
+              <T>Tổng doanh thu</T>
             </CardTitle>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -244,7 +245,7 @@ export default function DashboardMain() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Bàn đang phục vụ
+              <T>Bàn đang phục vụ</T>
             </CardTitle>
             <svg
               xmlns="http://www.w3.org/2000/svg"

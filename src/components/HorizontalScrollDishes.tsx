@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import SafeImage from '@/components/SafeImage';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { T } from '@/components/t';
 
 const dishes = [
   {
@@ -128,7 +129,7 @@ export default function HorizontalScrollDishes() {
               />
               {dish.isNew && (
                 <Badge className="absolute top-2 right-2 bg-red-500 text-white">
-                  Mới
+                  <T>Mới</T>
                 </Badge>
               )}
             </div>
@@ -144,7 +145,7 @@ export default function HorizontalScrollDishes() {
                   {dish.price.toLocaleString('vi-VN')}đ
                 </span>
                 <button className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                  Thêm vào giỏ
+                  <T>Thêm vào giỏ</T>
                 </button>
               </div>
             </CardContent>

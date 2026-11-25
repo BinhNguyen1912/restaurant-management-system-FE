@@ -3,6 +3,7 @@
 import React from 'react';
 import ProductCard from './ProductCard';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 /**
  * Hình dạng tối thiểu ProductGrid cần. Khai báo lỏng (superset-friendly) để dùng được cả dữ liệu
@@ -69,7 +70,7 @@ export default function ProductGrid({
         <div className="text-gray-400 text-6xl mb-4">🍽️</div>
         <h3 className="text-lg font-semibold text-gray-900 mb-2">{t("Không có sản phẩm nào")}</h3>
         <p className="text-gray-500 text-center">
-          Hiện tại chưa có sản phẩm nào trong danh mục này.
+          <T>Hiện tại chưa có sản phẩm nào trong danh mục này.</T>
         </p>
       </div>
     );

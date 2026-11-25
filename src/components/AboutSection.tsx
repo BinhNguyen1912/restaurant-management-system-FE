@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import { T } from '@/components/t';
 
 const AboutSection = () => {
   return (
@@ -30,10 +31,10 @@ const AboutSection = () => {
             {/* Title */}
             <div className="space-y-4">
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold font-serif leading-tight text-white">
-                VỀ
+                <T>VỀ</T>
               </h1>
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold font-serif text-gray-300 leading-tight">
-                BẮC KIM THANG
+                <T>BẮC KIM THANG</T>
               </h2>
             </div>
 
@@ -68,7 +69,7 @@ const AboutSection = () => {
                 size="lg"
                 className="bg-white text-gray-900 hover:bg-gray-100 px-10 py-5 text-lg font-semibold rounded-xl border-2 border-white hover:border-gray-200 transition-all duration-300 shadow-lg hover:shadow-xl"
               >
-                Tìm hiểu thêm
+                <T>Tìm hiểu thêm</T>
               </Button>
             </motion.div>
           </motion.div>

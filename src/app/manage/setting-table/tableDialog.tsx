@@ -17,6 +17,7 @@ import { TableStatusValues } from '@/app/constants/table.constant';
 import { keyof } from 'zod';
 import { getVietnameseTableStatus } from '@/lib/utils';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 interface TableDialogProps {
   open: boolean;
@@ -53,14 +54,14 @@ export default function TableDialog({
         <DialogHeader>
           <DialogTitle>{t("Chỉnh sửa bàn")}</DialogTitle>
           <DialogDescription>
-            Cập nhật thông tin chi tiết cho bàn này.
+            <T>Cập nhật thông tin chi tiết cho bàn này.</T>
           </DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
-              Tên bàn
+              <T>Tên bàn</T>
             </Label>
             <Input
               id="name"
@@ -72,7 +73,7 @@ export default function TableDialog({
 
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="seats" className="text-right">
-              Số chỗ ngồi
+              <T>Số chỗ ngồi</T>
             </Label>
             <Input
               id="seats"
@@ -84,7 +85,7 @@ export default function TableDialog({
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="status" className="text-right">
-              Trạng thái
+              <T>Trạng thái</T>
             </Label>
             <select
               id="status"
@@ -108,7 +109,7 @@ export default function TableDialog({
 
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Hủy
+            <T>Hủy</T>
           </Button>
           <Button onClick={handleSave}>{t("Lưu thay đổi")}</Button>
         </DialogFooter>

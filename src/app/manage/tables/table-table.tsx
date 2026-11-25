@@ -61,6 +61,7 @@ import { Wrench, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
 import { useI18n } from '@/i18n/locale-provider';
 import { tr } from '@/i18n/tr';
+import { T } from '@/components/t';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -409,7 +410,7 @@ export default function TableTable() {
                   updateTableNodeMutation.isPending ? 'animate-spin' : ''
                 }`}
               />
-              Đổi Token
+              <T>Đổi Token</T>
             </Button>
             <Link
               href="/manage/setting-table"

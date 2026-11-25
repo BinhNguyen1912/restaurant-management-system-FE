@@ -33,6 +33,7 @@ import {
 } from '@/app/ValidationSchemas/auth.schema';
 import { RoleType } from '@/types/jwt.types';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 function Register() {
   const { t } = useI18n();
@@ -99,7 +100,7 @@ function Register() {
           height={100}
         />
         <h2 className="text-lg font-semibold mt-4">
-          Quản trị hệ thống quản lý nhà hàng
+          <T>Quản trị hệ thống quản lý nhà hàng</T>
         </h2>
         <h1 className="text-2xl font-bold text-green-700 mt-1">
           Mr. Binh Nguyen
@@ -195,7 +196,7 @@ function Register() {
                   variant={'outline'}
                   className="w-full mt-6 bg-green-700"
                 >
-                  Đăng Ký
+                  <T>Đăng Ký</T>
                 </Button>
               )}
             </form>

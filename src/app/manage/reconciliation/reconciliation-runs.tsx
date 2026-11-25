@@ -30,6 +30,7 @@ import {
 } from '@/app/queries/useLedgerReconciliation';
 import { formatCurrency } from '@/lib/utils';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 const KIND_LABEL: Record<string, string> = {
   MATCHED: 'Khớp',
@@ -133,7 +134,7 @@ export default function ReconciliationRuns() {
             <Play className="size-4" /> Chạy đối soát &amp; lưu
           </Button>
           <span className="text-xs text-muted-foreground">
-            Cron tự chạy 02:30 mỗi ngày cho hôm qua.
+            <T>Cron tự chạy 02:30 mỗi ngày cho hôm qua.</T>
           </span>
         </div>
 

@@ -5,7 +5,7 @@ export default function About() {
       <section className='bg-secondary  py-20 px-4 md:px-6 lg:px-8'>
         <div className='max-w-4xl text-center'>
           <h1 className='text-4xl font-bold sm:text-5xl md:text-6xl'>
-            Chính sách bảo mật
+            <T>Chính sách bảo mật</T>
           </h1>
         </div>
       </section>
@@ -24,7 +24,7 @@ export default function About() {
           <div className='space-y-4'>
             <h2 className='text-3xl font-bold'><T>Mục đích sử dụng</T></h2>
             <p className=' text-muted-foreground leading-8'>
-              Chúng tôi sử dụng thông tin cá nhân của bạn với các mục đích sau:
+              <T>Chúng tôi sử dụng thông tin cá nhân của bạn với các mục đích sau:</T>
             </p>
             <ul className='space-y-4 text-muted-foreground leading-8'>
               <li>

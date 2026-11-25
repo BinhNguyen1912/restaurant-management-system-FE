@@ -5,10 +5,10 @@ export default function About() {
       <section className='bg-secondary  py-20 px-4 md:px-6 lg:px-8'>
         <div className='max-w-4xl text-center'>
           <h1 className='text-4xl font-bold sm:text-5xl md:text-6xl'>
-            Về nhà hàng Big Boy
+            <T>Về nhà hàng Big Boy</T>
           </h1>
           <p className='mt-4 text-lg md:text-xl'>
-            Địa chỉ: Số 1, đường Nguyễn Văn Linh, thành phố Đà Nẵng
+            <T>Địa chỉ: Số 1, đường Nguyễn Văn Linh, thành phố Đà Nẵng</T>
           </p>
         </div>
       </section>

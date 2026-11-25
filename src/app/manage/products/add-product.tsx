@@ -40,6 +40,7 @@ import { mediaApiRequest } from '@/apiRequest/media';
 import { useAddProductMutation } from '@/app/queries/useProducts';
 import { getApiErrorMessage } from '@/lib/api-error';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 /** Ảnh đã chọn nhưng chưa upload: giữ File + blob preview, upload 1 lần khi submit */
 type PendingImage = {
@@ -340,7 +341,7 @@ export default function AddDish() {
       <DialogTrigger asChild>
         <Button size="sm" className="flex items-center gap-2">
           <PlusCircle className="h-4 w-4" />
-          Thêm món ăn
+          <T>Thêm món ăn</T>
         </Button>
       </DialogTrigger>
 
@@ -427,7 +428,7 @@ export default function AddDish() {
                   <Upload className="h-4 w-4 mr-1" /> Tải ảnh lên
                 </Button>
                 <p className="text-xs text-muted-foreground text-center">
-                  Tối đa 10 ảnh, mỗi ảnh &lt; 5MB
+                  <T>Tối đa 10 ảnh, mỗi ảnh &lt; 5MB</T>
                 </p>
               </div>
 
@@ -622,7 +623,7 @@ export default function AddDish() {
 
               {variants.length === 0 ? (
                 <p className="text-sm text-muted-foreground">
-                  Chưa có biến thể nào
+                  <T>Chưa có biến thể nào</T>
                 </p>
               ) : (
                 <div className="space-y-4">
@@ -693,7 +694,7 @@ export default function AddDish() {
                                 />
                               ) : (
                                 <span className="text-xs text-gray-400">
-                                  Ảnh
+                                  <T>Ảnh</T>
                                 </span>
                               )}
                               <input
@@ -754,7 +755,7 @@ export default function AddDish() {
             onClick={() => handleOpenChange(false)}
             disabled={isSubmitting}
           >
-            Hủy
+            <T>Hủy</T>
           </Button>
           <Button type="submit" form="add-dish-form" disabled={isSubmitting}>
             {isSubmitting ? 'Đang lưu...' : 'Thêm món ăn'}

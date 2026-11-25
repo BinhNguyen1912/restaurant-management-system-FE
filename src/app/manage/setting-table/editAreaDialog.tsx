@@ -17,6 +17,7 @@ import { useUpdateAreaMutation } from '@/app/queries/useArea';
 import { toast } from 'react-toastify';
 import { AreaType } from '@/app/ValidationSchemas/area.schema';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 interface EditAreaDialogProps {
   open: boolean;
@@ -87,7 +88,7 @@ export default function EditAreaDialog({
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
-              Tên khu vực
+              <T>Tên khu vực</T>
             </Label>
             <Input
               id="name"
@@ -101,7 +102,7 @@ export default function EditAreaDialog({
 
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="isActive" className="text-right">
-              Trạng thái
+              <T>Trạng thái</T>
             </Label>
             <div className="col-span-3 flex items-center gap-2">
               <Switch
@@ -123,7 +124,7 @@ export default function EditAreaDialog({
             onClick={() => onOpenChange(false)}
             disabled={updateAreaMutation.isPending}
           >
-            Hủy
+            <T>Hủy</T>
           </Button>
           <Button
             onClick={handleUpdate}

@@ -5,6 +5,7 @@ import { X, Plus, Minus } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import SafeImage from '@/components/SafeImage';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 interface SkuSelection {
   skuId: number;
@@ -179,7 +180,7 @@ export default function MobileCartModal({
             onClick={onOrder}
             disabled={selectedSkus.length === 0}
           >
-            Thêm vào đơn
+            <T>Thêm vào đơn</T>
           </Button>
         </div>
       </div>

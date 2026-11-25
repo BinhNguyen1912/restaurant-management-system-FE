@@ -28,6 +28,7 @@ import {
 } from '@/app/ValidationSchemas/user.schema';
 import { useGetRoleListQuery } from '@/app/queries/useRole';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 type CreateUserForm = UserBodyType & {
   phoneNumber: string;
@@ -119,7 +120,7 @@ export default function AddEmployee() {
         <Button size="sm" className="h-7 gap-1">
           <PlusCircle className="h-3.5 w-3.5" />
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            Tạo tài khoản
+            <T>Tạo tài khoản</T>
           </span>
         </Button>
       </DialogTrigger>
@@ -127,7 +128,7 @@ export default function AddEmployee() {
         <DialogHeader>
           <DialogTitle>{t("Tạo tài khoản")}</DialogTitle>
           <DialogDescription>
-            Các trường tên, email, mật khẩu là bắt buộc
+            <T>Các trường tên, email, mật khẩu là bắt buộc</T>
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -310,7 +311,7 @@ export default function AddEmployee() {
         </Form>
         <DialogFooter>
           <Button type="submit" form="add-employee-form">
-            Thêm
+            <T>Thêm</T>
           </Button>
         </DialogFooter>
       </DialogContent>

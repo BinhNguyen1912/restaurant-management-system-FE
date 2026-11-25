@@ -42,6 +42,7 @@ import { useGetCategories } from '@/app/queries/useCategory';
 import { Switch } from '@/components/ui/switch';
 import { UpsertSKUBody } from '@/app/ValidationSchemas/sku.schema';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 // Định nghĩa types cho biến thể
 type VariantOption = {
@@ -355,10 +356,10 @@ export default function EditProduct({
       <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-auto">
         <DialogHeader className="border-b pb-4">
           <DialogTitle className="text-2xl font-bold">
-            Cập nhật sản phẩm
+            <T>Cập nhật sản phẩm</T>
           </DialogTitle>
           <DialogDescription className="text-muted-foreground">
-            Các trường bắt buộc: Tên, ảnh
+            <T>Các trường bắt buộc: Tên, ảnh</T>
           </DialogDescription>
         </DialogHeader>
 
@@ -435,7 +436,7 @@ export default function EditProduct({
                             >
                               <Upload className="h-6 w-6 text-muted-foreground mb-1" />
                               <span className="text-xs text-muted-foreground">
-                                Thêm ảnh
+                                <T>Thêm ảnh</T>
                               </span>
                             </div>
                           )}
@@ -472,7 +473,7 @@ export default function EditProduct({
                     render={({ field }) => (
                       <FormItem>
                         <Label htmlFor="name" className="text-sm font-medium">
-                          Tên sản phẩm *
+                          <T>Tên sản phẩm *</T>
                         </Label>
                         <Input
                           id="name"
@@ -491,7 +492,7 @@ export default function EditProduct({
                     render={({ field }) => (
                       <FormItem>
                         <Label htmlFor="description" className="text-sm font-medium">
-                          Mô tả
+                          <T>Mô tả</T>
                         </Label>
                         <Textarea
                           id="description"
@@ -517,7 +518,7 @@ export default function EditProduct({
                             htmlFor="basePrice"
                             className="text-sm font-medium"
                           >
-                            Giá gốc
+                            <T>Giá gốc</T>
                           </Label>
                           <Input
                             id="basePrice"
@@ -543,7 +544,7 @@ export default function EditProduct({
                             htmlFor="virtualPrice"
                             className="text-sm font-medium"
                           >
-                            Giá hiển thị
+                            <T>Giá hiển thị</T>
                           </Label>
                           <Input
                             id="virtualPrice"
@@ -628,7 +629,7 @@ export default function EditProduct({
                     render={({ field }) => (
                       <FormItem>
                         <Label className="text-sm font-medium">
-                          Danh mục sản phẩm
+                          <T>Danh mục sản phẩm</T>
                         </Label>
                         <FormControl>
                           <div className="space-y-3">
@@ -698,7 +699,7 @@ export default function EditProduct({
 
                     {variants.length === 0 ? (
                       <div className="text-center py-6 text-gray-500">
-                        Chưa có biến thể nào
+                        <T>Chưa có biến thể nào</T>
                       </div>
                     ) : (
                       variants.map((variant, vi) => (
@@ -775,7 +776,7 @@ export default function EditProduct({
                                       />
                                     ) : (
                                       <div className="w-full h-20 flex items-center justify-center border border-dashed rounded-md text-gray-400">
-                                        Chưa có ảnh
+                                        <T>Chưa có ảnh</T>
                                       </div>
                                     )}
                                     <input
@@ -835,7 +836,7 @@ export default function EditProduct({
               resetForm();
             }}
           >
-            Hủy
+            <T>Hủy</T>
           </Button>
           <Button
             type="submit"

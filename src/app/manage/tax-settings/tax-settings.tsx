@@ -29,6 +29,7 @@ import {
 } from '@/app/ValidationSchemas/branch.schema';
 import { useGetBranches, useUpdateBranchSettings } from '@/app/queries/useBranch';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 type Draft = { taxRate: string; serviceChargeRate: string; pricesIncludeTax: boolean };
 
@@ -100,13 +101,13 @@ export default function TaxSettings() {
               {isLoading ? (
                 <TableRow>
                   <TableCell colSpan={5} className="text-sm text-muted-foreground">
-                    Đang tải…
+                    <T>Đang tải…</T>
                   </TableCell>
                 </TableRow>
               ) : branches.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={5} className="text-sm text-muted-foreground">
-                    Chưa có chi nhánh
+                    <T>Chưa có chi nhánh</T>
                   </TableCell>
                 </TableRow>
               ) : (

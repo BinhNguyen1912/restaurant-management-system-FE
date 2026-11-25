@@ -64,6 +64,7 @@ import { GetListProductsResType } from '@/app/ValidationSchemas/product.schema';
 import { LockKeyhole, LockKeyholeOpen } from 'lucide-react';
 import { useI18n } from '@/i18n/locale-provider';
 import { tr } from '@/i18n/tr';
+import { T } from '@/components/t';
 
 type ProductItem = GetListProductsResType['data'][0];
 
@@ -173,7 +174,7 @@ export const columns: ColumnDef<GetListProductsResType['data'][0]>[] = [
             <DropdownMenuItem onClick={openEditDish}>{tr("Sửa")}</DropdownMenuItem>
             <DropdownMenuItem onClick={openDeleteDish}>{tr("Xóa")}</DropdownMenuItem>
             <DropdownMenuItem onClick={openDeleteDish}>
-              Xem chi tiết
+              <T>Xem chi tiết</T>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

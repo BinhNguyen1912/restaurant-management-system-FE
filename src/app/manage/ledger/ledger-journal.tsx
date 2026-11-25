@@ -37,6 +37,7 @@ import {
 } from '@/app/queries/useLedgerEntry';
 import { formatCurrency } from '@/lib/utils';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 const REF_TYPES: LedgerRefTypeValue[] = [
   'ORDER_PAID_CASH',
@@ -272,7 +273,7 @@ export default function LedgerJournal() {
               />
             </div>
             <Button variant="ghost" onClick={resetFilters}>
-              Xoá lọc
+              <T>Xoá lọc</T>
             </Button>
           </div>
 
@@ -304,13 +305,13 @@ export default function LedgerJournal() {
               {entries.isLoading ? (
                 <TableRow>
                   <TableCell colSpan={8} className="text-sm text-muted-foreground">
-                    Đang tải nhật ký…
+                    <T>Đang tải nhật ký…</T>
                   </TableCell>
                 </TableRow>
               ) : rows.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={8} className="text-sm text-muted-foreground">
-                    Không có bút toán nào khớp bộ lọc
+                    <T>Không có bút toán nào khớp bộ lọc</T>
                   </TableCell>
                 </TableRow>
               ) : (
@@ -428,7 +429,7 @@ export default function LedgerJournal() {
                 disabled={page <= 1}
                 onClick={() => setPage((current) => Math.max(1, current - 1))}
               >
-                Trước
+                <T>Trước</T>
               </Button>
               <Button
                 size="sm"

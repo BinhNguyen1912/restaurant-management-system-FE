@@ -31,6 +31,7 @@ import {
 import { useGetAuditLogs } from '@/app/queries/useAuditLog';
 import { AuditLogType } from '@/app/ValidationSchemas/audit-log.schema';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 const ACTION_LABEL: Record<string, string> = {
   ORDER_CANCELLED: 'Huỷ đơn',
@@ -276,7 +277,7 @@ export default function AuditLogTable() {
           </span>
           <div className="flex gap-2">
             <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage(page - 1)}>
-              Trước
+              <T>Trước</T>
             </Button>
             <Button variant="outline" size="sm" disabled={page >= totalPages} onClick={() => setPage(page + 1)}>
               Sau

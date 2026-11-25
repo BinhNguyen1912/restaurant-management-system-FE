@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { CheckCircle } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 type PaymentSuccessData = {
   guestId?: number | string;
@@ -78,7 +79,7 @@ export default function PaymentSuccessDialog({
                   {data?.guestName && (
                     <div>
                       <div className="text-xs text-muted-foreground">
-                        Khách hàng
+                        <T>Khách hàng</T>
                       </div>
                       <div className="font-medium truncate">
                         {data.guestName}
@@ -96,7 +97,7 @@ export default function PaymentSuccessDialog({
                   {data?.guestId !== undefined && (
                     <div>
                       <div className="text-xs text-muted-foreground">
-                        Mã khách
+                        <T>Mã khách</T>
                       </div>
                       <div className="font-medium">{String(data.guestId)}</div>
                     </div>
@@ -104,7 +105,7 @@ export default function PaymentSuccessDialog({
                   {typeof data?.orderCount === 'number' && (
                     <div>
                       <div className="text-xs text-muted-foreground">
-                        Số đơn
+                        <T>Số đơn</T>
                       </div>
                       <div className="font-medium">{data.orderCount}</div>
                     </div>
@@ -112,7 +113,7 @@ export default function PaymentSuccessDialog({
                   {data?.status && (
                     <div>
                       <div className="text-xs text-muted-foreground">
-                        Trạng thái
+                        <T>Trạng thái</T>
                       </div>
                       <div className="inline-flex items-center gap-2">
                         <span className="inline-flex items-center rounded-full bg-green-100 text-green-700 px-2 py-0.5 text-xs font-medium">
@@ -124,7 +125,7 @@ export default function PaymentSuccessDialog({
                   {data?.bankCode && (
                     <div>
                       <div className="text-xs text-muted-foreground">
-                        Ngân hàng
+                        <T>Ngân hàng</T>
                       </div>
                       <div className="inline-flex items-center rounded-full bg-slate-100 text-slate-700 px-2 py-0.5 text-xs font-medium">
                         {data.bankCode}

@@ -63,6 +63,7 @@ import {
 import { useAppStore } from '@/components/app-provider';
 import { useI18n } from '@/i18n/locale-provider';
 import { tr } from '@/i18n/tr';
+import { T } from '@/components/t';
 
 type AccountItem = getListUsersType['data'][0];
 
@@ -162,7 +163,7 @@ export const columns: ColumnDef<AccountItem>[] = [
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={openEditEmployee}>{tr("Sửa")}</DropdownMenuItem>
             <DropdownMenuItem onClick={openDeleteEmployee}>
-              Xóa
+              <T>Xóa</T>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

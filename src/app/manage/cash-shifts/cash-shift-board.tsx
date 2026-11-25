@@ -45,6 +45,7 @@ import {
 import { mediaApiRequest } from '@/apiRequest/media';
 import { formatCurrency } from '@/lib/utils';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 /*
  * Ảnh chứng từ hiển thị bằng <img> thường (không qua next/image): URL Cloudinary do
@@ -208,7 +209,7 @@ export default function CashShiftBoard() {
       {current.isLoading ? (
         <Card>
           <CardContent className="py-6 text-sm text-muted-foreground">
-            Đang tải ca làm việc…
+            <T>Đang tải ca làm việc…</T>
           </CardContent>
         </Card>
       ) : shift ? (
@@ -243,7 +244,7 @@ export default function CashShiftBoard() {
               />
               <div className="rounded-lg border p-3">
                 <div className="text-xs uppercase text-muted-foreground">
-                  Đơn tiền mặt chưa thu
+                  <T>Đơn tiền mặt chưa thu</T>
                 </div>
                 <div
                   className={
@@ -259,7 +260,7 @@ export default function CashShiftBoard() {
                 </div>
                 {(totals?.unpaidCashOrders ?? 0) > 0 ? (
                   <div className="text-xs text-destructive">
-                    Phải thu hết mới đóng ca được
+                    <T>Phải thu hết mới đóng ca được</T>
                   </div>
                 ) : null}
               </div>
@@ -383,7 +384,7 @@ export default function CashShiftBoard() {
                     {movements.length === 0 ? (
                       <TableRow>
                         <TableCell colSpan={4} className="text-sm text-muted-foreground">
-                          Chưa có khoản thu/chi nào trong ca
+                          <T>Chưa có khoản thu/chi nào trong ca</T>
                         </TableCell>
                       </TableRow>
                     ) : (
@@ -493,7 +494,7 @@ export default function CashShiftBoard() {
               <UnlockKeyhole className="h-5 w-5" /> Mở ca làm việc
             </CardTitle>
             <CardDescription>
-              Mỗi chi nhánh chỉ có 1 ca mở. Đếm tiền lẻ có sẵn trong két trước khi mở ca.
+              <T>Mỗi chi nhánh chỉ có 1 ca mở. Đếm tiền lẻ có sẵn trong két trước khi mở ca.</T>
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -517,7 +518,7 @@ export default function CashShiftBoard() {
                 />
               </div>
               <Button type="submit" disabled={isOpening}>
-                Mở ca
+                <T>Mở ca</T>
               </Button>
             </form>
           </CardContent>
@@ -528,7 +529,7 @@ export default function CashShiftBoard() {
         <CardHeader>
           <CardTitle>{t("Lịch sử ca")}</CardTitle>
           <CardDescription>
-            20 ca gần nhất của chi nhánh. Lệch két đã ghi sổ cái ở tài khoản thiếu/thừa quỹ.
+            <T>20 ca gần nhất của chi nhánh. Lệch két đã ghi sổ cái ở tài khoản thiếu/thừa quỹ.</T>
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -550,7 +551,7 @@ export default function CashShiftBoard() {
               {historyRows.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={9} className="text-sm text-muted-foreground">
-                    Chưa có ca nào
+                    <T>Chưa có ca nào</T>
                   </TableCell>
                 </TableRow>
               ) : (

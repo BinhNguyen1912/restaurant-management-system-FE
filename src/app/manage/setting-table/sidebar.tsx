@@ -9,6 +9,7 @@ import { AreaType } from '@/app/ValidationSchemas/area.schema';
 import AreaTags from '@/app/manage/setting-table/areaTags';
 import { furnitureCategories } from '@/app/manage/setting-table/data/tables';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 interface SidebarProps {
   onAddTable: (table: TableData) => void;
@@ -84,7 +85,7 @@ export default function Sidebar({
       {/* <div className="mb-6">
         <Button className="w-full" onClick={onViewTableLayout}>
           <Eye className="h-4 w-4 mr-2" />
-          Xem sơ đồ theo bàn
+          <T>Xem sơ đồ theo bàn</T>
         </Button>
       </div> */}
 

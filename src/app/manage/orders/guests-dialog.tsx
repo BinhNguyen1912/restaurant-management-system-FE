@@ -39,6 +39,7 @@ import { formatDateTimeToLocaleString, simpleMatchText } from '@/lib/utils';
 import { GuestListType } from '@/app/ValidationSchemas/guest.schema';
 import { useGetGuestListQuery } from '@/app/queries/useAccount';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 type GuestItem = GuestListType['data'][0];
 
@@ -250,7 +251,7 @@ export default function GuestsDialog({
                       colSpan={columns.length}
                       className="h-24 text-center"
                     >
-                      Đang tải...
+                      <T>Đang tải...</T>
                     </TableCell>
                   </TableRow>
                 ) : table.getRowModel().rows?.length ? (
@@ -277,7 +278,7 @@ export default function GuestsDialog({
                       colSpan={columns.length}
                       className="h-24 text-center"
                     >
-                      Không có khách hàng nào.
+                      <T>Không có khách hàng nào.</T>
                     </TableCell>
                   </TableRow>
                 )}

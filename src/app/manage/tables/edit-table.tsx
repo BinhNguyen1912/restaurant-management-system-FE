@@ -343,7 +343,7 @@ export default function EditTable({
         </Form>
         <DialogFooter>
           <Button type="submit" form="edit-table-form">
-            Lưu
+            <T>Lưu</T>
           </Button>
         </DialogFooter>
       </DialogContent>

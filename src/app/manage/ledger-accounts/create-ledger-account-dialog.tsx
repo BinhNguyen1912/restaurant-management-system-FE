@@ -39,6 +39,7 @@ import {
 import { useCreateLedgerAccount } from '@/app/queries/useLedgerAccount';
 import { handleErrorApi } from '@/lib/utils';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 const TYPES = ['EXPENSE', 'REVENUE', 'ASSET', 'LIABILITY', 'EQUITY'] as const;
 
@@ -71,7 +72,7 @@ export default function CreateLedgerAccountDialog() {
         <Button size="sm" className="h-8 gap-1">
           <PlusCircle className="h-3.5 w-3.5" />
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            Thêm tài khoản chi tiết
+            <T>Thêm tài khoản chi tiết</T>
           </span>
         </Button>
       </DialogTrigger>

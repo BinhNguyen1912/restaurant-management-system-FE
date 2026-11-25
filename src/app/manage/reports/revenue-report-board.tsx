@@ -30,6 +30,7 @@ import {
 } from '@/app/queries/useRevenueReport';
 import { formatCurrency } from '@/lib/utils';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 const METHOD_LABEL: Record<string, string> = {
   CASH: 'Tiền mặt',
@@ -173,7 +174,7 @@ export default function RevenueReportBoard() {
             <CardTitle className="text-2xl">{formatCurrency(report?.totals.net ?? 0)}</CardTitle>
           </CardHeader>
           <CardContent className="text-xs text-muted-foreground">
-            Đã trừ giảm giá và VAT, chưa gồm tip
+            <T>Đã trừ giảm giá và VAT, chưa gồm tip</T>
           </CardContent>
         </Card>
         <Card>
@@ -182,7 +183,7 @@ export default function RevenueReportBoard() {
             <CardTitle className="text-2xl">{formatCurrency(report?.totals.tax ?? 0)}</CardTitle>
           </CardHeader>
           <CardContent className="text-xs text-muted-foreground">
-            Tách riêng khỏi doanh thu theo ADR 0001
+            <T>Tách riêng khỏi doanh thu theo ADR 0001</T>
           </CardContent>
         </Card>
         <Card>
@@ -191,7 +192,7 @@ export default function RevenueReportBoard() {
             <CardTitle className="text-2xl">{formatCurrency(report?.totals.cogs ?? 0)}</CardTitle>
           </CardHeader>
           <CardContent className="text-xs text-muted-foreground">
-            Từ recipe × giá nhập nguyên liệu
+            <T>Từ recipe × giá nhập nguyên liệu</T>
           </CardContent>
         </Card>
         <Card>
@@ -327,7 +328,7 @@ export default function RevenueReportBoard() {
               {!items.length && (
                 <TableRow>
                   <TableCell colSpan={3} className="py-6 text-center text-sm text-muted-foreground">
-                    Kỳ này chưa có món nào được bán
+                    <T>Kỳ này chưa có món nào được bán</T>
                   </TableCell>
                 </TableRow>
               )}

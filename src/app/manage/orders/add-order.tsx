@@ -36,6 +36,7 @@ import { useGetProducts } from '@/app/queries/useProducts';
 import { useCreateOrderForGuestMutation } from '@/app/queries/useOrder';
 import { useCreateGuest } from '@/app/queries/useAccount';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 interface SkuSelection {
   skuId: number;
@@ -215,7 +216,7 @@ export default function AddOrder() {
         <Button size="sm" className="h-7 gap-1">
           <PlusCircle className="h-3.5 w-3.5" />
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            Tạo đơn hàng
+            <T>Tạo đơn hàng</T>
           </span>
         </Button>
       </DialogTrigger>
@@ -230,7 +231,7 @@ export default function AddOrder() {
                 htmlFor="isNewGuest"
                 className="text-sm font-medium text-blue-900"
               >
-                Khách hàng mới
+                <T>Khách hàng mới</T>
               </Label>
               <p className="text-xs text-blue-700 mt-1">
                 {isNewGuest
@@ -248,7 +249,7 @@ export default function AddOrder() {
         {isNewGuest && (
           <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
             <h3 className="text-sm font-semibold text-gray-900 mb-4">
-              Thông tin khách hàng
+              <T>Thông tin khách hàng</T>
             </h3>
             <Form {...form}>
               <form noValidate className="space-y-4">
@@ -261,7 +262,7 @@ export default function AddOrder() {
                         htmlFor="name"
                         className="text-sm font-medium text-gray-700"
                       >
-                        Tên khách hàng
+                        <T>Tên khách hàng</T>
                       </Label>
                       <Input
                         id="name"
@@ -282,7 +283,7 @@ export default function AddOrder() {
                         htmlFor="tableNumber"
                         className="text-sm font-medium text-gray-700"
                       >
-                        Chọn bàn
+                        <T>Chọn bàn</T>
                       </Label>
                       <div className="mt-1 flex items-center gap-3">
                         <div className="flex-1 px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-sm text-gray-600">
@@ -314,7 +315,7 @@ export default function AddOrder() {
         {!isNewGuest && selectedGuest && (
           <div className="bg-green-50 border border-green-200 rounded-lg p-4">
             <h3 className="text-sm font-semibold text-green-900 mb-2">
-              Khách hàng đã chọn
+              <T>Khách hàng đã chọn</T>
             </h3>
             <div className="flex items-center justify-between">
               <div>
@@ -351,7 +352,7 @@ export default function AddOrder() {
                       {isUnavailable && (
                         <div className="absolute inset-0 bg-black/60 flex items-center justify-center rounded-lg z-10">
                           <span className="text-white text-xs font-medium bg-red-500 px-2 py-1 rounded">
-                            Hết hàng
+                            <T>Hết hàng</T>
                           </span>
                         </div>
                       )}
@@ -449,7 +450,7 @@ export default function AddOrder() {
               onClick={handleOrder}
               disabled={orders.length === 0}
             >
-              Tạo đơn hàng
+              <T>Tạo đơn hàng</T>
             </Button>
           </div>
         </DialogFooter>

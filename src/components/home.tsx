@@ -14,19 +14,19 @@ const Home = () => {
         <div className="p-6 border-2 border-black rounded-lg">
           <h3 className="text-xl font-semibold mb-3">{tr("Tính năng 1")}</h3>
           <p>
-            Mô tả tính năng đầu tiên của website với thiết kế trắng đen tinh tế.
+            <T>Mô tả tính năng đầu tiên của website với thiết kế trắng đen tinh tế.</T>
           </p>
         </div>
         <div className="p-6 border-2 border-black rounded-lg">
           <h3 className="text-xl font-semibold mb-3">{tr("Tính năng 2")}</h3>
           <p>
-            Mô tả tính năng thứ hai của website với thiết kế trắng đen tinh tế.
+            <T>Mô tả tính năng thứ hai của website với thiết kế trắng đen tinh tế.</T>
           </p>
         </div>
         <div className="p-6 border-2 border-black rounded-lg">
           <h3 className="text-xl font-semibold mb-3">{tr("Tính năng 3")}</h3>
           <p>
-            Mô tả tính năng thứ ba của website với thiết kế trắng đen tinh tế.
+            <T>Mô tả tính năng thứ ba của website với thiết kế trắng đen tinh tế.</T>
           </p>
         </div>
       </div>

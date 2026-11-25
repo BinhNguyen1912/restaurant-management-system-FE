@@ -14,6 +14,7 @@ import { CheckCircle } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import Link from 'next/link';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 function PaymentSuccessContent() {
   const { t } = useI18n();
@@ -81,10 +82,10 @@ function PaymentSuccessContent() {
             </div>
           </div>
           <DialogTitle className="text-2xl text-center text-green-600">
-            Thanh toán thành công!
+            <T>Thanh toán thành công!</T>
           </DialogTitle>
           <DialogDescription className="text-sm text-center mt-4">
-            Cảm ơn quý khách đã sử dụng dịch vụ của tại B'Restaurant
+            <T>Cảm ơn quý khách đã sử dụng dịch vụ của tại B'Restaurant</T>
           </DialogDescription>
         </DialogHeader>
 
@@ -125,11 +126,11 @@ function PaymentSuccessContent() {
             onClick={handleClose}
             className="w-full bg-green-600 hover:bg-green-700 text-white"
           >
-            Xem đơn hàng
+            <T>Xem đơn hàng</T>
           </Button>
           <Link href="/guest/menu">
             <Button variant="outline" className="w-full">
-              Đặt món thêm
+              <T>Đặt món thêm</T>
             </Button>
           </Link>
         </DialogFooter>

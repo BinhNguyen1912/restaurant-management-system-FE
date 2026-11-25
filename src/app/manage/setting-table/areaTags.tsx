@@ -19,6 +19,7 @@ import { toast } from 'react-toastify';
 import { AreaType } from '@/app/ValidationSchemas/area.schema';
 import EditAreaDialog from '@/app/manage/setting-table/editAreaDialog';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 interface AreaTagsProps {
   currentArea: string;
@@ -87,7 +88,7 @@ export default function AreaTags({
             className="h-8 px-2"
           >
             <Plus className="h-3 w-3 mr-1" />
-            Thêm
+            <T>Thêm</T>
           </Button>
         </div>
 

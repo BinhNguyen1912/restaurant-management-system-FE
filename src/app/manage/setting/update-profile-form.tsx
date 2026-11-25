@@ -22,6 +22,7 @@ import { Badge } from '@/components/ui/badge';
 import { getVietNameseRole, roleNameType } from '@/app/constants/role.constant';
 import { RoleType } from '@/app/ValidationSchemas/role.schema';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 export default function UpdateProfileForm() {
   const { t } = useI18n();
@@ -192,10 +193,10 @@ export default function UpdateProfileForm() {
 
               <div className=" items-center gap-2 md:ml-auto flex">
                 <Button variant="outline" size="sm" type="reset">
-                  Hủy
+                  <T>Hủy</T>
                 </Button>
                 <Button size="sm" type="submit">
-                  Lưu thông tin
+                  <T>Lưu thông tin</T>
                 </Button>
               </div>
             </div>

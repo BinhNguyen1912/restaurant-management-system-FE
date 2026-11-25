@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/chart';
 import { format, parse } from 'date-fns';
 import { DashboardIndicatorType } from '@/app/ValidationSchemas/dashboard.model';
+import { T } from '@/components/t';
 
 const chartConfig = {
   desktop: {
@@ -34,10 +35,10 @@ export function RevenueAreaChart({
     <Card className="h-full">
       <CardHeader>
         <CardTitle className="text-lg font-semibold">
-          Biểu đồ doanh thu
+          <T>Biểu đồ doanh thu</T>
         </CardTitle>
         <CardDescription className="text-sm text-muted-foreground">
-          Doanh thu theo thời gian
+          <T>Doanh thu theo thời gian</T>
         </CardDescription>
       </CardHeader>
       <CardContent className="p-4">

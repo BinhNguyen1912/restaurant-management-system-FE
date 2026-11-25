@@ -44,6 +44,7 @@ import {
 import { formatCurrency } from '@/lib/utils';
 import CreateLedgerAccountDialog from '@/app/manage/ledger-accounts/create-ledger-account-dialog';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 const TYPE_OPTIONS = ['ALL', 'ASSET', 'LIABILITY', 'EQUITY', 'REVENUE', 'EXPENSE'] as const;
 
@@ -153,21 +154,21 @@ export default function LedgerAccountTable() {
             {isLoading && (
               <TableRow>
                 <TableCell colSpan={8} className="text-center text-sm text-muted-foreground">
-                  Đang tải danh mục tài khoản…
+                  <T>Đang tải danh mục tài khoản…</T>
                 </TableCell>
               </TableRow>
             )}
             {isError && (
               <TableRow>
                 <TableCell colSpan={8} className="text-center text-sm text-destructive">
-                  Không tải được danh mục (kiểm tra quyền LEDGER-ACCOUNTS)
+                  <T>Không tải được danh mục (kiểm tra quyền LEDGER-ACCOUNTS)</T>
                 </TableCell>
               </TableRow>
             )}
             {!isLoading && !isError && filtered.length === 0 && (
               <TableRow>
                 <TableCell colSpan={8} className="text-center text-sm text-muted-foreground">
-                  Không có tài khoản nào khớp
+                  <T>Không có tài khoản nào khớp</T>
                 </TableCell>
               </TableRow>
             )}
@@ -178,7 +179,7 @@ export default function LedgerAccountTable() {
                     {account.code}
                     {account.isSystem && (
                       <Badge variant="secondary" className="text-[10px]">
-                        hệ thống
+                        <T>hệ thống</T>
                       </Badge>
                     )}
                   </div>
@@ -252,7 +253,7 @@ export default function LedgerAccountTable() {
           <AlertDialogFooter>
             <AlertDialogCancel>{t("Huỷ")}</AlertDialogCancel>
             <AlertDialogAction onClick={submitRename} disabled={isUpdating || !renameValue.trim()}>
-              Lưu
+              <T>Lưu</T>
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -263,13 +264,13 @@ export default function LedgerAccountTable() {
           <AlertDialogHeader>
             <AlertDialogTitle>Xoá {deleting?.code}?</AlertDialogTitle>
             <AlertDialogDescription>
-              Tài khoản này chưa có bút toán nào nên xoá được. Nếu sau này cần, hãy tạo lại cùng mã.
+              <T>Tài khoản này chưa có bút toán nào nên xoá được. Nếu sau này cần, hãy tạo lại cùng mã.</T>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>{t("Huỷ")}</AlertDialogCancel>
             <AlertDialogAction onClick={confirmDelete} disabled={isDeleting}>
-              Xoá
+              <T>Xoá</T>
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -265,7 +265,7 @@ export function TablesDialog({
                           colSpan={columns.length}
                           className="h-24 text-center"
                         >
-                          Không có dữ liệu.
+                          <T>Không có dữ liệu.</T>
                         </TableCell>
                       </TableRow>
                     )}

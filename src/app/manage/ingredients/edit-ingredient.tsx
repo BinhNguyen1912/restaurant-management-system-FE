@@ -58,6 +58,7 @@ import {
 import { useGetUnits } from '@/app/queries/useUnit';
 import DialogAddUnit from '@/app/manage/ingredients/add-unit';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 export default function EditIngredient({
   id,
@@ -179,10 +180,10 @@ export default function EditIngredient({
       <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-auto">
         <DialogHeader className="border-b pb-4">
           <DialogTitle className="text-2xl font-bold">
-            Cập nhật sản phẩm
+            <T>Cập nhật sản phẩm</T>
           </DialogTitle>
           <DialogDescription className="text-muted-foreground">
-            Các trường bắt buộc: Tên, ảnh
+            <T>Các trường bắt buộc: Tên, ảnh</T>
           </DialogDescription>
         </DialogHeader>
 
@@ -240,7 +241,7 @@ export default function EditIngredient({
                             >
                               <Upload className="h-6 w-6 text-muted-foreground mb-1" />
                               <span className="text-xs text-muted-foreground">
-                                Thêm ảnh
+                                <T>Thêm ảnh</T>
                               </span>
                             </div>
                           )}
@@ -260,7 +261,7 @@ export default function EditIngredient({
                         />
 
                         <p className="text-xs text-muted-foreground">
-                          Chỉ chọn 1 ảnh, kích thước tối đa 2MB
+                          <T>Chỉ chọn 1 ảnh, kích thước tối đa 2MB</T>
                         </p>
                       </div>
                       <FormMessage />
@@ -280,7 +281,7 @@ export default function EditIngredient({
                     render={({ field }) => (
                       <FormItem>
                         <Label htmlFor="name" className="text-sm font-medium">
-                          Tên nguyên liệu *
+                          <T>Tên nguyên liệu *</T>
                         </Label>
                         <Input
                           id="name"
@@ -303,7 +304,7 @@ export default function EditIngredient({
                             htmlFor="stock"
                             className="text-sm font-medium"
                           >
-                            Số lượng còn
+                            <T>Số lượng còn</T>
                           </Label>
                           <Input
                             id="stock"
@@ -359,7 +360,7 @@ export default function EditIngredient({
                       render={({ field }) => (
                         <FormItem>
                           <Label htmlFor="unitCost" className="text-sm font-medium">
-                            Giá nhập / 1 đơn vị (đồng)
+                            <T>Giá nhập / 1 đơn vị (đồng)</T>
                           </Label>
                           <Input
                             id="unitCost"
@@ -371,7 +372,7 @@ export default function EditIngredient({
                             onChange={(e) => field.onChange(Number(e.target.value))}
                           />
                           <p className="text-xs text-muted-foreground">
-                            Dùng tính giá vốn (COGS). 0 = chưa khai giá.
+                            <T>Dùng tính giá vốn (COGS). 0 = chưa khai giá.</T>
                           </p>
                           <FormMessage />
                         </FormItem>
@@ -388,7 +389,7 @@ export default function EditIngredient({
                               htmlFor="minStock"
                               className="text-sm font-medium"
                             >
-                              Mức tồn cảnh báo
+                              <T>Mức tồn cảnh báo</T>
                             </Label>
                             <Input
                               id="minStock"
@@ -492,7 +493,7 @@ export default function EditIngredient({
               resetForm();
             }}
           >
-            Hủy
+            <T>Hủy</T>
           </Button>
           <Button
             type="submit"

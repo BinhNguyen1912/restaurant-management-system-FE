@@ -49,6 +49,7 @@ import {
 import { useGetRoleListQuery } from '@/app/queries/useRole';
 import { z } from 'zod';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 export default function EditEmployee({
   id,
@@ -170,7 +171,7 @@ export default function EditEmployee({
         <DialogHeader>
           <DialogTitle>{t("Cập nhật tài khoản")}</DialogTitle>
           <DialogDescription>
-            Các trường tên, email, mật khẩu là bắt buộc
+            <T>Các trường tên, email, mật khẩu là bắt buộc</T>
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -383,7 +384,7 @@ export default function EditEmployee({
                       <FormItem>
                         <div className="grid grid-cols-4 items-center justify-items-start gap-4">
                           <Label htmlFor="confirmNewPassword">
-                            Xác nhận mật khẩu mới
+                            <T>Xác nhận mật khẩu mới</T>
                           </Label>
                           <div className="col-span-3 w-full space-y-2">
                             <Input
@@ -406,7 +407,7 @@ export default function EditEmployee({
         </Form>
         <DialogFooter>
           <Button type="submit" form="edit-employee-form">
-            Lưu
+            <T>Lưu</T>
           </Button>
         </DialogFooter>
       </DialogContent>

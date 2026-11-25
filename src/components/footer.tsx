@@ -1,5 +1,6 @@
 import { Beef } from 'lucide-react';
 import Link from 'next/link';
+import { T } from '@/components/t';
 
 export default function Footer() {
   return (
@@ -16,17 +17,17 @@ export default function Footer() {
               className="hover:underline"
               prefetch={false}
             >
-              Điều khoản dịch vụ
+              <T>Điều khoản dịch vụ</T>
             </Link>
             <Link
               href="/privacy-policy"
               className="hover:underline"
               prefetch={false}
             >
-              Chính sách bảo mật
+              <T>Chính sách bảo mật</T>
             </Link>
             <Link href="/about" className="hover:underline" prefetch={false}>
-              Về chúng tôi
+              <T>Về chúng tôi</T>
             </Link>
           </div>
         </div>

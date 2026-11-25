@@ -54,6 +54,7 @@ import {
 import DialogAddUnit from '@/app/manage/ingredients/add-unit';
 import { handleErrorApi } from '@/lib/utils';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 interface AddIngredientProps {
   onIngredientCreated?: () => void;
@@ -178,7 +179,7 @@ export default function AddIngredient({
       <DialogTrigger asChild>
         <Button size="sm" className="flex items-center gap-2">
           <PlusCircle className="h-4 w-4" />
-          Thêm nguyên liệu
+          <T>Thêm nguyên liệu</T>
         </Button>
       </DialogTrigger>
 
@@ -325,7 +326,7 @@ export default function AddIngredient({
                         />
                       </FormControl>
                       <p className="text-xs text-muted-foreground">
-                        Dùng để tính giá vốn (COGS). Bỏ trống = 0 → báo cáo lãi gộp sẽ thiếu phần nguyên liệu này.
+                        <T>Dùng để tính giá vốn (COGS). Bỏ trống = 0 → báo cáo lãi gộp sẽ thiếu phần nguyên liệu này.</T>
                       </p>
                       <FormMessage />
                     </FormItem>
@@ -671,10 +672,10 @@ export default function AddIngredient({
             variant="outline"
             onClick={() => setOpen(false)}
           >
-            Hủy
+            <T>Hủy</T>
           </Button>
           <Button type="submit" form="add-ingredient-form">
-            Thêm nguyên liệu
+            <T>Thêm nguyên liệu</T>
           </Button>
         </DialogFooter>
       </DialogContent>

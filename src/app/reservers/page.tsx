@@ -21,6 +21,7 @@ import { useListArea } from '@/app/queries/useArea';
 import { Button } from '@/components/ui/button';
 import { Select } from '@/components/ui/select';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 const nodeTypes: NodeTypes = {
   table: TableNode,
@@ -125,7 +126,7 @@ export default function TableSelectionPage() {
       {/* Chọn khu vực */}
       <div className="p-2 bg-gray-100 flex items-center gap-4">
         <label className="block mb-1 font-semibold text-gray-700">
-          Khu vực:
+          <T>Khu vực:</T>
         </label>
         <div className="relative inline-block w-64">
           <select

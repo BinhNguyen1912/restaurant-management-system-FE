@@ -28,6 +28,7 @@ import {
 } from '@/app/queries/useLedgerReconciliation';
 import { formatCurrency } from '@/lib/utils';
 import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 const METHOD_LABEL: Record<string, string> = {
   CASH: 'Tiền mặt',
@@ -230,7 +231,7 @@ export default function ReconciliationBoard() {
               <Input id="note" value={note} onChange={(event) => setNote(event.target.value)} />
             </div>
             <Button type="submit" disabled={isPending}>
-              Ghi đối soát
+              <T>Ghi đối soát</T>
             </Button>
           </form>
           <p className="mt-2 text-xs text-muted-foreground">

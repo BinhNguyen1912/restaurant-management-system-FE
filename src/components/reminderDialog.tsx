@@ -222,10 +222,10 @@ export const QuickReminderDialog: React.FC<QuickReminderDialogProps> = ({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Bell className="h-5 w-5" />
-            Tạo lời nhắc mới
+            <T>Tạo lời nhắc mới</T>
           </DialogTitle>
           <DialogDescription>
-            Thiết lập công việc cần nhắc nhở cho nhân viên
+            <T>Thiết lập công việc cần nhắc nhở cho nhân viên</T>
           </DialogDescription>
         </DialogHeader>
 
@@ -254,7 +254,7 @@ export const QuickReminderDialog: React.FC<QuickReminderDialogProps> = ({
                   <div className="space-y-2">
                     <Label htmlFor="time" className="flex items-center gap-1">
                       <Clock className="h-4 w-4" />
-                      Thời gian *
+                      <T>Thời gian *</T>
                     </Label>
                     <Input
                       id="time"
@@ -274,7 +274,7 @@ export const QuickReminderDialog: React.FC<QuickReminderDialogProps> = ({
                       className="flex items-center gap-1"
                     >
                       <Calendar className="h-4 w-4" />
-                      Ngày nhắc (tùy chọn)
+                      <T>Ngày nhắc (tùy chọn)</T>
                     </Label>
                     <Input
                       id="scheduled_date"
@@ -318,7 +318,7 @@ export const QuickReminderDialog: React.FC<QuickReminderDialogProps> = ({
                       className="flex items-center gap-1"
                     >
                       <Calendar className="h-4 w-4" />
-                      Lặp lại
+                      <T>Lặp lại</T>
                     </Label>
                     <Select
                       value={formData.repeat_mode}
@@ -582,7 +582,7 @@ export const QuickReminderDialog: React.FC<QuickReminderDialogProps> = ({
               disabled={createReminderMutation.isPending}
               className="flex-1"
             >
-              Hủy bỏ
+              <T>Hủy bỏ</T>
             </Button>
             <Button
               type="submit"
@@ -597,12 +597,12 @@ export const QuickReminderDialog: React.FC<QuickReminderDialogProps> = ({
               {createReminderMutation.isPending ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-2 border-current border-t-transparent" />
-                  Đang tạo...
+                  <T>Đang tạo...</T>
                 </>
               ) : (
                 <>
                   <Save className="h-4 w-4" />
-                  Tạo lời nhắc
+                  <T>Tạo lời nhắc</T>
                 </>
               )}
             </Button>
