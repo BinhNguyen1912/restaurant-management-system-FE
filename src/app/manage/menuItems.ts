@@ -16,6 +16,7 @@ import {
   Landmark,
   TicketPercent,
   FolderTree,
+  Wallet2,
 } from 'lucide-react';
 
 const menuItems = [
@@ -32,6 +33,13 @@ const menuItems = [
     href: '/manage/reports',
     group: 'Tổng quan',
     roles: [Role.ADMIN],
+  },
+  {
+    title: 'Sổ quỹ',
+    Icon: Wallet2,
+    href: '/manage/cash-book',
+    group: 'Tài chính',
+    roles: [Role.ADMIN, Role.STAFF],
   },
   {
     title: 'Sổ cái',

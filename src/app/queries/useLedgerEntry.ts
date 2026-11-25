@@ -15,3 +15,9 @@ export const useGetLedgerIntegrity = () => {
     refetchInterval: 60_000,
   });
 };
+
+export const useGetCashBook = (query: { fromDate?: string; toDate?: string; branchId?: number } = {}) =>
+  useQuery({
+    queryKey: ['cash-book', query.fromDate ?? '', query.toDate ?? '', query.branchId ?? ''],
+    queryFn: () => ledgerEntryApiRequest.cashBook(query),
+  });
