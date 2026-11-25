@@ -45,6 +45,7 @@ import type { CreateReminderType } from '@/app/ValidationSchemas/reminder.schema
 import { RoleValues } from '@/app/constants/type';
 import { roleName } from '@/app/constants/role.constant';
 import { getVietnameseRoleStatus } from '@/lib/utils';
+import { T } from '@/components/t';
 
 type QuickReminderDialogProps = {
   triggerVariant?: 'default' | 'icon';
@@ -210,7 +211,7 @@ export const QuickReminderDialog: React.FC<QuickReminderDialogProps> = ({
             size="sm"
           >
             <Bell size={16} />
-            <span className="hidden sm:inline">Tạo lời nhắc</span>
+            <span className="hidden sm:inline"><T>Tạo lời nhắc</T></span>
           </Button>
         )}
       </DialogTrigger>
@@ -232,12 +233,12 @@ export const QuickReminderDialog: React.FC<QuickReminderDialogProps> = ({
             <div className="space-y-4">
               <Card>
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-sm">Thông tin cơ bản</CardTitle>
+                  <CardTitle className="text-sm"><T>Thông tin cơ bản</T></CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {/* Tiêu đề */}
                   <div className="space-y-2">
-                    <Label htmlFor="title">Tiêu đề lời nhắc *</Label>
+                    <Label htmlFor="title"><T>Tiêu đề lời nhắc *</T></Label>
                     <Input
                       id="title"
                       required
@@ -344,7 +345,7 @@ export const QuickReminderDialog: React.FC<QuickReminderDialogProps> = ({
               {/* Người nhận */}
               <Card>
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-sm">Phân công</CardTitle>
+                  <CardTitle className="text-sm"><T>Phân công</T></CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
@@ -374,7 +375,7 @@ export const QuickReminderDialog: React.FC<QuickReminderDialogProps> = ({
                         <SelectValue placeholder="Chọn vai trò" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="0">Tất cả</SelectItem>
+                        <SelectItem value="0"><T>Tất cả</T></SelectItem>
                         {roles.map((role) => (
                           <SelectItem key={role.id} value={role.id.toString()}>
                             {getVietnameseRoleStatus(
@@ -394,7 +395,7 @@ export const QuickReminderDialog: React.FC<QuickReminderDialogProps> = ({
               {/* Mô tả */}
               <Card>
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-sm">Mô tả chi tiết</CardTitle>
+                  <CardTitle className="text-sm"><T>Mô tả chi tiết</T></CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Textarea
@@ -412,19 +413,19 @@ export const QuickReminderDialog: React.FC<QuickReminderDialogProps> = ({
               {/* Preview */}
               <Card>
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-sm">Xem trước</CardTitle>
+                  <CardTitle className="text-sm"><T>Xem trước</T></CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="font-medium">Tiêu đề:</span>
+                    <span className="font-medium"><T>Tiêu đề:</T></span>
                     <span>{formData.title || 'Chưa có'}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="font-medium">Thời gian:</span>
+                    <span className="font-medium"><T>Thời gian:</T></span>
                     <span>{formData.time_to_remind || 'Chưa có'}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="font-medium">Ngày nhắc:</span>
+                    <span className="font-medium"><T>Ngày nhắc:</T></span>
                     <span>
                       {formData.scheduled_date
                         ? (() => {
@@ -443,7 +444,7 @@ export const QuickReminderDialog: React.FC<QuickReminderDialogProps> = ({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="font-medium">Lặp lại:</span>
+                    <span className="font-medium"><T>Lặp lại:</T></span>
                     <span>
                       {
                         repeatModes.find(
@@ -453,7 +454,7 @@ export const QuickReminderDialog: React.FC<QuickReminderDialogProps> = ({
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="font-medium">Người nhận:</span>
+                    <span className="font-medium"><T>Người nhận:</T></span>
                     <span>
                       {!formData.assigned_role ||
                       formData.assigned_role.length === 0
@@ -472,7 +473,7 @@ export const QuickReminderDialog: React.FC<QuickReminderDialogProps> = ({
                   </div>
                   {showRepeatDays && formData.repeat_days.length > 0 && (
                     <div className="flex justify-between">
-                      <span className="font-medium">Ngày lặp lại:</span>
+                      <span className="font-medium"><T>Ngày lặp lại:</T></span>
                       <span className="text-right">
                         {formData.repeat_mode === RepeatModeType.WEEKLY
                           ? formData.repeat_days
@@ -494,7 +495,7 @@ export const QuickReminderDialog: React.FC<QuickReminderDialogProps> = ({
           {showRepeatDays && (
             <Card className="mt-6">
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm">Chọn ngày lặp lại *</CardTitle>
+                <CardTitle className="text-sm"><T>Chọn ngày lặp lại *</T></CardTitle>
               </CardHeader>
               <CardContent>
                 {formData.repeat_mode === RepeatModeType.WEEKLY && (

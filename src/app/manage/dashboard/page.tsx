@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/card';
 import LowStockWarningDialog from '@/components/lowStockWarningDialog';
 import CallStaffNotification from '@/components/CallStaffNotification';
+import { T } from '@/components/t';
 
 export default async function Dashboard() {
   return (
@@ -16,7 +17,7 @@ export default async function Dashboard() {
         <Card x-chunk="dashboard-06-chunk-0">
           <CardHeader>
             <CardTitle>Dashboard</CardTitle>
-            <CardDescription>Phân tích các chỉ số</CardDescription>
+            <CardDescription><T>Phân tích các chỉ số</T></CardDescription>
           </CardHeader>
           <CardContent>
             <DashboardMain />

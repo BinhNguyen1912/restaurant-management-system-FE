@@ -38,6 +38,7 @@ import { useListTableNode } from '@/app/queries/useTableNode';
 import { OrdersListResType } from '@/app/ValidationSchemas/order.schema';
 import { useGetOrderListQuery } from '@/app/queries/useOrder';
 import { endOfDay, startOfDay } from 'date-fns';
+import { T } from '@/components/t';
 
 export default function OrderStatics({
   statics,
@@ -220,7 +221,7 @@ export default function OrderStatics({
         </div>
       ) : tableList.length === 0 ? (
         <div className="flex justify-center items-center py-8">
-          <div className="text-sm text-muted-foreground">Không có bàn nào</div>
+          <div className="text-sm text-muted-foreground"><T>Không có bàn nào</T></div>
         </div>
       ) : (
         <div className="flex justify-start items-stretch gap-4 flex-wrap py-4">

@@ -9,6 +9,7 @@ import DishTable from '@/app/manage/products/product-table';
 import { Suspense } from 'react';
 import IngredientTable from '@/app/manage/ingredients/ingredient-table';
 import LowStockWarningDialog from '@/components/lowStockWarningDialog';
+import { T } from '@/components/t';
 
 export default function DishesPage() {
   return (
@@ -16,8 +17,8 @@ export default function DishesPage() {
       <div className="space-y-2">
         <Card x-chunk="dashboard-06-chunk-0">
           <CardHeader>
-            <CardTitle>Nguyên Liệu</CardTitle>
-            <CardDescription>Quản lý nguyên liệu</CardDescription>
+            <CardTitle><T>Nguyên Liệu</T></CardTitle>
+            <CardDescription><T>Quản lý nguyên liệu</T></CardDescription>
           </CardHeader>
           <CardContent>
             <Suspense>

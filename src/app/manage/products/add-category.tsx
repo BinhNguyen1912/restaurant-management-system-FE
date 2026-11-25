@@ -130,7 +130,7 @@
 //         <Form {...form}>
 //           <form onSubmit={handleFormSubmit} id="add-category-form">
 //             <DialogHeader>
-//               <DialogTitle className="mb-2">Thêm danh mục mới</DialogTitle>
+//               <DialogTitle className="mb-2"><T>Thêm danh mục mới</T></DialogTitle>
 //             </DialogHeader>
 //             <div className="grid gap-4">
 //               <div className="grid gap-3">
@@ -194,7 +194,7 @@
 //                   name="parentCategoryId"
 //                   render={({ field }) => (
 //                     <FormItem>
-//                       <FormLabel>Danh mục cha</FormLabel>
+//                       <FormLabel><T>Danh mục cha</T></FormLabel>
 //                       <FormControl>
 //                         <Select
 //                           onValueChange={(value) =>
@@ -274,6 +274,7 @@ import {
 } from '@/components/ui/form';
 import { AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Avatar } from '@radix-ui/react-avatar';
+import { T } from '@/components/t';
 import {
   Select,
   SelectContent,
@@ -372,7 +373,7 @@ export default function DialogAddCategory({
         <Form {...form}>
           <form onSubmit={handleFormSubmit} id="add-category-form">
             <DialogHeader>
-              <DialogTitle className="mb-2">Thêm danh mục mới</DialogTitle>
+              <DialogTitle className="mb-2"><T>Thêm danh mục mới</T></DialogTitle>
             </DialogHeader>
             <div className="grid gap-4">
               <div className="grid gap-3">
@@ -437,7 +438,7 @@ export default function DialogAddCategory({
                   name="parentCategoryId"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Danh mục cha</FormLabel>
+                      <FormLabel><T>Danh mục cha</T></FormLabel>
                       <FormControl>
                         <Select
                           onValueChange={(value) =>

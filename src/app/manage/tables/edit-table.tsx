@@ -42,6 +42,7 @@ import { TableNodeType } from '@/app/ValidationSchemas/table-node.schema';
 import { use, useEffect } from 'react';
 import QrCodeTable from '@/components/qrcode-table';
 import { toast } from 'react-toastify';
+import { T } from '@/components/t';
 import {
   UpdateTableBodySchema,
   UpdateTableBodyType,
@@ -136,7 +137,7 @@ export default function EditTable({
         }}
       >
         <DialogHeader>
-          <DialogTitle>Cập nhật bàn ăn</DialogTitle>
+          <DialogTitle><T>Cập nhật bàn ăn</T></DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -148,7 +149,7 @@ export default function EditTable({
             <div className="grid gap-4 py-4">
               <FormItem>
                 <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                  <Label htmlFor="id">ID bàn</Label>
+                  <Label htmlFor="id"><T>ID bàn</T></Label>
                   <div className="col-span-3 w-full space-y-2">
                     <Input
                       id="id"
@@ -167,7 +168,7 @@ export default function EditTable({
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="name">Tên bàn</Label>
+                      <Label htmlFor="name"><T>Tên bàn</T></Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Input id="name" className="w-full" {...field} />
                         <FormMessage />
@@ -182,7 +183,7 @@ export default function EditTable({
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="seats">Số ghế</Label>
+                      <Label htmlFor="seats"><T>Số ghế</T></Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Input
                           id="seats"
@@ -202,7 +203,7 @@ export default function EditTable({
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="type">Loại bàn</Label>
+                      <Label htmlFor="type"><T>Loại bàn</T></Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Select
                           value={field.value}
@@ -233,7 +234,7 @@ export default function EditTable({
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="status">Trạng thái</Label>
+                      <Label htmlFor="status"><T>Trạng thái</T></Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Select
                           value={field.value}
@@ -264,7 +265,7 @@ export default function EditTable({
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="areaId">Khu vực</Label>
+                      <Label htmlFor="areaId"><T>Khu vực</T></Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Input
                           id="areaId"
@@ -284,7 +285,7 @@ export default function EditTable({
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="changeToken">Đổi QR Code</Label>
+                      <Label htmlFor="changeToken"><T>Đổi QR Code</T></Label>
                       <div className="col-span-3 w-full space-y-2">
                         <div className="flex items-center space-x-2">
                           <Switch
@@ -315,7 +316,7 @@ export default function EditTable({
               </FormItem>
               <FormItem>
                 <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                  <Label>URL gọi món</Label>
+                  <Label><T>URL gọi món</T></Label>
                   <div className="col-span-3 w-full space-y-2">
                     {data && (
                       <Link

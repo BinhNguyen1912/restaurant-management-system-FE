@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/chart';
 import { DashboardIndicatorType } from '@/app/ValidationSchemas/dashboard.model';
 import { useMemo } from 'react';
+import { T } from '@/components/t';
 
 type ChartConfig = {
   [key: string]: {
@@ -65,7 +66,7 @@ export function DishBarChart({
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle className="text-lg font-semibold">Xếp hạng món ăn</CardTitle>
+        <CardTitle className="text-lg font-semibold"><T>Xếp hạng món ăn</T></CardTitle>
         <CardDescription className="text-sm text-muted-foreground">
           Top {productIndicator.length} món được gọi nhiều nhất
         </CardDescription>

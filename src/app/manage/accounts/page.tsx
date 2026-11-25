@@ -10,6 +10,7 @@ import AccountTable from '@/app/manage/accounts/account-table';
 import { Suspense } from 'react';
 import LowStockWarningDialog from '@/components/lowStockWarningDialog';
 import CallStaffNotification from '@/components/CallStaffNotification';
+import { T } from '@/components/t';
 
 export default function Dashboard() {
   return (
@@ -17,8 +18,8 @@ export default function Dashboard() {
       <div className="space-y-2">
         <Card x-chunk="dashboard-06-chunk-0">
           <CardHeader>
-            <CardTitle>Tài khoản</CardTitle>
-            <CardDescription>Quản lý tài khoản nhân viên</CardDescription>
+            <CardTitle><T>Tài khoản</T></CardTitle>
+            <CardDescription><T>Quản lý tài khoản nhân viên</T></CardDescription>
           </CardHeader>
           <CardContent>
             <Suspense>

@@ -1,3 +1,4 @@
+import { T } from '@/components/t';
 // 'use client';
 // import React from 'react';
 // import {
@@ -49,13 +50,13 @@
 //         {isLoading && (
 //           <div className="flex items-center justify-center py-8">
 //             <Loader2 className="h-8 w-8 animate-spin" />
-//             <span className="ml-2">Đang tải...</span>
+//             <span className="ml-2"><T>Đang tải...</T></span>
 //           </div>
 //         )}
 
 //         {error && (
 //           <div className="text-center py-8">
-//             <p className="text-red-500">Có lỗi xảy ra khi tải dữ liệu</p>
+//             <p className="text-red-500"><T>Có lỗi xảy ra khi tải dữ liệu</T></p>
 //             <p className="text-sm text-gray-500 mt-2">
 //               {error?.message || 'Unknown error'}
 //             </p>
@@ -67,21 +68,21 @@
 //             {/* Thông tin cơ bản */}
 //             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 //               <div className="space-y-2">
-//                 <h3 className="font-semibold text-lg">Thông tin đơn hàng</h3>
+//                 <h3 className="font-semibold text-lg"><T>Thông tin đơn hàng</T></h3>
 //                 <div className="space-y-1 text-sm">
 //                   <p>
 //                     <span className="font-medium">ID:</span> {order.id}
 //                   </p>
 //                   <p>
-//                     <span className="font-medium">Khách hàng:</span>{' '}
+//                     <span className="font-medium"><T>Khách hàng:</T></span>{' '}
 //                     {order.guest?.name || 'Khách vãng lai'}
 //                   </p>
 //                   <p>
-//                     <span className="font-medium">Bàn:</span>{' '}
+//                     <span className="font-medium"><T>Bàn:</T></span>{' '}
 //                     {order.tableNode?.name || 'N/A'}
 //                   </p>
 //                   <p>
-//                     <span className="font-medium">Loại:</span>
+//                     <span className="font-medium"><T>Loại:</T></span>
 //                     <Badge variant="outline" className="ml-2">
 //                       {order.type === 'AT_TABLE'
 //                         ? 'Tại bàn'
@@ -91,7 +92,7 @@
 //                     </Badge>
 //                   </p>
 //                   <p>
-//                     <span className="font-medium">Trạng thái:</span>
+//                     <span className="font-medium"><T>Trạng thái:</T></span>
 //                     <Badge
 //                       variant={
 //                         order.status === 'COMPLETED'
@@ -111,18 +112,18 @@
 //               </div>
 
 //               <div className="space-y-2">
-//                 <h3 className="font-semibold text-lg">Thông tin thanh toán</h3>
+//                 <h3 className="font-semibold text-lg"><T>Thông tin thanh toán</T></h3>
 //                 <div className="space-y-1 text-sm">
 //                   <p>
-//                     <span className="font-medium">Phương thức:</span>{' '}
+//                     <span className="font-medium"><T>Phương thức:</T></span>{' '}
 //                     {order.payment.method || 'Chưa chọn'}
 //                   </p>
 //                   <p>
-//                     <span className="font-medium">Số tiền:</span>{' '}
+//                     <span className="font-medium"><T>Số tiền:</T></span>{' '}
 //                     {formatCurrency(Number(order.payment.amount))}
 //                   </p>
 //                   <p>
-//                     <span className="font-medium">Trạng thái:</span>
+//                     <span className="font-medium"><T>Trạng thái:</T></span>
 //                     <Badge
 //                       variant={
 //                         order.payment.status === 'SUCCESS'
@@ -146,16 +147,16 @@
 
 //             {/* Danh sách món ăn */}
 //             <div>
-//               <h3 className="font-semibold text-lg mb-4">Danh sách món ăn</h3>
+//               <h3 className="font-semibold text-lg mb-4"><T>Danh sách món ăn</T></h3>
 //               <div className="rounded-md border">
 //                 <Table>
 //                   <TableHeader>
 //                     <TableRow>
-//                       <TableHead>Món ăn</TableHead>
-//                       <TableHead>Phiên bản</TableHead>
-//                       <TableHead className="text-center">Số lượng</TableHead>
-//                       <TableHead className="text-right">Đơn giá</TableHead>
-//                       <TableHead className="text-right">Thành tiền</TableHead>
+//                       <TableHead><T>Món ăn</T></TableHead>
+//                       <TableHead><T>Phiên bản</T></TableHead>
+//                       <TableHead className="text-center"><T>Số lượng</T></TableHead>
+//                       <TableHead className="text-right"><T>Đơn giá</T></TableHead>
+//                       <TableHead className="text-right"><T>Thành tiền</T></TableHead>
 //                     </TableRow>
 //                   </TableHeader>
 //                   <TableBody>
@@ -216,24 +217,24 @@
 //             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
 //               <div>
 //                 <p>
-//                   <span className="font-medium">Ngày tạo:</span>{' '}
+//                   <span className="font-medium"><T>Ngày tạo:</T></span>{' '}
 //                   {new Date(order.createdAt).toLocaleString('vi-VN')}
 //                 </p>
 //                 <p>
-//                   <span className="font-medium">Cập nhật lần cuối:</span>{' '}
+//                   <span className="font-medium"><T>Cập nhật lần cuối:</T></span>{' '}
 //                   {new Date(order.updatedAt).toLocaleString('vi-VN')}
 //                 </p>
 //               </div>
 //               <div>
 //                 {order.createdBy && (
 //                   <p>
-//                     <span className="font-medium">Người tạo:</span>{' '}
+//                     <span className="font-medium"><T>Người tạo:</T></span>{' '}
 //                     {order.createdBy.name}
 //                   </p>
 //                 )}
 //                 {order.updatedBy && (
 //                   <p>
-//                     <span className="font-medium">Người cập nhật:</span>{' '}
+//                     <span className="font-medium"><T>Người cập nhật:</T></span>{' '}
 //                     {order.updatedBy.name}
 //                   </p>
 //                 )}

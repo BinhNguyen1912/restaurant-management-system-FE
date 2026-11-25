@@ -1,3 +1,4 @@
+import { T } from '@/components/t';
 export default function About() {
   return (
     <div className='flex flex-col'>
@@ -11,7 +12,7 @@ export default function About() {
       <section className='py-12 md:py-20 lg:py-24'>
         <div className='max-w-4xl space-y-8'>
           <div>
-            <h2 className='text-3xl font-bold'>Dữ liệu thu thập</h2>
+            <h2 className='text-3xl font-bold'><T>Dữ liệu thu thập</T></h2>
             <p className='mt-4 text-muted-foreground leading-8'>
               Chúng tôi thu thập các thông tin cá nhân mà bạn cung cấp khi tạo
               tài khoản, đặt hàng hoặc liên hệ với chúng tôi. Các thông tin này
@@ -21,7 +22,7 @@ export default function About() {
             </p>
           </div>
           <div className='space-y-4'>
-            <h2 className='text-3xl font-bold'>Mục đích sử dụng</h2>
+            <h2 className='text-3xl font-bold'><T>Mục đích sử dụng</T></h2>
             <p className=' text-muted-foreground leading-8'>
               Chúng tôi sử dụng thông tin cá nhân của bạn với các mục đích sau:
             </p>

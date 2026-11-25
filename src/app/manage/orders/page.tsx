@@ -10,6 +10,7 @@ import LowStockWarningDialog from '@/components/lowStockWarningDialog';
 import CallStaffNotification from '@/components/CallStaffNotification';
 
 import { Suspense } from 'react';
+import { T } from '@/components/t';
 
 export default function AccountsPage() {
   return (
@@ -17,8 +18,8 @@ export default function AccountsPage() {
       <div className="space-y-2">
         <Card x-chunk="dashboard-06-chunk-0">
           <CardHeader>
-            <CardTitle>Đơn hàng</CardTitle>
-            <CardDescription>Quản lý đơn hàng</CardDescription>
+            <CardTitle><T>Đơn hàng</T></CardTitle>
+            <CardDescription><T>Quản lý đơn hàng</T></CardDescription>
           </CardHeader>
           <CardContent>
             <Suspense>

@@ -501,3 +501,198 @@ Xóa nguyên liệu thành công
 Xoá tài khoản
 Xóa tất cả
 Xóa thành công
+(tiền mặt)
+► Bỏ qua
+124 thích
+406 đã đặt
+Bắt đầu
+Bật public
+Biến thể
+Bút toán
+Các biến thể sản phẩm
+Cảnh báo tồn kho thấp
+Cân
+Cập nhật thông tin khu vực này.
+Cập nhật thông tin lời nhắc
+Chênh lệch
+Chỉnh sửa bàn
+Chỉnh sửa khu vực
+Chọn khách
+Chọn khách hàng
+Chọn loại:
+Chọn một khách hàng để xem tin nhắn
+Chọn ngày lặp lại *
+Chọn nội thất
+Chổ ngồi:
+Chưa có giao dịch trong kỳ
+Chưa có món được chọn
+Chưa có tin nhắn
+chưa gồm
+Chứng từ
+Có
+Danh mục
+Diễn giải
+Đã dùng
+đã gồm VAT
+đã tắt
+Đã tắt
+Đang bật
+Đang chạy
+Đang dùng
+Đang tải kết quả thanh toán...
+Đang tải khu vực...
+Đang tải thông tin món ăn...
+Đang tải...
+Đăng nhập gọi món
+Đăng xuất
+Đầu ca
+Đếm được
+Đến
+Đóng ca — đếm két
+Đổi mật khẩu
+Đối tượng
+đồng nguyên
+đơn hàng
+đơn tạo mới
+Đơn vị
+Ghi chú
+Ghi chú (tuỳ chọn)
+Ghi sổ
+Ghi sổ (Nợ)
+Giá ảo
+Giá Ảo
+Giá cơ bản
+Giá menu đã gồm VAT
+Giá nhập / 1 đơn vị (đồng)
+Giá vốn (COGS)
+Giảm
+Giỏ hàng
+Giới hạn lượt (để trống = không giới hạn)
+Gọi nhân viên
+Hành động
+Hết hạn
+Hiệu lực
+Hình ảnh sản phẩm
+Hỗ trợ
+Huỷ
+Hủy
+ID đối tượng
+Kết quả
+Kết thúc
+Khách
+Không có sản phẩm nào
+Không có tin nhắn mới
+không làm sai đơn cũ
+Khu vực
+Kỳ
+Lãi gộp
+Lặp lại:
+Lần chạy
+Lệch
+Lịch sử ca
+Loại giảm
+Loại nghiệp vụ
+Loại tài khoản
+Lượng khách cho phép
+Lý do
+Mã
+Mã khách hàng :
+Mã khách:
+Mã lỗi:
+Mã sao kê / giao dịch
+Mã tài khoản
+Mật khẩu cũ
+Mật khẩu mới
+Món
+Món bán chạy trong kỳ
+Mô tả
+Mô tả chi tiết
+Mở
+Mức tồn kho cảnh báo
+Ngày lặp lại:
+Ngày nhắc:
+Ngân hàng:
+Nghiệp vụ
+Ngoài giờ / hết lượt
+Nguồn: đơn đã thu tiền, giá snapshot tại thời điểm bán
+Nguyên liệu
+Người làm
+Người nhận:
+Nhật ký bút toán (audit)
+Nợ
+Nợ BANK / Có VNPAY_CLEARING
+Phải có
+Phân công
+Phân loại
+Phần trăm (%)
+Phí phục vụ (%)
+phí phục vụ +
+Phương thức
+Quản lý định lượng
+Sắp xếp vị trí
+Số dư
+Số giao dịch
+Số hiệu bàn
+Số lượng
+Số lượng nhập
+Số tiền
+Số tiền (đ)
+Số tiền báo có
+Số tiền:
+Tài khoản
+Tài khoản (mã)
+Tài khoản nhận tiền
+tài khoản VNPAY_CLEARING
+Tên hiển thị
+Tên khách hàng
+Tên khách hàng :
+Tên món ăn
+Tham chiếu
+Thao tác
+Thay đổi
+Theo ngày và chi nhánh
+Thêm bàn
+Thêm ghi chú
+Thêm món mới
+Thêm tài khoản chi tiết
+Thêm vào giỏ
+thì thuế được
+Thiết kế bàn ăn
+Thông tin cá nhân
+Thông tin cơ bản
+Thời điểm
+Thời gian:
+Thu / chi tiền mặt
+Thu vào
+Thuế phải nộp (VAT)
+Thực tế
+tiền (CASH/VNPAY) =
+Tiền đã thu
+Tiền mặt thực đếm
+Tiêu đề lời nhắc *
+Tiêu đề:
+Tìm
+Tin nhắn từ khách hàng
+Tin nhắn với khách hàng
+Tổng Có
+Tổng Có (Credit)
+Tổng cộng:
+Tổng kỳ
+Tổng Nợ
+Tổng Nợ (Debit)
+Tổng Nợ = Tổng Có
+Tổng số tiền
+Tổng:
+Trải nghiệm đặt món thông minh tại bàn
+Trạng thái công khai
+Trạng thái:
+trích ra
+Trước
+Từ
+VAT = (tiền món − giảm giá + phí phục vụ) × tỷ lệ
+VAT được tính ở đâu?
+VNPay chờ về
+Xác nhận xóa
+Xác nhận xóa tất cả bàn
+Xem trước
+Xử lý

@@ -9,6 +9,7 @@ import DishTable from '@/app/manage/tables/table-table';
 import { Suspense } from 'react';
 import LowStockWarningDialog from '@/components/lowStockWarningDialog';
 import CallStaffNotification from '@/components/CallStaffNotification';
+import { T } from '@/components/t';
 
 export default function TablesPage() {
   return (
@@ -16,8 +17,8 @@ export default function TablesPage() {
       <div className="space-y-2">
         <Card x-chunk="dashboard-06-chunk-0">
           <CardHeader>
-            <CardTitle>Bàn ăn</CardTitle>
-            <CardDescription>Quản lý bàn ăn</CardDescription>
+            <CardTitle><T>Bàn ăn</T></CardTitle>
+            <CardDescription><T>Quản lý bàn ăn</T></CardDescription>
           </CardHeader>
           <CardContent>
             <Suspense>

@@ -1,3 +1,4 @@
+import { T } from '@/components/t';
 export default function About() {
   return (
     <div className='flex flex-col'>
@@ -14,7 +15,7 @@ export default function About() {
       <section className='py-12 md:py-20 lg:py-24'>
         <div className='max-w-4xl space-y-8'>
           <div>
-            <h2 className='text-3xl font-bold'>Câu chuyện của chúng tôi</h2>
+            <h2 className='text-3xl font-bold'><T>Câu chuyện của chúng tôi</T></h2>
             <p className='mt-4 text-muted-foreground leading-8'>
               Big Boy được thành lập vào năm 2010 với một sứ mệnh đơn giản: phục
               vụ món ăn ngon, chất lượng cao để gắn kết mọi người lại với nhau.
@@ -25,7 +26,7 @@ export default function About() {
             </p>
           </div>
           <div>
-            <h2 className='text-3xl font-bold'>Giá trị của chúng tôi</h2>
+            <h2 className='text-3xl font-bold'><T>Giá trị của chúng tôi</T></h2>
             <p className='mt-4 text-muted-foreground leading-8'>
               Tại trung tâm của Big Boy là sự cống hiến sâu sắc cho tính bền
               vững, cộng đồng và sự xuất sắc trong ẩm thực. Chúng tôi lấy nguyên
@@ -37,7 +38,7 @@ export default function About() {
             </p>
           </div>
           <div>
-            <h2 className='text-3xl font-bold'>Cam kết của chúng tôi</h2>
+            <h2 className='text-3xl font-bold'><T>Cam kết của chúng tôi</T></h2>
             <p className='mt-4 text-muted-foreground leading-8'>
               Chúng tôi tin rằng món ăn ngon có sức mạnh gắn kết mọi người lại
               với nhau và tạo ra những kỷ niệm lâu dài. Đó là lý do tại sao

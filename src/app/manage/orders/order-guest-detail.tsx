@@ -27,6 +27,7 @@ import { Fragment } from 'react';
 import { OrdersListResType } from '@/app/ValidationSchemas/order.schema';
 import { usePayOrdersByGuestMutation } from '@/app/queries/useOrder';
 import { toast } from 'react-toastify';
+import { T } from '@/components/t';
 
 type Guest = OrdersListResType['data'][0]['guest'];
 type Orders = OrdersListResType['data'];
@@ -117,25 +118,25 @@ export default function OrderGuestDetail({
       {safeGuest && (
         <Fragment>
           <div className="space-x-1">
-            <span className="font-semibold">Tên:</span>
+            <span className="font-semibold"><T>Tên:</T></span>
             <span>{safeGuest.name}</span>
             <span className="font-semibold">(#{safeGuest.id})</span>
             <span>|</span>
-            <span className="font-semibold">Tên bàn:</span>
+            <span className="font-semibold"><T>Tên bàn:</T></span>
             <span>{safeGuest.tableNode?.name}</span>
           </div>
         </Fragment>
       )}
 
       <div className="space-y-1">
-        <div className="font-semibold">Đơn hàng:</div>
+        <div className="font-semibold"><T>Đơn hàng:</T></div>
         {safeOrders.map((order, index) => {
           // Kiểm tra nếu order không có items hoặc items rỗng
           if (!order.items || order.items.length === 0) {
             return (
               <div key={order.id} className="flex gap-2 items-center text-xs">
                 <span className="w-[10px]">{index + 1}</span>
-                <span>Không có sản phẩm</span>
+                <span><T>Không có sản phẩm</T></span>
               </div>
             );
           }
@@ -216,7 +217,7 @@ export default function OrderGuestDetail({
       </div>
 
       <div className="rounded-md border p-2">
-        <div className="mb-1 text-xs font-semibold">Chưa thanh toán</div>
+        <div className="mb-1 text-xs font-semibold"><T>Chưa thanh toán</T></div>
         <OrderMoneyBreakdown
           subtotal={unpaidTotals.subtotal}
           discountTotal={unpaidTotals.discountTotal}
@@ -229,7 +230,7 @@ export default function OrderGuestDetail({
         />
       </div>
       <div className="space-x-1">
-        <span className="font-semibold">Đã thanh toán:</span>
+        <span className="font-semibold"><T>Đã thanh toán:</T></span>
         <Badge variant={'outline'}>
           <span>
             {formatCurrency(

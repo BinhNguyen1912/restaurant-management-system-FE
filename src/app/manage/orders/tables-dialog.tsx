@@ -33,6 +33,7 @@ import { Input } from '@/components/ui/input';
 import { TableStatus } from '@/app/constants/table.constant';
 import { useListTableNode } from '@/app/queries/useTableNode';
 import { TableNodeType } from '@/app/ValidationSchemas/table-node.schema';
+import { T } from '@/components/t';
 
 // Mock fallback
 const mockTableNodes: TableNodeType[] = [
@@ -167,11 +168,11 @@ export function TablesDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Chọn bàn</Button>
+        <Button variant="outline"><T>Chọn bàn</T></Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] max-h-full overflow-auto">
         <DialogHeader>
-          <DialogTitle>Chọn bàn</DialogTitle>
+          <DialogTitle><T>Chọn bàn</T></DialogTitle>
         </DialogHeader>
         <div>
           <div className="w-full">
@@ -190,7 +191,7 @@ export function TablesDialog({
 
             {isLoading ? (
               <div className="flex items-center justify-center py-8">
-                <div className="text-sm text-muted-foreground">Đang tải...</div>
+                <div className="text-sm text-muted-foreground"><T>Đang tải...</T></div>
               </div>
             ) : (
               <div className="rounded-md border">
