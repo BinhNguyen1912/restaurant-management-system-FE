@@ -65,6 +65,7 @@ import { LockKeyhole, LockKeyholeOpen } from 'lucide-react';
 import { useI18n } from '@/i18n/locale-provider';
 import { tr } from '@/i18n/tr';
 import { T } from '@/components/t';
+import ProductTranslationsDialog from '@/app/manage/products/product-translations-dialog';
 
 type ProductItem = GetListProductsResType['data'][0];
 
@@ -172,6 +173,23 @@ export const columns: ColumnDef<GetListProductsResType['data'][0]>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={openEditDish}>{tr("Sửa")}</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <div className="flex items-center gap-2">
+                <ProductTranslationsDialog
+                  productId={row.original.id}
+                  productName={row.original.name}
+                  translations={
+                    ((row.original as any).productTranslations ?? []).map((item: any) => ({
+                      id: item.id,
+                      languageId: item.languageId,
+                      name: item.name,
+                      description: item.description ?? '',
+                    }))
+                  }
+                />
+                <span>{tr('Bản dịch')}</span>
+              </div>
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={openDeleteDish}>{tr("Xóa")}</DropdownMenuItem>
             <DropdownMenuItem onClick={openDeleteDish}>
               <T>Xem chi tiết</T>
