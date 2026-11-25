@@ -27,6 +27,15 @@ const DishBarChart = dynamic(
     loading: () => <div className="h-[300px] w-full animate-pulse rounded-md bg-muted" />,
   },
 );
+/** 2 biểu đồ phụ cũng tách chunk: chỉ tải khi đã vào dashboard */
+const RevenueCompositionChart = dynamic(
+  () => import('@/app/manage/dashboard/revenue-composition-chart'),
+  { ssr: false, loading: () => <div className="h-[240px] animate-pulse rounded-md bg-muted" /> },
+);
+const PaymentMethodChart = dynamic(
+  () => import('@/app/manage/dashboard/payment-method-chart'),
+  { ssr: false, loading: () => <div className="h-[240px] animate-pulse rounded-md bg-muted" /> },
+);
 import { toast } from 'react-toastify';
 import NewOrderSound from '@/components/newOrderSound';
 import LowStockWarningDialog from '@/components/lowStockWarningDialog';
@@ -267,11 +276,17 @@ export default function DashboardMain() {
         </Card>
       </div>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <div className="lg:col-span-4">
+        <div className="md:col-span-2 lg:col-span-4">
           <RevenueAreaChart revenueByDate={revenueByDate} />
         </div>
-        <div className="lg:col-span-3">
+        <div className="md:col-span-2 lg:col-span-3">
           <DishBarChart productIndicator={productIndicator} />
+        </div>
+        <div className="md:col-span-1 lg:col-span-4">
+          <RevenueCompositionChart fromDate={toDayString(fromDate)} toDate={toDayString(toDate)} />
+        </div>
+        <div className="md:col-span-1 lg:col-span-3">
+          <PaymentMethodChart fromDate={toDayString(fromDate)} toDate={toDayString(toDate)} />
         </div>
         <NewOrderSound hasNewOrder={hasNewOrder} />
         <LowStockWarningDialog />
