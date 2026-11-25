@@ -34,10 +34,11 @@ export default function AdminConversationDialog() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Mở hộp thoại: poll nhanh để thấy tin mới; đóng: gần như không poll (tin mới đã có socket đẩy về)
   const { data: unreadData, refetch: refetchUnread } =
-    useGetUnreadMessagesQuery();
+    useGetUnreadMessagesQuery({ pollMs: open ? 3000 : 60_000 });
   const { data: receivedMessagesData, refetch: refetchReceived } =
-    useGetReceivedMessagesQuery();
+    useGetReceivedMessagesQuery({ pollMs: open ? 5000 : 60_000 });
   const { data: conversation, isLoading: isLoadingConversation } =
     useGetConversationWithGuestQuery(selectedGuestId);
   const sendMessageMutation = useSendAdminToGuestMessageMutation();
@@ -61,11 +62,6 @@ export default function AdminConversationDialog() {
       ? receivedMessagesData
       : [];
 
-  // Debug logs
-  console.log('Unread messages:', unreadMessages);
-  console.log('Received messages:', receivedMessages);
-  console.log('Received messages count:', receivedMessages.length);
-
   // Extract unique guests from received messages
   const guestsWithMessages = receivedMessages.reduce(
     (acc: any[], message: any) => {
@@ -86,9 +82,6 @@ export default function AdminConversationDialog() {
     },
     [],
   );
-
-  // Debug log
-  console.log('Guests with messages:', guestsWithMessages);
 
   // Listen for new messages via WebSocket
   useEffect(() => {

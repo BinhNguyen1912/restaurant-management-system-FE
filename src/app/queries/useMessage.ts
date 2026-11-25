@@ -11,11 +11,25 @@ import {
 /**
  * Hook để lấy danh sách tin nhắn chưa đọc (Admin)
  */
-export const useGetUnreadMessagesQuery = () => {
+/**
+ * Tin nhắn chưa đọc (Admin).
+ *
+ * Trước đây poll 3s **luôn luôn**, mà hook này được gắn ở header admin nên MỌI trang đều gọi API
+ * ~20 lần/phút dù không ai mở hộp thoại — đây là nguyên nhân chính làm app ì. Giờ:
+ *  - hộp thoại mở: poll nhanh (mặc định 3s) để thấy tin mới ngay,
+ *  - hộp thoại đóng: chỉ poll thưa (60s) làm lưới an toàn, vì tin mới đã có socket
+ *    `guest-message-to-admin` đẩy về và gọi `refetch`.
+ */
+export const useGetUnreadMessagesQuery = ({
+  enabled = true,
+  pollMs = 3000,
+}: { enabled?: boolean; pollMs?: number | false } = {}) => {
   return useQuery({
     queryKey: ['unread-messages'],
     queryFn: () => messageApiRequest.getUnreadMessages(),
-    refetchInterval: 3000, // Auto refetch mỗi 3 giây
+    enabled,
+    refetchInterval: pollMs,
+    staleTime: 3000,
   });
 };
 
@@ -112,11 +126,15 @@ export const useReplyToGuestMutation = () => {
 /**
  * Hook để lấy danh sách tin nhắn đã nhận (để hiển thị danh sách guests)
  */
-export const useGetReceivedMessagesQuery = () => {
+export const useGetReceivedMessagesQuery = ({
+  enabled = true,
+  pollMs = 5000,
+}: { enabled?: boolean; pollMs?: number | false } = {}) => {
   return useQuery({
     queryKey: ['received-messages'],
     queryFn: () => messageApiRequest.getReceivedMessages(),
-    refetchInterval: 5000, // Auto refetch mỗi 5 giây
+    enabled,
+    refetchInterval: pollMs,
     staleTime: 3000, // Cache 3s
     gcTime: 30000, // Giữ cache 30s
   });
