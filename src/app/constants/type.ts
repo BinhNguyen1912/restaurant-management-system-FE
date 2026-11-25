@@ -15,13 +15,23 @@ export const Role = {
   STAFF: 'STAFF',
   GUEST: 'GUEST',
   USER: 'USER',
+  /** vai trò đặt sẵn (seed): kế toán — chỉ đọc sổ cái, sổ quỹ, báo cáo, đối soát */
+  KE_TOAN: 'KE_TOAN',
 } as const;
 export const RoleValues = [
   Role.ADMIN,
   Role.STAFF,
   Role.GUEST,
   Role.USER,
+  Role.KE_TOAN,
 ] as const;
+
+/** Role được vào khu /manage (khách thì không). Role tự tạo cũng vào được, menu lọc theo quyền. */
+export const MANAGEMENT_ROLES: string[] = [
+  Role.ADMIN,
+  Role.STAFF,
+  Role.KE_TOAN,
+];
 
 export const DishStatus = {
   Available: 'Available',
