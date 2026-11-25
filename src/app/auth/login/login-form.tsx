@@ -33,6 +33,8 @@ import Link from 'next/link';
 // import { Loader } from 'lucide-react';
 import { TextShimmer } from '../../../../components/motion-primitives/text-shimmer';
 import { RoleType } from '@/types/jwt.types';
+import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 const getOauthGoogleUrl = () => {
   const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
   const options = {
@@ -51,6 +53,7 @@ const getOauthGoogleUrl = () => {
 };
 const googleOauthUrl = getOauthGoogleUrl();
 function Login() {
+  const { t } = useI18n();
   const loginMutation = useLoginMutation();
   const searchParams = useSearchParams();
   const clearTokens = searchParams.get('clearTokens');
@@ -76,7 +79,7 @@ function Login() {
       const resuft = await loginMutation.mutateAsync(values);
       console.log('resuft', resuft);
 
-      toast.success('Đăng nhập thành công');
+      toast.success(t("Đăng nhập thành công"));
 
       // Lưu tokens vào localStorage
       setAccessTokenFormLocalStorage(resuft?.payload?.accessToken!);
@@ -118,19 +121,19 @@ function Login() {
             className="mx-auto"
           />
           <h2 className="text-lg font-semibold mt-4">
-            Quản trị hệ thống quản lý nhà hàng
+            <T>Quản trị hệ thống quản lý nhà hàng</T>
           </h2>
           <h1 className="text-2xl font-bold text-green-700 mt-1">
             Mr. Binh Nguyen
           </h1>
           <p className="text-[12px] text-gray-500 mt-2 mb-6">
-            Vui lòng đăng nhập tài khoản của Bạn và trải nghiệm
+            <T>Vui lòng đăng nhập tài khoản của Bạn và trải nghiệm</T>
           </p>
           <Form {...loginform}>
             <form
               onSubmit={loginform.handleSubmit(onSubmit, (error) => {
                 console.warn(error);
-                toast.error('Đăng nhập thất bại');
+                toast.error(t("Đăng nhập thất bại"));
               })}
               className=""
               noValidate
@@ -141,7 +144,7 @@ function Login() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Tên đăng nhập</FormLabel>
+                      <FormLabel>{t("Tên đăng nhập")}</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -155,7 +158,7 @@ function Login() {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Mật khẩu</FormLabel>
+                      <FormLabel>{t("Mật khẩu")}</FormLabel>
                       <FormControl>
                         <Input {...field} className="w-full" type="password" />
                       </FormControl>
@@ -177,11 +180,11 @@ function Login() {
                   variant={'outline'}
                   className="w-full mt-6 bg-green-700"
                 >
-                  Đăng nhập
+                  <T>Đăng nhập</T>
                 </Button>
               )}
               <div className="text-[12px] text-gray-400">
-                (Nếu tài khoản Email đã được tạo, vui lọc dùng tài khoản GG)
+                <T>(Nếu tài khoản Email đã được tạo, vui lọc dùng tài khoản GG)</T>
               </div>
               <div className="flex justify-between">
                 <Link
@@ -189,7 +192,7 @@ function Login() {
                   className="pt-3 flex flex-col gap-1"
                 >
                   <Button type="button" variant={'link'} className="w-full">
-                    Đăng nhập với Google
+                    <T>Đăng nhập với Google</T>
                   </Button>
                 </Link>
                 <Link
@@ -197,7 +200,7 @@ function Login() {
                   className="pt-3 flex flex-col gap-1"
                 >
                   <Button type="button" variant={'link'} className="w-full">
-                    Đăng ký
+                    <T>Đăng ký</T>
                   </Button>
                 </Link>
               </div>

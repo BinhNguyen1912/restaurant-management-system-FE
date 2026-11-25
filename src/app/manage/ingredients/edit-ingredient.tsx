@@ -57,6 +57,8 @@ import {
 } from '@/components/ui/select';
 import { useGetUnits } from '@/app/queries/useUnit';
 import DialogAddUnit from '@/app/manage/ingredients/add-unit';
+import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 export default function EditIngredient({
   id,
@@ -67,6 +69,7 @@ export default function EditIngredient({
   setId: (value: number | undefined) => void;
   onSubmitSuccess?: () => void;
 }) {
+  const { t } = useI18n();
   const [files, setFiles] = useState<File[]>([]);
   const [image, setImage] = useState<string>('');
 
@@ -150,7 +153,7 @@ export default function EditIngredient({
       console.log('Final body:', body);
 
       await updateMutation.mutateAsync({ id: id as number, ...body });
-      toast.success('Cập nhật thành công', {
+      toast.success(t("Cập nhật thành công"), {
         hideProgressBar: true,
         autoClose: 1000,
       });
@@ -177,10 +180,10 @@ export default function EditIngredient({
       <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-auto">
         <DialogHeader className="border-b pb-4">
           <DialogTitle className="text-2xl font-bold">
-            Cập nhật sản phẩm
+            <T>Cập nhật sản phẩm</T>
           </DialogTitle>
           <DialogDescription className="text-muted-foreground">
-            Các trường bắt buộc: Tên, ảnh
+            <T>Các trường bắt buộc: Tên, ảnh</T>
           </DialogDescription>
         </DialogHeader>
 
@@ -196,7 +199,7 @@ export default function EditIngredient({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Phần hình ảnh */}
               <div className="md:col-span-1">
-                <h3 className="text-lg font-medium mb-3">Hình ảnh sản phẩm</h3>
+                <h3 className="text-lg font-medium mb-3">{t("Hình ảnh sản phẩm")}</h3>
                 <FormField
                   control={form.control}
                   name="image"
@@ -238,7 +241,7 @@ export default function EditIngredient({
                             >
                               <Upload className="h-6 w-6 text-muted-foreground mb-1" />
                               <span className="text-xs text-muted-foreground">
-                                Thêm ảnh
+                                <T>Thêm ảnh</T>
                               </span>
                             </div>
                           )}
@@ -258,7 +261,7 @@ export default function EditIngredient({
                         />
 
                         <p className="text-xs text-muted-foreground">
-                          Chỉ chọn 1 ảnh, kích thước tối đa 2MB
+                          <T>Chỉ chọn 1 ảnh, kích thước tối đa 2MB</T>
                         </p>
                       </div>
                       <FormMessage />
@@ -270,7 +273,7 @@ export default function EditIngredient({
               {/* Phần thông tin cơ bản */}
               <div className="md:col-span-2 space-y-6">
                 <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Thông tin cơ bản</h3>
+                  <h3 className="text-lg font-medium">{t("Thông tin cơ bản")}</h3>
 
                   <FormField
                     control={form.control}
@@ -278,12 +281,12 @@ export default function EditIngredient({
                     render={({ field }) => (
                       <FormItem>
                         <Label htmlFor="name" className="text-sm font-medium">
-                          Tên nguyên liệu *
+                          <T>Tên nguyên liệu *</T>
                         </Label>
                         <Input
                           id="name"
                           {...field}
-                          placeholder="Nhập tên nguyên liệu"
+                          placeholder={t("Nhập tên nguyên liệu")}
                           className="mt-1"
                         />
                         <FormMessage />
@@ -301,7 +304,7 @@ export default function EditIngredient({
                             htmlFor="stock"
                             className="text-sm font-medium"
                           >
-                            Số lượng còn
+                            <T>Số lượng còn</T>
                           </Label>
                           <Input
                             id="stock"
@@ -326,7 +329,7 @@ export default function EditIngredient({
                           <div className="flex flex-col gap-3">
                             <div className="flex items-center justify-between">
                               <div className="space-y-0.5 text-sm">
-                                <FormLabel>Cảnh báo tồn kho thấp</FormLabel>
+                                <FormLabel>{t("Cảnh báo tồn kho thấp")}</FormLabel>
                                 <p className="text-[12px] text-muted-foreground">
                                   {field.value
                                     ? 'Bật cảnh báo'
@@ -357,7 +360,7 @@ export default function EditIngredient({
                       render={({ field }) => (
                         <FormItem>
                           <Label htmlFor="unitCost" className="text-sm font-medium">
-                            Giá nhập / 1 đơn vị (đồng)
+                            <T>Giá nhập / 1 đơn vị (đồng)</T>
                           </Label>
                           <Input
                             id="unitCost"
@@ -369,7 +372,7 @@ export default function EditIngredient({
                             onChange={(e) => field.onChange(Number(e.target.value))}
                           />
                           <p className="text-xs text-muted-foreground">
-                            Dùng tính giá vốn (COGS). 0 = chưa khai giá.
+                            <T>Dùng tính giá vốn (COGS). 0 = chưa khai giá.</T>
                           </p>
                           <FormMessage />
                         </FormItem>
@@ -386,7 +389,7 @@ export default function EditIngredient({
                               htmlFor="minStock"
                               className="text-sm font-medium"
                             >
-                              Mức tồn cảnh báo
+                              <T>Mức tồn cảnh báo</T>
                             </Label>
                             <Input
                               id="minStock"
@@ -414,7 +417,7 @@ export default function EditIngredient({
                         <div className="flex flex-col gap-3">
                           <div className="flex items-center justify-between">
                             <div className="space-y-0.5 text-sm">
-                              <FormLabel>Trạng thái công khai</FormLabel>
+                              <FormLabel>{t("Trạng thái công khai")}</FormLabel>
                               <p className="text-[12px] text-muted-foreground">
                                 {field.value
                                   ? 'Đang hoạt động'
@@ -442,7 +445,7 @@ export default function EditIngredient({
                   name="unitId"
                   render={({ field }) => (
                     <FormItem>
-                      <Label htmlFor="unitId">Đơn vị</Label>
+                      <Label htmlFor="unitId">{t("Đơn vị")}</Label>
                       <div className="flex items-center gap-2">
                         <FormControl>
                           <Select
@@ -450,7 +453,7 @@ export default function EditIngredient({
                             onValueChange={field.onChange}
                           >
                             <SelectTrigger>
-                              <SelectValue placeholder="Chọn đơn vị" />
+                              <SelectValue placeholder={t("Chọn đơn vị")} />
                             </SelectTrigger>
                             <SelectContent>
                               {unitsQuery?.payload?.data.map((unit) => (
@@ -490,7 +493,7 @@ export default function EditIngredient({
               resetForm();
             }}
           >
-            Hủy
+            <T>Hủy</T>
           </Button>
           <Button
             type="submit"

@@ -38,10 +38,13 @@ import {
 } from '@/app/ValidationSchemas/ledger-account.schema';
 import { useCreateLedgerAccount } from '@/app/queries/useLedgerAccount';
 import { handleErrorApi } from '@/lib/utils';
+import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 const TYPES = ['EXPENSE', 'REVENUE', 'ASSET', 'LIABILITY', 'EQUITY'] as const;
 
 export default function CreateLedgerAccountDialog() {
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const { mutateAsync, isPending } = useCreateLedgerAccount();
 
@@ -59,7 +62,7 @@ export default function CreateLedgerAccountDialog() {
       setOpen(false);
     } catch (error) {
       handleErrorApi({ error, setError: form.setError });
-      toast.error('Không thêm được tài khoản');
+      toast.error(t("Không thêm được tài khoản"));
     }
   };
 
@@ -69,13 +72,13 @@ export default function CreateLedgerAccountDialog() {
         <Button size="sm" className="h-8 gap-1">
           <PlusCircle className="h-3.5 w-3.5" />
           <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-            Thêm tài khoản chi tiết
+            <T>Thêm tài khoản chi tiết</T>
           </span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Thêm tài khoản chi tiết</DialogTitle>
+          <DialogTitle>{t("Thêm tài khoản chi tiết")}</DialogTitle>
           <DialogDescription>
             Chỉ dùng cho tài khoản phân loại báo cáo (chi phí, doanh thu khác).
             Tài khoản hệ thống (CASH, VNPAY_CLEARING, …) đã có sẵn và không xoá
@@ -94,7 +97,7 @@ export default function CreateLedgerAccountDialog() {
               name="code"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Mã tài khoản</FormLabel>
+                  <FormLabel>{t("Mã tài khoản")}</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="EXPENSE_ELECTRIC"
@@ -113,9 +116,9 @@ export default function CreateLedgerAccountDialog() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Tên hiển thị</FormLabel>
+                  <FormLabel>{t("Tên hiển thị")}</FormLabel>
                   <FormControl>
-                    <Input placeholder="Tiền điện" {...field} />
+                    <Input placeholder={t("Tiền điện")} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -126,11 +129,11 @@ export default function CreateLedgerAccountDialog() {
               name="type"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Loại tài khoản</FormLabel>
+                  <FormLabel>{t("Loại tài khoản")}</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Chọn loại" />
+                        <SelectValue placeholder={t("Chọn loại")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>

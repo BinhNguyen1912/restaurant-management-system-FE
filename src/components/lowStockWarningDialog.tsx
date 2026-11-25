@@ -10,6 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useAppStore } from '@/components/app-provider';
+import { T } from '@/components/t';
 
 interface LowStockItem {
   ingredientName: string;
@@ -60,7 +61,7 @@ export default function LowStockWarningDialog() {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-amber-600">
             <AlertTriangle className="h-5 w-5" />
-            Cảnh báo nguyên liệu hết hàng
+            <T>Cảnh báo nguyên liệu hết hàng</T>
           </DialogTitle>
         </DialogHeader>
 
@@ -75,7 +76,7 @@ export default function LowStockWarningDialog() {
 
           <div className="space-y-3">
             <h4 className="font-semibold text-gray-900">
-              Danh sách nguyên liệu cần bổ sung:
+              <T>Danh sách nguyên liệu cần bổ sung:</T>
             </h4>
 
             <div className="space-y-2 max-h-60 overflow-y-auto">
@@ -90,7 +91,7 @@ export default function LowStockWarningDialog() {
                         {item.ingredientName}
                       </span>
                       <Badge variant={'destructive'} className="text-xs">
-                        Cảnh báo
+                        <T>Cảnh báo</T>
                       </Badge>
                     </div>
                     <div className="text-sm text-gray-600 mt-1">
@@ -110,7 +111,7 @@ export default function LowStockWarningDialog() {
                     </div> */}
                     {item.currentStock <= item.minStock && (
                       <div className="text-xs text-red-600 font-medium">
-                        Đã hết!
+                        <T>Đã hết!</T>
                       </div>
                     )}
                   </div>
@@ -125,7 +126,7 @@ export default function LowStockWarningDialog() {
             onClick={handleConfirm}
             className="flex items-center gap-2"
           >
-            Xác nhận
+            <T>Xác nhận</T>
           </Button>
         </div>
       </DialogContent>

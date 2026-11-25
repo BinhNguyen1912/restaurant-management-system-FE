@@ -8,6 +8,8 @@ import ProductGrid from './ProductGrid';
 import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/lib/utils';
 import { ShoppingCart, X } from 'lucide-react';
+import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 interface Category {
   id: number;
@@ -78,6 +80,7 @@ const mockCategories: Category[] = [
 ];
 
 export default function MenuOrderPage() {
+  const { t } = useI18n();
   const { data, isLoading } = useGetProducts();
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -157,7 +160,7 @@ export default function MenuOrderPage() {
       <div className="bg-white shadow-sm sticky top-0 z-30">
         <div className="px-4 py-3 flex items-center justify-between">
           <h1 className="text-lg font-bold text-gray-900">
-            Nhà hàng AI - Cửa hàng
+            <T>Nhà hàng AI - Cửa hàng</T>
           </h1>
           <div className="flex items-center gap-2">
             <button
@@ -179,9 +182,9 @@ export default function MenuOrderPage() {
       <div className="bg-purple-600 text-white px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium">DEMO</span>
-          <span className="text-sm">Trải nghiệm đặt món thông minh tại bàn</span>
+          <span className="text-sm">{t("Trải nghiệm đặt món thông minh tại bàn")}</span>
         </div>
-        <button className="text-sm underline">► Bỏ qua</button>
+        <button className="text-sm underline">{t("► Bỏ qua")}</button>
       </div>
 
       {/* Promotion Banner */}
@@ -228,7 +231,7 @@ export default function MenuOrderPage() {
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-end">
           <div className="bg-white w-full max-w-md h-full overflow-y-auto">
             <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-              <h2 className="text-lg font-semibold">Giỏ hàng</h2>
+              <h2 className="text-lg font-semibold">{t("Giỏ hàng")}</h2>
               <button
                 onClick={() => setShowCart(false)}
                 className="p-2 hover:bg-gray-100 rounded-full"
@@ -265,11 +268,11 @@ export default function MenuOrderPage() {
 
             <div className="p-4 border-t border-gray-200">
               <div className="flex justify-between items-center mb-4">
-                <span className="text-lg font-semibold">Tổng cộng:</span>
+                <span className="text-lg font-semibold">{t("Tổng cộng:")}</span>
                 <span className="text-lg font-bold text-red-600">{formatCurrency(totalPrice)}</span>
               </div>
               <Button className="w-full h-12 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg">
-                Đặt hàng
+                <T>Đặt hàng</T>
               </Button>
             </div>
           </div>

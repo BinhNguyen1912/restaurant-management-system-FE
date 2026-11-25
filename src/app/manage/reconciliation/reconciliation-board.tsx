@@ -27,6 +27,8 @@ import {
   useSettleVnpay,
 } from '@/app/queries/useLedgerReconciliation';
 import { formatCurrency } from '@/lib/utils';
+import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 const METHOD_LABEL: Record<string, string> = {
   CASH: 'Tiền mặt',
@@ -36,6 +38,7 @@ const METHOD_LABEL: Record<string, string> = {
 const formatTime = (value: string) => new Date(value).toLocaleString('vi-VN');
 
 export default function ReconciliationBoard() {
+  const { t } = useI18n();
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [amount, setAmount] = useState('');
@@ -91,11 +94,11 @@ export default function ReconciliationBoard() {
         <CardContent className="grid gap-3">
           <div className="flex flex-wrap items-end gap-2">
             <div className="grid gap-1">
-              <Label htmlFor="from">Từ ngày</Label>
+              <Label htmlFor="from">{t("Từ ngày")}</Label>
               <Input id="from" type="date" value={fromDate} onChange={(e) => setFromDate(e.target.value)} />
             </div>
             <div className="grid gap-1">
-              <Label htmlFor="to">Đến ngày</Label>
+              <Label htmlFor="to">{t("Đến ngày")}</Label>
               <Input id="to" type="date" value={toDate} onChange={(e) => setToDate(e.target.value)} />
             </div>
             <Button variant="outline" onClick={() => refetch()} disabled={isFetching}>
@@ -108,19 +111,19 @@ export default function ReconciliationBoard() {
 
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <div className="rounded-lg border p-3">
-              <div className="text-xs uppercase text-muted-foreground">Tiền đã thu</div>
+              <div className="text-xs uppercase text-muted-foreground">{t("Tiền đã thu")}</div>
               <div className="text-xl font-semibold">
                 {formatCurrency(report?.totals.paymentAmount ?? 0)}
               </div>
             </div>
             <div className="rounded-lg border p-3">
-              <div className="text-xs uppercase text-muted-foreground">Ghi sổ (Nợ)</div>
+              <div className="text-xs uppercase text-muted-foreground">{t("Ghi sổ (Nợ)")}</div>
               <div className="text-xl font-semibold">
                 {formatCurrency(report?.totals.ledgerAmount ?? 0)}
               </div>
             </div>
             <div className="rounded-lg border p-3">
-              <div className="text-xs uppercase text-muted-foreground">Chênh lệch</div>
+              <div className="text-xs uppercase text-muted-foreground">{t("Chênh lệch")}</div>
               <div
                 className={
                   balanced
@@ -132,23 +135,23 @@ export default function ReconciliationBoard() {
               </div>
             </div>
             <div className="rounded-lg border p-3">
-              <div className="text-xs uppercase text-muted-foreground">VNPay chờ về</div>
+              <div className="text-xs uppercase text-muted-foreground">{t("VNPay chờ về")}</div>
               <div className="text-xl font-semibold">
                 {formatCurrency(report?.vnpayClearingBalance ?? 0)}
               </div>
-              <div className="text-xs text-muted-foreground">tài khoản VNPAY_CLEARING</div>
+              <div className="text-xs text-muted-foreground">{t("tài khoản VNPAY_CLEARING")}</div>
             </div>
           </div>
 
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Phương thức</TableHead>
-                <TableHead>Tài khoản nhận tiền</TableHead>
-                <TableHead className="text-right">Số giao dịch</TableHead>
-                <TableHead className="text-right">Tiền đã thu</TableHead>
-                <TableHead className="text-right">Ghi sổ</TableHead>
-                <TableHead className="text-right">Lệch</TableHead>
+                <TableHead>{t("Phương thức")}</TableHead>
+                <TableHead>{t("Tài khoản nhận tiền")}</TableHead>
+                <TableHead className="text-right">{t("Số giao dịch")}</TableHead>
+                <TableHead className="text-right">{t("Tiền đã thu")}</TableHead>
+                <TableHead className="text-right">{t("Ghi sổ")}</TableHead>
+                <TableHead className="text-right">{t("Lệch")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -197,14 +200,14 @@ export default function ReconciliationBoard() {
             <Landmark className="h-5 w-5" /> Ngân hàng báo có tiền VNPay
           </CardTitle>
           <CardDescription>
-            Ghi bút toán <b>Nợ BANK / Có VNPAY_CLEARING</b> theo sao kê ngân hàng. Mã đối soát là
+            Ghi bút toán <b>{t("Nợ BANK / Có VNPAY_CLEARING")}</b> theo sao kê ngân hàng. Mã đối soát là
             khoá chống trùng: bấm lại cùng mã sẽ không ghi lần hai.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form className="flex flex-wrap items-end gap-2" onSubmit={handleSettle}>
             <div className="grid w-40 gap-1">
-              <Label htmlFor="amount">Số tiền báo có</Label>
+              <Label htmlFor="amount">{t("Số tiền báo có")}</Label>
               <Input
                 id="amount"
                 inputMode="numeric"
@@ -214,7 +217,7 @@ export default function ReconciliationBoard() {
               />
             </div>
             <div className="grid min-w-[12rem] flex-1 gap-1">
-              <Label htmlFor="reference">Mã sao kê / giao dịch</Label>
+              <Label htmlFor="reference">{t("Mã sao kê / giao dịch")}</Label>
               <Input
                 id="reference"
                 value={reference}
@@ -224,11 +227,11 @@ export default function ReconciliationBoard() {
               />
             </div>
             <div className="grid min-w-[12rem] flex-1 gap-1">
-              <Label htmlFor="note">Ghi chú (tuỳ chọn)</Label>
+              <Label htmlFor="note">{t("Ghi chú (tuỳ chọn)")}</Label>
               <Input id="note" value={note} onChange={(event) => setNote(event.target.value)} />
             </div>
             <Button type="submit" disabled={isPending}>
-              Ghi đối soát
+              <T>Ghi đối soát</T>
             </Button>
           </form>
           <p className="mt-2 text-xs text-muted-foreground">

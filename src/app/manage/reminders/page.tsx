@@ -9,6 +9,7 @@ import ReminderTable from '@/app/manage/reminders/reminder-table';
 import { Suspense } from 'react';
 import LowStockWarningDialog from '@/components/lowStockWarningDialog';
 import CallStaffNotification from '@/components/CallStaffNotification';
+import { T } from '@/components/t';
 
 export default function RemindersPage() {
   return (
@@ -16,9 +17,9 @@ export default function RemindersPage() {
       <div className="space-y-2">
         <Card x-chunk="dashboard-06-chunk-0">
           <CardHeader>
-            <CardTitle>Lời nhắc</CardTitle>
+            <CardTitle><T>Lời nhắc</T></CardTitle>
             <CardDescription>
-              Quản lý các lời nhắc và công việc cần thực hiện
+              <T>Quản lý các lời nhắc và công việc cần thực hiện</T>
             </CardDescription>
           </CardHeader>
           <CardContent>

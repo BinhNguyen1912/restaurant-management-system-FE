@@ -28,6 +28,8 @@ import {
   UpdateBranchSettingsBodyType,
 } from '@/app/ValidationSchemas/branch.schema';
 import { useGetBranches, useUpdateBranchSettings } from '@/app/queries/useBranch';
+import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 type Draft = { taxRate: string; serviceChargeRate: string; pricesIncludeTax: boolean };
 
@@ -38,6 +40,7 @@ const toDraft = (branch: BranchSettingsTypeRes): Draft => ({
 });
 
 export default function TaxSettings() {
+  const { t } = useI18n();
   const { data, isLoading } = useGetBranches();
   const { mutateAsync: save, isPending } = useUpdateBranchSettings();
   const [drafts, setDrafts] = useState<Record<number, Draft>>({});
@@ -79,18 +82,18 @@ export default function TaxSettings() {
             <Percent className="h-5 w-5" /> VAT & phí phục vụ theo chi nhánh
           </CardTitle>
           <CardDescription>
-            Cấu hình chỉ áp cho <b>đơn tạo mới</b>: mỗi đơn lưu lại thuế suất tại thời điểm bán nên
-            đổi ở đây <b>không làm sai đơn cũ</b> và báo cáo thuế theo kỳ vẫn đúng.
+            Cấu hình chỉ áp cho <b>{t("đơn tạo mới")}</b>: mỗi đơn lưu lại thuế suất tại thời điểm bán nên
+            đổi ở đây <b>{t("không làm sai đơn cũ")}</b> và báo cáo thuế theo kỳ vẫn đúng.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Chi nhánh</TableHead>
+                <TableHead>{t("Chi nhánh")}</TableHead>
                 <TableHead className="w-28">VAT (%)</TableHead>
-                <TableHead className="w-32">Phí phục vụ (%)</TableHead>
-                <TableHead className="w-56">Giá menu đã gồm VAT</TableHead>
+                <TableHead className="w-32">{t("Phí phục vụ (%)")}</TableHead>
+                <TableHead className="w-56">{t("Giá menu đã gồm VAT")}</TableHead>
                 <TableHead className="w-24" />
               </TableRow>
             </TableHeader>
@@ -98,13 +101,13 @@ export default function TaxSettings() {
               {isLoading ? (
                 <TableRow>
                   <TableCell colSpan={5} className="text-sm text-muted-foreground">
-                    Đang tải…
+                    <T>Đang tải…</T>
                   </TableCell>
                 </TableRow>
               ) : branches.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={5} className="text-sm text-muted-foreground">
-                    Chưa có chi nhánh
+                    <T>Chưa có chi nhánh</T>
                   </TableCell>
                 </TableRow>
               ) : (
@@ -116,7 +119,7 @@ export default function TaxSettings() {
                         <div className="font-medium">{branch.name}</div>
                         <div className="text-xs text-muted-foreground">
                           {branch.code}{' '}
-                          {branch.isActive ? null : <Badge variant="secondary">đã tắt</Badge>}
+                          {branch.isActive ? null : <Badge variant="secondary">{t("đã tắt")}</Badge>}
                         </div>
                       </TableCell>
                       <TableCell>
@@ -163,24 +166,24 @@ export default function TaxSettings() {
           </Table>
 
           <div className="mt-4 grid gap-2 rounded-lg border bg-muted/30 p-3 text-sm">
-            <div className="font-medium">VAT được tính ở đâu?</div>
+            <div className="font-medium">{t("VAT được tính ở đâu?")}</div>
             <ul className="list-inside list-disc text-muted-foreground">
               <li>
-                Trên <b>đơn hàng</b>, tại thời điểm tạo đơn — không tính trên từng món. Món chỉ có
+                Trên <b>{t("đơn hàng")}</b>, tại thời điểm tạo đơn — không tính trên từng món. Món chỉ có
                 giá; một hoá đơn có thể gồm nhiều món, nhiều thuế suất sau này.
               </li>
               <li>
-                Công thức: <b>VAT = (tiền món − giảm giá + phí phục vụ) × tỷ lệ</b>. Nếu giá menu{' '}
-                <b>đã gồm VAT</b> thì thuế được <i>trích ra</i> (tổng khách trả không đổi); nếu{' '}
-                <b>chưa gồm</b> thì cộng thêm lên tổng.
+                Công thức: <b>{t("VAT = (tiền món − giảm giá + phí phục vụ) × tỷ lệ")}</b>. Nếu giá menu{' '}
+                <b>{t("đã gồm VAT")}</b>{t("thì thuế được")}<i>{t("trích ra")}</i> (tổng khách trả không đổi); nếu{' '}
+                <b>{t("chưa gồm")}</b> thì cộng thêm lên tổng.
               </li>
               <li>
-                Làm tròn về <b>đồng nguyên</b> vì VND không có đơn vị lẻ và sổ cái chỉ nhận số
+                Làm tròn về <b>{t("đồng nguyên")}</b> vì VND không có đơn vị lẻ và sổ cái chỉ nhận số
                 nguyên.
               </li>
               <li>
-                Khi thu tiền, sổ cái ghi: <b>Nợ</b> tiền (CASH/VNPAY) = <b>Có</b> doanh thu thuần +{' '}
-                <b>Có</b> phí phục vụ + <b>Có</b> TAX_PAYABLE (thuế phải nộp).
+                Khi thu tiền, sổ cái ghi: <b>{t("Nợ")}</b>{t("tiền (CASH/VNPAY) =")}<b>{t("Có")}</b> doanh thu thuần +{' '}
+                <b>{t("Có")}</b>{t("phí phục vụ +")}<b>{t("Có")}</b> TAX_PAYABLE (thuế phải nộp).
               </li>
             </ul>
           </div>

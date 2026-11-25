@@ -32,6 +32,8 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { CreateVoucherBody, VoucherResType } from '@/app/ValidationSchemas/voucher.schema';
+import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 import {
   useCreateVoucher,
   useDeleteVoucher,
@@ -87,14 +89,15 @@ const toDraft = (voucher: VoucherResType): Draft => ({
   usageLimit: voucher.usageLimit === null ? '' : String(voucher.usageLimit),
 });
 
-const statusBadge = (voucher: VoucherResType) => {
-  if (voucher.status === 'INACTIVE') return <Badge variant="secondary">Đã tắt</Badge>;
-  if (voucher.status === 'EXPIRED') return <Badge variant="outline">Hết hạn</Badge>;
-  if (voucher.usableNow) return <Badge>Đang chạy</Badge>;
-  return <Badge variant="outline">Ngoài giờ / hết lượt</Badge>;
+const statusBadge = (voucher: VoucherResType, t: (key: string) => string) => {
+  if (voucher.status === 'INACTIVE') return <Badge variant="secondary">{t("Đã tắt")}</Badge>;
+  if (voucher.status === 'EXPIRED') return <Badge variant="outline">{t("Hết hạn")}</Badge>;
+  if (voucher.usableNow) return <Badge>{t("Đang chạy")}</Badge>;
+  return <Badge variant="outline">{t("Ngoài giờ / hết lượt")}</Badge>;
 };
 
 export default function VoucherTable() {
+  const { t } = useI18n();
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState<'ALL' | 'ACTIVE' | 'INACTIVE'>('ALL');
   const [page, setPage] = useState(1);
@@ -218,7 +221,7 @@ export default function VoucherTable() {
           <div className="flex flex-wrap items-center gap-2">
             <Input
               className="w-52"
-              placeholder="Tìm theo mã…"
+              placeholder={t("Tìm theo mã…")}
               value={search}
               onChange={(event) => {
                 setSearch(event.target.value);
@@ -236,9 +239,9 @@ export default function VoucherTable() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="ALL">Tất cả</SelectItem>
-                <SelectItem value="ACTIVE">Đang bật</SelectItem>
-                <SelectItem value="INACTIVE">Đã tắt</SelectItem>
+                <SelectItem value="ALL">{t("Tất cả")}</SelectItem>
+                <SelectItem value="ACTIVE">{t("Đang bật")}</SelectItem>
+                <SelectItem value="INACTIVE">{t("Đã tắt")}</SelectItem>
               </SelectContent>
             </Select>
             <Button onClick={openCreate}>
@@ -250,19 +253,19 @@ export default function VoucherTable() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Mã</TableHead>
-                <TableHead>Giảm</TableHead>
-                <TableHead>Hiệu lực</TableHead>
-                <TableHead className="text-right">Đã dùng</TableHead>
-                <TableHead>Trạng thái</TableHead>
-                <TableHead className="text-right">Thao tác</TableHead>
+                <TableHead>{t("Mã")}</TableHead>
+                <TableHead>{t("Giảm")}</TableHead>
+                <TableHead>{t("Hiệu lực")}</TableHead>
+                <TableHead className="text-right">{t("Đã dùng")}</TableHead>
+                <TableHead>{t("Trạng thái")}</TableHead>
+                <TableHead className="text-right">{t("Thao tác")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {isLoading && (
                 <TableRow>
                   <TableCell colSpan={6} className="text-center text-muted-foreground">
-                    Đang tải…
+                    <T>Đang tải…</T>
                   </TableCell>
                 </TableRow>
               )}
@@ -297,7 +300,7 @@ export default function VoucherTable() {
                     {voucher.usedCount}
                     {voucher.usageLimit !== null ? ` / ${voucher.usageLimit}` : ' / ∞'}
                   </TableCell>
-                  <TableCell>{statusBadge(voucher)}</TableCell>
+                  <TableCell>{statusBadge(voucher, t)}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">
                       <Button variant="ghost" size="sm" onClick={() => openEdit(voucher)}>
@@ -322,7 +325,7 @@ export default function VoucherTable() {
             </span>
             <div className="flex gap-2">
               <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage(page - 1)}>
-                Trước
+                <T>Trước</T>
               </Button>
               <Button
                 variant="outline"
@@ -342,13 +345,13 @@ export default function VoucherTable() {
           <DialogHeader>
             <DialogTitle>{editing ? `Sửa mã ${editing.code}` : 'Tạo mã giảm giá'}</DialogTitle>
             <DialogDescription>
-              Giảm theo % áp lên phần tạm tính của đơn; để trống số lượt nghĩa là không giới hạn.
+              <T>Giảm theo % áp lên phần tạm tính của đơn; để trống số lượt nghĩa là không giới hạn.</T>
             </DialogDescription>
           </DialogHeader>
 
           <div className="grid gap-3">
             <div className="grid gap-1">
-              <Label htmlFor="voucher-code">Mã</Label>
+              <Label htmlFor="voucher-code">{t("Mã")}</Label>
               <Input
                 id="voucher-code"
                 value={draft.code}
@@ -360,7 +363,7 @@ export default function VoucherTable() {
 
             <div className="grid grid-cols-2 gap-3">
               <div className="grid gap-1">
-                <Label>Loại giảm</Label>
+                <Label>{t("Loại giảm")}</Label>
                 <Select
                   value={draft.discountType}
                   onValueChange={(value) => patch({ discountType: value as 'PERCENT' | 'FIXED' })}
@@ -369,8 +372,8 @@ export default function VoucherTable() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="PERCENT">Phần trăm (%)</SelectItem>
-                    <SelectItem value="FIXED">Số tiền (đ)</SelectItem>
+                    <SelectItem value="PERCENT">{t("Phần trăm (%)")}</SelectItem>
+                    <SelectItem value="FIXED">{t("Số tiền (đ)")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -390,7 +393,7 @@ export default function VoucherTable() {
 
             <div className="grid grid-cols-2 gap-3">
               <div className="grid gap-1">
-                <Label htmlFor="voucher-start-at">Bắt đầu</Label>
+                <Label htmlFor="voucher-start-at">{t("Bắt đầu")}</Label>
                 <Input
                   id="voucher-start-at"
                   type="datetime-local"
@@ -400,7 +403,7 @@ export default function VoucherTable() {
                 {errors.startAt && <p className="text-xs text-destructive">{errors.startAt}</p>}
               </div>
               <div className="grid gap-1">
-                <Label htmlFor="voucher-end-at">Kết thúc</Label>
+                <Label htmlFor="voucher-end-at">{t("Kết thúc")}</Label>
                 <Input
                   id="voucher-end-at"
                   type="datetime-local"
@@ -412,7 +415,7 @@ export default function VoucherTable() {
             </div>
 
             <div className="grid gap-1">
-              <Label htmlFor="voucher-usage-limit">Giới hạn lượt (để trống = không giới hạn)</Label>
+              <Label htmlFor="voucher-usage-limit">{t("Giới hạn lượt (để trống = không giới hạn)")}</Label>
               <Input
                 id="voucher-usage-limit"
                 inputMode="numeric"
@@ -425,7 +428,7 @@ export default function VoucherTable() {
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setOpen(false)}>
-              Huỷ
+              <T>Huỷ</T>
             </Button>
             <Button onClick={submit} disabled={creating || updating}>
               {editing ? 'Lưu thay đổi' : 'Tạo mã'}
@@ -445,10 +448,10 @@ export default function VoucherTable() {
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" onClick={() => setDeleteTarget(null)}>
-              Giữ lại
+              <T>Giữ lại</T>
             </Button>
             <Button variant="destructive" onClick={confirmDelete}>
-              Xoá
+              <T>Xoá</T>
             </Button>
           </DialogFooter>
         </DialogContent>

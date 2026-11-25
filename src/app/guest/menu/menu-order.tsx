@@ -29,6 +29,8 @@ import PromotionBanner from '@/components/PromotionBanner';
 import { ProductStatus } from '@/app/constants/product.constant';
 import ProductDetailDialog from './product-detail-dialog';
 import MobileCartModal from '@/components/MobileCartModal';
+import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 interface SkuSelection {
   skuId: number;
@@ -43,6 +45,7 @@ interface Category {
 }
 
 export default function MenuOrder() {
+  const { t } = useI18n();
   const { data } = useGetProducts();
   const { data: categoriesData } = useGetCategories();
 
@@ -212,7 +215,7 @@ export default function MenuOrder() {
     try {
       const result = await mutateAsync({ data: orders, voucherCode: voucherCode.trim() || undefined });
       console.log('Order result:', result);
-      toast.success('Đặt món thành công!', {
+      toast.success(t("Đặt món thành công!"), {
         hideProgressBar: true,
         autoClose: 3000,
       });
@@ -226,7 +229,7 @@ export default function MenuOrder() {
 
   const handleCallStaff = async () => {
     if (!mounted || !guestInfo?.tableNodeId || !guestInfo?.tableName) {
-      toast.error('Không thể xác định thông tin bàn');
+      toast.error(t("Không thể xác định thông tin bàn"));
       return;
     }
 
@@ -242,7 +245,7 @@ export default function MenuOrder() {
 
     try {
       await callStaffMutation.mutateAsync(callStaffData);
-      toast.success('Quý khách đợi xíu, nhân viên sẽ đến ngay!', {
+      toast.success(t("Quý khách đợi xíu, nhân viên sẽ đến ngay!"), {
         hideProgressBar: true,
         autoClose: 3000,
       });
@@ -318,7 +321,7 @@ export default function MenuOrder() {
                       {isUnavailable && (
                         <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
                           <span className="text-white text-xs font-medium bg-red-500 px-2 py-1 rounded">
-                            Hết hàng
+                            <T>Hết hàng</T>
                           </span>
                         </div>
                       )}
@@ -331,7 +334,7 @@ export default function MenuOrder() {
 
                       <div className="absolute top-2 left-2">
                         <span className="bg-orange-500 text-white text-xs font-medium px-2 py-1 rounded-full">
-                          Đặc biệt
+                          <T>Đặc biệt</T>
                         </span>
                       </div>
                     </div>
@@ -417,7 +420,7 @@ export default function MenuOrder() {
                         variant="outline"
                       >
                         <Plus className="w-3 h-3 md:w-4 md:h-4" />
-                        <span className="hidden sm:inline">Thêm vào giỏ</span>
+                        <span className="hidden sm:inline">{t("Thêm vào giỏ")}</span>
                         <span className="sm:hidden">+</span>
                       </Button>
                     </div>
@@ -449,7 +452,7 @@ export default function MenuOrder() {
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Gọi nhân viên</p>
+                    <p>{t("Gọi nhân viên")}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -459,7 +462,7 @@ export default function MenuOrder() {
             <div className="h-[60vh] grid place-items-center text-center text-gray-500">
               <div>
                 <div className="text-4xl xl:text-6xl mb-4">📝</div>
-                <p className="text-sm xl:text-base">Chưa có món được chọn</p>
+                <p className="text-sm xl:text-base">{t("Chưa có món được chọn")}</p>
               </div>
             </div>
           ) : (
@@ -506,7 +509,7 @@ export default function MenuOrder() {
             <div className="mb-3 xl:mb-4">
               <div className="mb-2 grid gap-1">
                 <label htmlFor="voucher-code" className="text-xs text-muted-foreground">
-                  Mã giảm giá (không bắt buộc)
+                  <T>Mã giảm giá (không bắt buộc)</T>
                 </label>
                 <Input
                   id="voucher-code"
@@ -535,7 +538,7 @@ export default function MenuOrder() {
                 />
               ) : (
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-sm xl:text-base">Tổng:</span>
+                  <span className="font-semibold text-sm xl:text-base">{t("Tổng:")}</span>
                   <span className="text-base xl:text-lg font-bold text-red-600">
                     {formatCurrency(totalPrice)}
                   </span>
@@ -548,7 +551,7 @@ export default function MenuOrder() {
               disabled={orders.length === 0}
               variant="default"
             >
-              Đặt món
+              <T>Đặt món</T>
             </Button>
           </div>
         </aside>
@@ -569,12 +572,12 @@ export default function MenuOrder() {
                 >
                   <Bell className="h-4 w-4 md:h-5 md:w-5" />
                   <span className="hidden sm:inline ml-2 text-xs md:text-sm">
-                    Gọi nhân viên
+                    <T>Gọi nhân viên</T>
                   </span>
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Gọi nhân viên</p>
+                <p>{t("Gọi nhân viên")}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>

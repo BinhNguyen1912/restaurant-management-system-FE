@@ -1,17 +1,18 @@
+import { T } from '@/components/t';
 export default function TermsOfService() {
   return (
     <div className='flex flex-col'>
       <section className='bg-secondary py-20 px-4 md:px-6 lg:px-8'>
         <div className='max-w-4xl text-center'>
           <h1 className='text-4xl font-bold sm:text-5xl md:text-6xl'>
-            Điều khoản dịch vụ
+            <T>Điều khoản dịch vụ</T>
           </h1>
         </div>
       </section>
       <section className='py-12 md:py-20 lg:py-24'>
         <div className='max-w-4xl space-y-8'>
           <div>
-            <h2 className='text-3xl font-bold'>Giới thiệu</h2>
+            <h2 className='text-3xl font-bold'><T>Giới thiệu</T></h2>
             <p className='mt-4 text-muted-foreground leading-8'>
               Chào mừng bạn đến với trang Điều khoản dịch vụ của chúng tôi. Khi
               sử dụng dịch vụ của chúng tôi, bạn đồng ý tuân thủ các điều khoản
@@ -19,7 +20,7 @@ export default function TermsOfService() {
             </p>
           </div>
           <div className='space-y-4'>
-            <h2 className='text-3xl font-bold'>Sử dụng dịch vụ</h2>
+            <h2 className='text-3xl font-bold'><T>Sử dụng dịch vụ</T></h2>
             <p className='text-muted-foreground leading-8'>
               Bạn đồng ý sử dụng dịch vụ của chúng tôi chỉ cho các mục đích hợp
               pháp và không vi phạm bất kỳ luật lệ nào. Bạn không được sử dụng
@@ -28,7 +29,7 @@ export default function TermsOfService() {
             </p>
           </div>
           <div className='space-y-4'>
-            <h2 className='text-3xl font-bold'>Quyền sở hữu trí tuệ</h2>
+            <h2 className='text-3xl font-bold'><T>Quyền sở hữu trí tuệ</T></h2>
             <p className='text-muted-foreground leading-8'>
               Tất cả nội dung và tài liệu trên trang web của chúng tôi, bao gồm
               văn bản, hình ảnh, đồ họa, logo, và phần mềm, đều thuộc quyền sở
@@ -37,7 +38,7 @@ export default function TermsOfService() {
             </p>
           </div>
           <div className='space-y-4'>
-            <h2 className='text-3xl font-bold'>Thay đổi điều khoản</h2>
+            <h2 className='text-3xl font-bold'><T>Thay đổi điều khoản</T></h2>
             <p className='text-muted-foreground leading-8'>
               Chúng tôi có quyền thay đổi các điều khoản dịch vụ này bất kỳ lúc
               nào mà không cần thông báo trước. Việc tiếp tục sử dụng dịch vụ
@@ -46,7 +47,7 @@ export default function TermsOfService() {
             </p>
           </div>
           <div className='space-y-4'>
-            <h2 className='text-3xl font-bold'>Liên hệ</h2>
+            <h2 className='text-3xl font-bold'><T>Liên hệ</T></h2>
             <p className='text-muted-foreground leading-8'>
               Nếu bạn có bất kỳ câu hỏi nào về các điều khoản dịch vụ này, vui
               lòng liên hệ với chúng tôi qua email hoặc số điện thoại được cung

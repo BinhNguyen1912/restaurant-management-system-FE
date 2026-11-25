@@ -4,6 +4,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import { T } from '@/components/t';
 
 const AnimatedImagesOnBg = () => {
   const menuCategories = [
@@ -51,10 +52,10 @@ const AnimatedImagesOnBg = () => {
             className="mb-8"
           >
             <h1 className="text-5xl md:text-6xl font-bold text-amber-900 mb-4 font-serif">
-              Thực đơn
+              <T>Thực đơn</T>
             </h1>
             <p className="text-xl text-amber-800 mb-6">
-              Đi đâu để ăn món Việt khắp ba miền?
+              <T>Đi đâu để ăn món Việt khắp ba miền?</T>
             </p>
             <p className="text-lg text-amber-700 max-w-4xl mx-auto leading-relaxed">
               B'Restaurant phục vụ các món ngon truyền thống, đảm bảo Vệ Sinh An
@@ -139,7 +140,7 @@ const AnimatedImagesOnBg = () => {
             transition={{ duration: 0.8, delay: 0.8 }}
           >
             <h2 className="text-4xl md:text-5xl font-bold text-amber-900 mb-4 font-serif">
-              Các món mới
+              <T>Các món mới</T>
             </h2>
             <p className="text-lg text-amber-700 max-w-3xl mx-auto">
               B'Restaurant là điểm đến lý tưởng cho những ai muốn khám phá hương

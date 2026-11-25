@@ -1,3 +1,4 @@
+import { T } from '@/components/t';
 // import { Button } from '@/components/ui/button';
 // import {
 //   Dialog,
@@ -131,11 +132,11 @@
 //   return (
 //     <Dialog open={open} onOpenChange={setOpen}>
 //       <DialogTrigger asChild>
-//         <Button variant="outline">Thay đổi</Button>
+//         <Button variant="outline"><T>Thay đổi</T></Button>
 //       </DialogTrigger>
 //       <DialogContent className="sm:max-w-[600px]">
 //         <DialogHeader>
-//           <DialogTitle>Chọn món ăn</DialogTitle>
+//           <DialogTitle><T>Chọn món ăn</T></DialogTitle>
 //         </DialogHeader>
 //         <div>
 //           <div className="w-full">

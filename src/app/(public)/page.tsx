@@ -19,6 +19,7 @@ import BananaTreeSection from '@/components/bananaTreeSection';
 import BananaTreeAnimation from '@/components/bananaTreeAnimation';
 import ClientOnly from '@/components/ClientOnly';
 import AboutSection from '@/components/AboutSection';
+import { T } from '@/components/t';
 
 export default function Home() {
   const { isLoading, progress } = useLoading();
@@ -41,10 +42,10 @@ export default function Home() {
         <div className="relative min-h-[100vh] flex items-center justify-center px-6">
           <div className="text-center">
             <h1 className="text-white text-4xl md:text-6xl font-bold tracking-wide drop-shadow-lg">
-              ẨM THỰC VIỆT NAM
+              <T>ẨM THỰC VIỆT NAM</T>
             </h1>
             <p className="mt-3 md:mt-4 text-white/90 text-base md:text-lg tracking-wide drop-shadow">
-              'Hương vị truyền thống, tinh hoa đất Việt'
+              <T>'Hương vị truyền thống, tinh hoa đất Việt'</T>
             </p>
           </div>
         </div>

@@ -61,6 +61,9 @@ import {
   UserType,
 } from '@/app/ValidationSchemas/user.schema';
 import { useAppStore } from '@/components/app-provider';
+import { useI18n } from '@/i18n/locale-provider';
+import { tr } from '@/i18n/tr';
+import { T } from '@/components/t';
 
 type AccountItem = getListUsersType['data'][0];
 
@@ -158,9 +161,9 @@ export const columns: ColumnDef<AccountItem>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={openEditEmployee}>Sửa</DropdownMenuItem>
+            <DropdownMenuItem onClick={openEditEmployee}>{tr("Sửa")}</DropdownMenuItem>
             <DropdownMenuItem onClick={openDeleteEmployee}>
-              Xóa
+              <T>Xóa</T>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -176,13 +179,14 @@ function AlertDialogDeleteAccount({
   employeeDelete: AccountItem | null;
   setEmployeeDelete: (value: AccountItem | null) => void;
 }) {
+  const { t } = useI18n();
   const { mutateAsync } = useDeleteMutation();
   const deleteEmployee = async () => {
     if (employeeDelete) {
       try {
         const resuft = await mutateAsync(employeeDelete.id);
         setEmployeeDelete(null);
-        toast.success('Xóa thành công');
+        toast.success(tr("Xóa thành công"));
       } catch (error) {
         throw error;
       }
@@ -199,7 +203,7 @@ function AlertDialogDeleteAccount({
     >
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Xóa nhân viên?</AlertDialogTitle>
+          <AlertDialogTitle>{tr("Xóa nhân viên?")}</AlertDialogTitle>
           <AlertDialogDescription>
             Tài khoản{' '}
             <span className="bg-foreground text-primary-foreground rounded px-1">

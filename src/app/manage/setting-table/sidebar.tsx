@@ -8,6 +8,8 @@ import { Area, FurnitureType, TableData } from './types/table';
 import { AreaType } from '@/app/ValidationSchemas/area.schema';
 import AreaTags from '@/app/manage/setting-table/areaTags';
 import { furnitureCategories } from '@/app/manage/setting-table/data/tables';
+import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 interface SidebarProps {
   onAddTable: (table: TableData) => void;
@@ -34,6 +36,7 @@ export default function Sidebar({
   isOpen,
   onClose,
 }: SidebarProps) {
+  const { t } = useI18n();
   const [selectedCategory, setSelectedCategory] =
     useState<FurnitureType>('table');
 
@@ -49,7 +52,7 @@ export default function Sidebar({
       `}
     >
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-bold">Thiết kế bàn ăn</h2>
+        <h2 className="text-xl font-bold">{t("Thiết kế bàn ăn")}</h2>
         <Button variant="ghost" size="icon" onClick={onClose}>
           <X className="h-4 w-4" />
         </Button>
@@ -62,7 +65,7 @@ export default function Sidebar({
       />
 
       <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-2">Chọn nội thất</h3>
+        <h3 className="text-lg font-semibold mb-2">{t("Chọn nội thất")}</h3>
         <div className="flex flex-wrap gap-2">
           {furnitureCategories.map((category) => (
             <Button
@@ -82,12 +85,12 @@ export default function Sidebar({
       {/* <div className="mb-6">
         <Button className="w-full" onClick={onViewTableLayout}>
           <Eye className="h-4 w-4 mr-2" />
-          Xem sơ đồ theo bàn
+          <T>Xem sơ đồ theo bàn</T>
         </Button>
       </div> */}
 
       <div className="mb-6 flex-1 overflow-y-auto">
-        <h3 className="text-lg font-semibold mb-2">Sắp xếp vị trí</h3>
+        <h3 className="text-lg font-semibold mb-2">{t("Sắp xếp vị trí")}</h3>
 
         <div className="space-y-4">
           {furnitureCategories

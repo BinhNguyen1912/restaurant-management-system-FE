@@ -38,6 +38,8 @@ import AutoPagination from '@/components/auto-pagination';
 import { formatDateTimeToLocaleString, simpleMatchText } from '@/lib/utils';
 import { GuestListType } from '@/app/ValidationSchemas/guest.schema';
 import { useGetGuestListQuery } from '@/app/queries/useAccount';
+import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 type GuestItem = GuestListType['data'][0];
 
@@ -94,6 +96,7 @@ export default function GuestsDialog({
 }: {
   onChoose: (guest: GuestItem) => void;
 }) {
+  const { t } = useI18n();
   // State management
   const [open, setOpen] = useState(false);
   const [fromDate, setFromDate] = useState(initFromDate);
@@ -163,31 +166,31 @@ export default function GuestsDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Chọn khách</Button>
+        <Button variant="outline">{t("Chọn khách")}</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[700px] max-h-full overflow-auto">
         <DialogHeader>
-          <DialogTitle>Chọn khách hàng</DialogTitle>
+          <DialogTitle>{t("Chọn khách hàng")}</DialogTitle>
         </DialogHeader>
 
         <div className="w-full">
           {/* Date Filters */}
           <div className="flex flex-wrap gap-2">
             <div className="flex items-center">
-              <span className="mr-2">Từ</span>
+              <span className="mr-2">{t("Từ")}</span>
               <Input
                 type="datetime-local"
-                placeholder="Từ ngày"
+                placeholder={t("Từ ngày")}
                 className="text-sm"
                 value={format(fromDate, 'yyyy-MM-dd HH:mm').replace(' ', 'T')}
                 onChange={(event) => setFromDate(new Date(event.target.value))}
               />
             </div>
             <div className="flex items-center">
-              <span className="mr-2">Đến</span>
+              <span className="mr-2">{t("Đến")}</span>
               <Input
                 type="datetime-local"
-                placeholder="Đến ngày"
+                placeholder={t("Đến ngày")}
                 value={format(toDate, 'yyyy-MM-dd HH:mm').replace(' ', 'T')}
                 onChange={(event) => setToDate(new Date(event.target.value))}
               />
@@ -200,7 +203,7 @@ export default function GuestsDialog({
           {/* Table Filters */}
           <div className="flex items-center py-4 gap-2">
             <Input
-              placeholder="Tên hoặc ID"
+              placeholder={t("Tên hoặc ID")}
               value={
                 (table.getColumn('name')?.getFilterValue() as string) ?? ''
               }
@@ -210,7 +213,7 @@ export default function GuestsDialog({
               className="w-[170px]"
             />
             <Input
-              placeholder="Tên bàn"
+              placeholder={t("Tên bàn")}
               value={
                 (table.getColumn('tableNode')?.getFilterValue() as string) ?? ''
               }
@@ -248,7 +251,7 @@ export default function GuestsDialog({
                       colSpan={columns.length}
                       className="h-24 text-center"
                     >
-                      Đang tải...
+                      <T>Đang tải...</T>
                     </TableCell>
                   </TableRow>
                 ) : table.getRowModel().rows?.length ? (
@@ -275,7 +278,7 @@ export default function GuestsDialog({
                       colSpan={columns.length}
                       className="h-24 text-center"
                     >
-                      Không có khách hàng nào.
+                      <T>Không có khách hàng nào.</T>
                     </TableCell>
                   </TableRow>
                 )}

@@ -23,8 +23,11 @@ import { formatDateTimeToTimeString } from '@/lib/utils';
 import { ConversationResponseType } from '@/app/ValidationSchemas/message.schema';
 import { cn } from '@/lib/utils';
 import { useAppStore } from '@/components/app-provider';
+import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 export default function AdminConversationDialog() {
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const [selectedGuestId, setSelectedGuestId] = useState<number | null>(null);
   const [messageContent, setMessageContent] = useState('');
@@ -180,7 +183,7 @@ export default function AdminConversationDialog() {
       inputRef.current?.focus();
     } catch (error) {
       console.error('Send message error:', error);
-      toast.error('Không thể gửi tin nhắn');
+      toast.error(t("Không thể gửi tin nhắn"));
     }
   };
 
@@ -219,11 +222,11 @@ export default function AdminConversationDialog() {
         <DialogContent className="max-w-4xl h-[80vh] overflow-hidden flex flex-col p-0">
           <DialogHeader className="px-6 py-4 border-b">
             <DialogTitle className="flex items-center justify-between">
-              <span>Tin nhắn với khách hàng</span>
+              <span>{t("Tin nhắn với khách hàng")}</span>
               <Badge variant="secondary">{unreadCountLocal} chưa đọc</Badge>
             </DialogTitle>
             <DialogDescription>
-              Chọn khách hàng để xem và trả lời tin nhắn
+              <T>Chọn khách hàng để xem và trả lời tin nhắn</T>
             </DialogDescription>
           </DialogHeader>
 
@@ -231,14 +234,14 @@ export default function AdminConversationDialog() {
             {/* Sidebar - List of guests */}
             <div className="w-1/3 border-r overflow-hidden flex flex-col">
               <div className="p-3 border-b bg-muted/50">
-                <h3 className="text-sm font-semibold">Khách hàng</h3>
+                <h3 className="text-sm font-semibold">{t("Khách hàng")}</h3>
               </div>
               <div className="flex-1 overflow-y-auto">
                 <div className="divide-y">
                   {guestsWithMessages.length === 0 ? (
                     <div className="p-4 text-center text-muted-foreground text-sm">
                       <MessageSquare className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                      <p>Chưa có tin nhắn</p>
+                      <p>{t("Chưa có tin nhắn")}</p>
                     </div>
                   ) : (
                     guestsWithMessages.map((guest) => (
@@ -297,12 +300,12 @@ export default function AdminConversationDialog() {
                     <div className="space-y-4">
                       {isLoadingConversation ? (
                         <div className="text-center py-8 text-muted-foreground">
-                          <div className="animate-pulse">Đang tải...</div>
+                          <div className="animate-pulse">{t("Đang tải...")}</div>
                         </div>
                       ) : messages.length === 0 ? (
                         <div className="text-center py-8 text-muted-foreground">
                           <MessageSquare className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                          <p>Chưa có tin nhắn</p>
+                          <p>{t("Chưa có tin nhắn")}</p>
                         </div>
                       ) : (
                         messages.map((message) => {
@@ -374,7 +377,7 @@ export default function AdminConversationDialog() {
                         value={messageContent}
                         onChange={(e) => setMessageContent(e.target.value)}
                         onKeyPress={handleKeyPress}
-                        placeholder="Nhập tin nhắn..."
+                        placeholder={t("Nhập tin nhắn...")}
                         className="flex-1"
                         disabled={sendMessageMutation.isPending}
                       />
@@ -395,7 +398,7 @@ export default function AdminConversationDialog() {
                 <div className="flex-1 flex items-center justify-center text-muted-foreground">
                   <div className="text-center">
                     <MessageSquare className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                    <p>Chọn một khách hàng để xem tin nhắn</p>
+                    <p>{t("Chọn một khách hàng để xem tin nhắn")}</p>
                   </div>
                 </div>
               )}

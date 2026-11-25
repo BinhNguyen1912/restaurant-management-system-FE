@@ -27,6 +27,8 @@ import {
   AreaBodyType,
 } from '@/app/ValidationSchemas/area.schema';
 import { toast } from 'react-toastify';
+import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 interface AddAreaDialogProps {
   open: boolean;
@@ -37,6 +39,7 @@ export default function AddAreaDialog({
   open,
   onOpenChange,
 }: AddAreaDialogProps) {
+  const { t } = useI18n();
   const form = useForm<AreaBodyType>({
     resolver: zodResolver(areaBodySchema),
     defaultValues: {
@@ -65,10 +68,10 @@ export default function AddAreaDialog({
       <DialogContent className="max-w-md w-full rounded-xl p-6 shadow-lg">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold ">
-            Thêm mới khu vực
+            <T>Thêm mới khu vực</T>
           </DialogTitle>
           <DialogDescription className=" text-gray-500 mb-2">
-            Thêm một khu vực mới vào nhà hàng của bạn.
+            <T>Thêm một khu vực mới vào nhà hàng của bạn.</T>
           </DialogDescription>
         </DialogHeader>
 
@@ -84,12 +87,12 @@ export default function AddAreaDialog({
               render={({ field }) => (
                 <FormItem className="flex flex-col gap-2">
                   <FormLabel className="font-medium text-base">
-                    Tên khu vực
+                    <T>Tên khu vực</T>
                   </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
-                      placeholder="Nhập tên khu vực..."
+                      placeholder={t("Nhập tên khu vực...")}
                       className="h-12 px-4 text-base border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-lg"
                     />
                   </FormControl>
@@ -104,7 +107,7 @@ export default function AddAreaDialog({
               render={({ field }) => (
                 <FormItem className="flex flex-row items-center justify-between gap-4 py-2 px-2 bg-gray-50 rounded-lg">
                   <FormLabel className="font-medium text-base">
-                    Kích hoạt
+                    <T>Kích hoạt</T>
                   </FormLabel>
                   <FormControl>
                     <Controller
@@ -126,7 +129,7 @@ export default function AddAreaDialog({
                 onClick={() => onOpenChange(false)}
                 className="rounded-lg px-6 h-11 border-gray-300 hover:bg-gray-100"
               >
-                Hủy
+                <T>Hủy</T>
               </Button>
               <Button
                 type="submit"

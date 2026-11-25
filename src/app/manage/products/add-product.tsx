@@ -39,6 +39,8 @@ import {
 import { mediaApiRequest } from '@/apiRequest/media';
 import { useAddProductMutation } from '@/app/queries/useProducts';
 import { getApiErrorMessage } from '@/lib/api-error';
+import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 /** Ảnh đã chọn nhưng chưa upload: giữ File + blob preview, upload 1 lần khi submit */
 type PendingImage = {
@@ -50,6 +52,7 @@ type PendingImage = {
 const createPreviewUrl = (file: File) => URL.createObjectURL(file);
 
 export default function AddDish() {
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [pendingImages, setPendingImages] = useState<PendingImage[]>([]);
@@ -251,14 +254,14 @@ export default function AddDish() {
       (variant) => !variant.value.trim(),
     );
     if (invalidVariant) {
-      toast.error('Tên biến thể không được để trống');
+      toast.error(t("Tên biến thể không được để trống"));
       return;
     }
     const invalidOption = values.variants.find((variant) =>
       variant.valueOption.some((option) => !option.value.trim()),
     );
     if (invalidOption) {
-      toast.error('Giá trị tuỳ chọn của biến thể không được để trống');
+      toast.error(t("Giá trị tuỳ chọn của biến thể không được để trống"));
       return;
     }
 
@@ -323,7 +326,7 @@ export default function AddDish() {
       };
 
       await addProductMutation.mutateAsync(body);
-      toast.success('Thêm món ăn thành công!');
+      toast.success(t("Thêm món ăn thành công!"));
       handleOpenChange(false);
     } catch (error) {
       console.error('[add-product] create failed', error);
@@ -338,13 +341,13 @@ export default function AddDish() {
       <DialogTrigger asChild>
         <Button size="sm" className="flex items-center gap-2">
           <PlusCircle className="h-4 w-4" />
-          Thêm món ăn
+          <T>Thêm món ăn</T>
         </Button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[900px] max-h-screen overflow-auto">
         <DialogHeader>
-          <DialogTitle>Thêm món ăn</DialogTitle>
+          <DialogTitle>{t("Thêm món ăn")}</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -425,7 +428,7 @@ export default function AddDish() {
                   <Upload className="h-4 w-4 mr-1" /> Tải ảnh lên
                 </Button>
                 <p className="text-xs text-muted-foreground text-center">
-                  Tối đa 10 ảnh, mỗi ảnh &lt; 5MB
+                  <T>Tối đa 10 ảnh, mỗi ảnh &lt; 5MB</T>
                 </p>
               </div>
 
@@ -436,9 +439,9 @@ export default function AddDish() {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Tên món ăn</FormLabel>
+                      <FormLabel>{t("Tên món ăn")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="VD: Phở bò" {...field} />
+                        <Input placeholder={t("VD: Phở bò")} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -450,12 +453,12 @@ export default function AddDish() {
                   name="description"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Mô tả</FormLabel>
+                      <FormLabel>{t("Mô tả")}</FormLabel>
                       <FormControl>
                         <Textarea
                           rows={2}
                           maxLength={500}
-                          placeholder="Mô tả ngắn về món ăn (không bắt buộc)"
+                          placeholder={t("Mô tả ngắn về món ăn (không bắt buộc)")}
                           {...field}
                           value={field.value ?? ''}
                         />
@@ -471,7 +474,7 @@ export default function AddDish() {
                     name="basePrice"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Giá cơ bản</FormLabel>
+                        <FormLabel>{t("Giá cơ bản")}</FormLabel>
                         <FormControl>
                           <Input
                             id="base-price"
@@ -498,7 +501,7 @@ export default function AddDish() {
                     name="virtualPrice"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Giá ảo</FormLabel>
+                        <FormLabel>{t("Giá ảo")}</FormLabel>
                         <FormControl>
                           <Input
                             id="virtual-price"
@@ -527,7 +530,7 @@ export default function AddDish() {
                     name="categories"
                     render={({ field }) => (
                       <FormItem>
-                        <Label>Danh mục</Label>
+                        <Label>{t("Danh mục")}</Label>
                         <FormControl>
                           <DialogCategory
                             selectedCategories={field.value || []}
@@ -555,7 +558,7 @@ export default function AddDish() {
                           <div className="flex flex-col gap-3">
                             <div className="flex items-center justify-between">
                               <div className="space-y-0.5 text-sm">
-                                <FormLabel>Trạng thái công khai</FormLabel>
+                                <FormLabel>{t("Trạng thái công khai")}</FormLabel>
                                 <p className="text-[12px] text-muted-foreground">
                                   {isPublished ? 'Đã công khai' : 'Riêng tư'}
                                 </p>
@@ -602,7 +605,7 @@ export default function AddDish() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-medium">Biến thể</h3>
+                  <h3 className="font-medium">{t("Biến thể")}</h3>
                   <p className="text-xs text-muted-foreground">
                     Không bắt buộc. Không có biến thể thì món dùng 1 SKU mặc định
                     theo tên + giá cơ bản.
@@ -620,7 +623,7 @@ export default function AddDish() {
 
               {variants.length === 0 ? (
                 <p className="text-sm text-muted-foreground">
-                  Chưa có biến thể nào
+                  <T>Chưa có biến thể nào</T>
                 </p>
               ) : (
                 <div className="space-y-4">
@@ -631,7 +634,7 @@ export default function AddDish() {
                     >
                       <div className="flex items-center gap-2">
                         <Input
-                          placeholder="Tên biến thể (VD: Size)"
+                          placeholder={t("Tên biến thể (VD: Size)")}
                           value={variant.value}
                           onChange={(e) =>
                             handleVariantChange(variantIndex, e.target.value)
@@ -654,7 +657,7 @@ export default function AddDish() {
                             className="grid grid-cols-1 md:grid-cols-[1fr_140px_120px_auto] gap-2 items-center"
                           >
                             <Input
-                              placeholder="Giá trị (VD: L)"
+                              placeholder={t("Giá trị (VD: L)")}
                               value={option.value}
                               onChange={(e) =>
                                 handleVariantOptionChange(
@@ -669,7 +672,7 @@ export default function AddDish() {
                               type="number"
                               min={0}
                               step={1000}
-                              placeholder="Giá"
+                              placeholder={t("Giá")}
                               value={Number.isFinite(option.price) ? option.price : 0}
                               onChange={(e) =>
                                 handleVariantOptionChange(
@@ -691,7 +694,7 @@ export default function AddDish() {
                                 />
                               ) : (
                                 <span className="text-xs text-gray-400">
-                                  Ảnh
+                                  <T>Ảnh</T>
                                 </span>
                               )}
                               <input
@@ -752,7 +755,7 @@ export default function AddDish() {
             onClick={() => handleOpenChange(false)}
             disabled={isSubmitting}
           >
-            Hủy
+            <T>Hủy</T>
           </Button>
           <Button type="submit" form="add-dish-form" disabled={isSubmitting}>
             {isSubmitting ? 'Đang lưu...' : 'Thêm món ăn'}

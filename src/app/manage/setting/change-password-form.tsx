@@ -12,12 +12,15 @@ import { useChangePasswordMutation } from '@/app/queries/useAccount';
 import { accountApiRequests } from '@/apiRequest/account';
 import { toast } from 'react-toastify';
 import { handleErrorApi } from '@/lib/utils';
+import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 import {
   ChangePassWordBodySchema,
   ChangePasswordBodyType,
 } from '@/app/ValidationSchemas/profile.schema';
 
 export default function ChangePasswordForm() {
+  const { t } = useI18n();
   const ChangePasswordMutaion = useChangePasswordMutation();
   const form = useForm<ChangePasswordBodyType>({
     resolver: zodResolver(ChangePassWordBodySchema),
@@ -34,7 +37,7 @@ export default function ChangePasswordForm() {
     if (ChangePasswordMutaion.isPending) return;
     try {
       const resuft = await accountApiRequests.changePassword(values);
-      toast.success('Cập nhật thành công');
+      toast.success(t("Cập nhật thành công"));
       reset();
     } catch (error) {
       handleErrorApi({
@@ -53,7 +56,7 @@ export default function ChangePasswordForm() {
       >
         <Card className="overflow-hidden" x-chunk="dashboard-07-chunk-4">
           <CardHeader>
-            <CardTitle>Đổi mật khẩu</CardTitle>
+            <CardTitle>{t("Đổi mật khẩu")}</CardTitle>
             {/* <CardDescription>Lipsum dolor sit amet, consectetur adipiscing elit</CardDescription> */}
           </CardHeader>
           <CardContent>
@@ -64,7 +67,7 @@ export default function ChangePasswordForm() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid gap-3">
-                      <Label htmlFor="oldPassword">Mật khẩu cũ</Label>
+                      <Label htmlFor="oldPassword">{t("Mật khẩu cũ")}</Label>
                       <Input
                         id="oldPassword"
                         type="password"
@@ -83,7 +86,7 @@ export default function ChangePasswordForm() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid gap-3">
-                      <Label htmlFor="password">Mật khẩu mới</Label>
+                      <Label htmlFor="password">{t("Mật khẩu mới")}</Label>
                       <Input
                         id="password"
                         type="password"
@@ -103,7 +106,7 @@ export default function ChangePasswordForm() {
                   <FormItem>
                     <div className="grid gap-3">
                       <Label htmlFor="confirmPassword">
-                        Nhập lại mật khẩu mới
+                        <T>Nhập lại mật khẩu mới</T>
                       </Label>
                       <Input
                         id="confirmPassword"
@@ -119,10 +122,10 @@ export default function ChangePasswordForm() {
               />
               <div className=" items-center gap-2 md:ml-auto flex">
                 <Button variant="outline" size="sm" type="reset">
-                  Hủy
+                  <T>Hủy</T>
                 </Button>
                 <Button size="sm" type="submit">
-                  Lưu thông tin
+                  <T>Lưu thông tin</T>
                 </Button>
               </div>
             </div>

@@ -36,6 +36,8 @@ import { handleErrorApi } from '@/lib/utils';
 import AddIngredient from '@/app/manage/ingredients/add-ingredient';
 import { useGetListIngredientMutation } from '@/app/queries/useIngredient';
 import { toast } from 'react-toastify';
+import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 const recipeSchema = z.object({
   skuId: z.number().min(1, 'Vui lòng chọn SKU'),
@@ -53,6 +55,7 @@ const recipeSchema = z.object({
 type RecipeFormType = z.infer<typeof recipeSchema>;
 
 export default function RecipeManagement() {
+  const { t } = useI18n();
   const [selectedProductId, setSelectedProductId] = useState<number | null>(
     null,
   );
@@ -104,11 +107,11 @@ export default function RecipeManagement() {
           skuId: data.skuId,
           ingredients: data.ingredients,
         });
-        toast.success('Cập nhật công thức thành công!');
+        toast.success(t("Cập nhật công thức thành công!"));
       } else {
         // Create new recipe
         await createRecipeMutation.mutateAsync(data);
-        toast.success('Tạo công thức mới thành công!');
+        toast.success(t("Tạo công thức mới thành công!"));
       }
       form.reset();
       setSelectedProductId(null);
@@ -128,7 +131,7 @@ export default function RecipeManagement() {
       try {
         const recipeId = recipe.skuRecipeIngredients[0].skuRecipeIngredientsId;
         await deleteRecipeMutation.mutateAsync(recipeId);
-        toast.success('Xóa công thức thành công!');
+        toast.success(t("Xóa công thức thành công!"));
         setSelectedSkuId(null);
         form.reset();
       } catch (error) {
@@ -139,12 +142,12 @@ export default function RecipeManagement() {
 
   const addIngredient = () => {
     append({ ingredientId: 0, quantity: 0, unitId: '' });
-    toast.success('Đã thêm nguyên liệu mới!');
+    toast.success(t("Đã thêm nguyên liệu mới!"));
   };
 
   const removeIngredient = (index: number) => {
     remove(index);
-    toast.success('Đã xóa nguyên liệu!');
+    toast.success(t("Đã xóa nguyên liệu!"));
   };
 
   const handleIngredientCreated = () => {
@@ -259,7 +262,7 @@ export default function RecipeManagement() {
   return (
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Quản lý định lượng</h1>
+        <h1 className="text-2xl font-bold">{t("Quản lý định lượng")}</h1>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -267,7 +270,7 @@ export default function RecipeManagement() {
         <Card>
           <CardHeader>
             <CardTitle className="text-md font-bold">
-              Danh sách sản phẩm
+              <T>Danh sách sản phẩm</T>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -351,7 +354,7 @@ export default function RecipeManagement() {
                         name={`ingredients.${index}.ingredientId`}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Nguyên liệu</FormLabel>
+                            <FormLabel>{t("Nguyên liệu")}</FormLabel>
                             <div className="flex gap-2">
                               <Select
                                 value={field.value?.toString() || ''}
@@ -361,7 +364,7 @@ export default function RecipeManagement() {
                               >
                                 <FormControl>
                                   <SelectTrigger>
-                                    <SelectValue placeholder="Chọn nguyên liệu">
+                                    <SelectValue placeholder={t("Chọn nguyên liệu")}>
                                       {field.value
                                         ? recipe
                                           ? getRecipeIngredientName(field.value)
@@ -393,7 +396,7 @@ export default function RecipeManagement() {
                         name={`ingredients.${index}.quantity`}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Số lượng</FormLabel>
+                            <FormLabel>{t("Số lượng")}</FormLabel>
                             <FormControl>
                               <Input
                                 type="number"
@@ -415,14 +418,14 @@ export default function RecipeManagement() {
                         name={`ingredients.${index}.unitId`}
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Đơn vị</FormLabel>
+                            <FormLabel>{t("Đơn vị")}</FormLabel>
                             <Select
                               value={field.value || ''}
                               onValueChange={field.onChange}
                             >
                               <FormControl>
                                 <SelectTrigger>
-                                  <SelectValue placeholder="Chọn đơn vị">
+                                  <SelectValue placeholder={t("Chọn đơn vị")}>
                                     {field.value
                                       ? recipe
                                         ? getRecipeUnitName(field.value)
@@ -465,10 +468,10 @@ export default function RecipeManagement() {
                     variant="outline"
                     onClick={addIngredient}
                     className="flex items-center gap-2"
-                    title="Thêm nguyên liệu"
+                    title={t("Thêm nguyên liệu")}
                   >
                     <Plus className="h-4 w-4" />
-                    <span className="hidden sm:inline">Thêm nguyên liệu</span>
+                    <span className="hidden sm:inline">{t("Thêm nguyên liệu")}</span>
                   </Button>
 
                   <Button

@@ -20,6 +20,7 @@ import { useAppStore } from '@/components/app-provider';
 import Link from 'next/link';
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
+import { useI18n } from '@/i18n/locale-provider';
 
 const menuItems: {
   title: string;
@@ -71,6 +72,7 @@ const menuItems: {
 // Nhưng ngay sau đó thì client render ra là Món ăn, Đơn hàng, Quản lý do đã check được trạng thái đăng nhập
 
 export default function NavItems({ className }: { className?: string }) {
+  const { t } = useI18n();
   const setRole = useAppStore((state) => state.setRole);
   const role = useAppStore((state) => state.role);
   const [isMounted, setIsMounted] = useState(false);
@@ -88,7 +90,7 @@ export default function NavItems({ className }: { className?: string }) {
       await logoutMutation.mutateAsync();
       setRole(undefined);
       // disconnectSocket();
-      toast.success('Đằng xuất thành công');
+      toast.success(t("Đằng xuất thành công"));
       router.push('/');
     } catch (error: any) {
       handleErrorApi({

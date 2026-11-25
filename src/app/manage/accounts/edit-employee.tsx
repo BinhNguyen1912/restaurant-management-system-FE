@@ -48,6 +48,8 @@ import {
 } from '@/app/ValidationSchemas/user.schema';
 import { useGetRoleListQuery } from '@/app/queries/useRole';
 import { z } from 'zod';
+import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 export default function EditEmployee({
   id,
@@ -58,6 +60,7 @@ export default function EditEmployee({
   setId: (value: number | undefined) => void;
   onSubmitSuccess?: () => void;
 }) {
+  const { t } = useI18n();
   const [file, setFile] = useState<File | null>(null);
   const avatarInputRef = useRef<HTMLInputElement | null>(null);
   const { data } = useGetEmployeeAccount({
@@ -141,7 +144,7 @@ export default function EditEmployee({
       if (!body.phoneNumber) body.phoneNumber = '';
       if (!body.avatar) body.avatar = '';
       const result = await updateAccountMutation.mutateAsync(body);
-      toast.success('Cập nhật thành công');
+      toast.success(t("Cập nhật thành công"));
       reset();
       onSubmitSuccess?.();
     } catch (error) {
@@ -166,9 +169,9 @@ export default function EditEmployee({
     >
       <DialogContent className="sm:max-w-[600px] max-h-screen overflow-auto">
         <DialogHeader>
-          <DialogTitle>Cập nhật tài khoản</DialogTitle>
+          <DialogTitle>{t("Cập nhật tài khoản")}</DialogTitle>
           <DialogDescription>
-            Các trường tên, email, mật khẩu là bắt buộc
+            <T>Các trường tên, email, mật khẩu là bắt buộc</T>
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -226,7 +229,7 @@ export default function EditEmployee({
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="name">Tên</Label>
+                      <Label htmlFor="name">{t("Tên")}</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Input
                           id="name"
@@ -266,7 +269,7 @@ export default function EditEmployee({
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="phoneNumber">Số điện thoại</Label>
+                      <Label htmlFor="phoneNumber">{t("Số điện thoại")}</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Input
                           id="phoneNumber"
@@ -286,7 +289,7 @@ export default function EditEmployee({
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="status">Trạng thái</Label>
+                      <Label htmlFor="status">{t("Trạng thái")}</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <select
                           id="status"
@@ -296,9 +299,9 @@ export default function EditEmployee({
                           }
                           className="w-full border rounded px-2 py-1"
                         >
-                          <option value="ACTIVE">Hoạt động</option>
-                          <option value="INACTIVE">Không hoạt động</option>
-                          <option value="BLOCKED">Bị khóa</option>
+                          <option value="ACTIVE">{t("Hoạt động")}</option>
+                          <option value="INACTIVE">{t("Không hoạt động")}</option>
+                          <option value="BLOCKED">{t("Bị khóa")}</option>
                         </select>
                         <FormMessage />
                       </div>
@@ -312,7 +315,7 @@ export default function EditEmployee({
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="roleId">Vai trò</Label>
+                      <Label htmlFor="roleId">{t("Vai trò")}</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <select
                           id="roleId"
@@ -320,7 +323,7 @@ export default function EditEmployee({
                           value={field.value ?? 0}
                           className="w-full border rounded px-2 py-1"
                         >
-                          <option value={0}>Chọn vai trò</option>
+                          <option value={0}>{t("Chọn vai trò")}</option>
                           {roles.map((role) => (
                             <option key={role.id} value={role.id}>
                               {role.name}
@@ -339,7 +342,7 @@ export default function EditEmployee({
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="changePassword">Đổi mật khẩu</Label>
+                      <Label htmlFor="changePassword">{t("Đổi mật khẩu")}</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Switch
                           checked={field.value}
@@ -359,7 +362,7 @@ export default function EditEmployee({
                     render={({ field }) => (
                       <FormItem>
                         <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                          <Label htmlFor="newPassword">Mật khẩu mới</Label>
+                          <Label htmlFor="newPassword">{t("Mật khẩu mới")}</Label>
                           <div className="col-span-3 w-full space-y-2">
                             <Input
                               id="newPassword"
@@ -381,7 +384,7 @@ export default function EditEmployee({
                       <FormItem>
                         <div className="grid grid-cols-4 items-center justify-items-start gap-4">
                           <Label htmlFor="confirmNewPassword">
-                            Xác nhận mật khẩu mới
+                            <T>Xác nhận mật khẩu mới</T>
                           </Label>
                           <div className="col-span-3 w-full space-y-2">
                             <Input
@@ -404,7 +407,7 @@ export default function EditEmployee({
         </Form>
         <DialogFooter>
           <Button type="submit" form="edit-employee-form">
-            Lưu
+            <T>Lưu</T>
           </Button>
         </DialogFooter>
       </DialogContent>

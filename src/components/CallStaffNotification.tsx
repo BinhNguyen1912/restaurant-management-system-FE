@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useAppStore } from '@/components/app-provider';
 import { toast } from 'react-toastify';
 import { Bell, User, MapPin, Clock } from 'lucide-react';
+import { T } from '@/components/t';
 
 interface CallStaffData {
   guestId: number;
@@ -137,7 +138,7 @@ export default function CallStaffNotification() {
             </div>
             <div>
               <div className="font-semibold text-gray-900">
-                Khách hàng gọi nhân viên
+                <T>Khách hàng gọi nhân viên</T>
               </div>
               <div className="text-sm text-gray-600 space-y-1">
                 <div className="flex items-center gap-2">

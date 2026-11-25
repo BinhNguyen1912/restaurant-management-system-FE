@@ -1,4 +1,5 @@
 import { formatCurrency } from '@/lib/utils';
+import { T } from '@/components/t';
 
 export type OrderMoneyBreakdownProps = {
   subtotal: number;
@@ -31,13 +32,13 @@ export default function OrderMoneyBreakdown({
   return (
     <div className="grid gap-1 text-sm">
       <div className="flex justify-between">
-        <span className="text-muted-foreground">Tạm tính</span>
+        <span className="text-muted-foreground"><T>Tạm tính</T></span>
         <span>{formatCurrency(subtotal)}</span>
       </div>
 
       {discountTotal > 0 ? (
         <div className="flex justify-between text-emerald-600">
-          <span>Giảm giá</span>
+          <span><T>Giảm giá</T></span>
           <span>-{formatCurrency(discountTotal)}</span>
         </div>
       ) : null}
@@ -68,7 +69,7 @@ export default function OrderMoneyBreakdown({
             : 'mt-1 flex justify-between border-t pt-2 font-semibold'
         }
       >
-        <span>Tổng cộng</span>
+        <span><T>Tổng cộng</T></span>
         <span className="text-red-600">{formatCurrency(grandTotal)}</span>
       </div>
     </div>

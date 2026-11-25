@@ -5,6 +5,7 @@ import SafeImage from '@/components/SafeImage';
 import { Button } from '@/components/ui/button';
 import { formatCurrency } from '@/lib/utils';
 import { Heart, ShoppingCart } from 'lucide-react';
+import { T } from '@/components/t';
 
 interface ProductCardProps {
   product: {
@@ -77,7 +78,7 @@ export default function ProductCard({
         {isUnavailable && (
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
             <span className="text-white text-sm font-medium bg-red-500 px-3 py-1 rounded-full">
-              Hết hàng
+              <T>Hết hàng</T>
             </span>
           </div>
         )}
@@ -92,7 +93,7 @@ export default function ProductCard({
         {/* Badge */}
         <div className="absolute top-2 left-2">
           <span className="bg-orange-500 text-white text-xs font-medium px-2 py-1 rounded-full">
-            Đặc biệt
+            <T>Đặc biệt</T>
           </span>
         </div>
 
@@ -174,7 +175,7 @@ export default function ProductCard({
           disabled={isUnavailable}
         >
           <ShoppingCart className="w-4 h-4" />
-          Thêm vào giỏ
+          <T>Thêm vào giỏ</T>
         </Button>
       </div>
     </div>

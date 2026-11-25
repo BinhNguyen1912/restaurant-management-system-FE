@@ -2,6 +2,7 @@ import ChangePasswordForm from '@/app/manage/setting/change-password-form';
 import UpdateProfileForm from '@/app/manage/setting/update-profile-form';
 import { Badge } from '@/components/ui/badge';
 import LowStockWarningDialog from '@/components/lowStockWarningDialog';
+import { T } from '@/components/t';
 
 export default function Setting() {
   return (
@@ -9,7 +10,7 @@ export default function Setting() {
       <div className="mx-auto grid w-full flex-1 auto-rows-max gap-4">
         <div className="flex items-center gap-4">
           <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-            Cài đặt
+            <T>Cài đặt</T>
           </h1>
         </div>
         <div className="grid gap-4 md:grid-cols-2 md:gap-8">

@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import BananaTreeAnimation from './bananaTreeAnimation';
+import { T } from '@/components/t';
 
 const BananaTreeSection = () => {
   return (
@@ -39,7 +40,7 @@ const BananaTreeSection = () => {
                 viewport={{ once: true }}
                 className="text-3xl md:text-4xl font-bold text-gray-800 tracking-wide"
               >
-                Hương Vị Truyền Thống
+                <T>Hương Vị Truyền Thống</T>
               </motion.h2>
 
               <motion.div

@@ -17,8 +17,11 @@ import { toast } from 'react-toastify';
 import { formatDateTimeToTimeString } from '@/lib/utils';
 import { ConversationResponseType } from '@/app/ValidationSchemas/message.schema';
 import { cn } from '@/lib/utils';
+import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 export default function GuestMessageDialog() {
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const [messageContent, setMessageContent] = useState('');
   const [guestInfo, setGuestInfo] = useState<any>(null);
@@ -70,7 +73,7 @@ export default function GuestMessageDialog() {
 
   const handleSendMessage = async () => {
     if (!messageContent.trim() || !guestInfo?.id) {
-      toast.error('Không thể xác định thông tin khách hàng');
+      toast.error(t("Không thể xác định thông tin khách hàng"));
       return;
     }
 
@@ -87,7 +90,7 @@ export default function GuestMessageDialog() {
       setMessageContent('');
       inputRef.current?.focus();
     } catch (error) {
-      toast.error('Không thể gửi tin nhắn. Vui lòng thử lại!');
+      toast.error(t("Không thể gửi tin nhắn. Vui lòng thử lại!"));
     }
   };
 
@@ -104,7 +107,7 @@ export default function GuestMessageDialog() {
         <DialogHeader className="px-4 py-3 border-b">
           <DialogTitle className="flex items-center gap-2 text-lg">
             <User className="w-4 h-4" />
-            <span>Chat với nhân viên</span>
+            <span>{t("Chat với nhân viên")}</span>
           </DialogTitle>
         </DialogHeader>
 
@@ -112,14 +115,14 @@ export default function GuestMessageDialog() {
         <div className="flex-1 p-3 overflow-y-auto">
           {isLoading ? (
             <div className="text-center py-6 text-muted-foreground">
-              <div className="animate-pulse text-sm">Đang tải...</div>
+              <div className="animate-pulse text-sm">{t("Đang tải...")}</div>
             </div>
           ) : messages.length === 0 ? (
             <div className="text-center py-6 text-muted-foreground">
               <MessageSquare className="w-10 h-10 mx-auto mb-3 opacity-50" />
-              <p className="text-sm">Chưa có tin nhắn</p>
+              <p className="text-sm">{t("Chưa có tin nhắn")}</p>
               <p className="text-xs mt-1">
-                Gửi tin nhắn để được hỗ trợ từ nhân viên
+                <T>Gửi tin nhắn để được hỗ trợ từ nhân viên</T>
               </p>
             </div>
           ) : (
@@ -192,7 +195,7 @@ export default function GuestMessageDialog() {
               value={messageContent}
               onChange={(e) => setMessageContent(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Nhập tin nhắn..."
+              placeholder={t("Nhập tin nhắn...")}
               className="flex-1 h-9"
               disabled={sendMessageMutation.isPending}
               maxLength={1000}
@@ -217,7 +220,7 @@ export default function GuestMessageDialog() {
         variant="outline"
         size="sm"
         className="relative"
-        title="Chat với nhân viên"
+        title={t("Chat với nhân viên")}
         onClick={() => setOpen(true)}
       >
         <MessageSquare className="w-4 h-4" />

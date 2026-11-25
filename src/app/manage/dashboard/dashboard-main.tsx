@@ -30,6 +30,8 @@ const DishBarChart = dynamic(
 import { toast } from 'react-toastify';
 import NewOrderSound from '@/components/newOrderSound';
 import LowStockWarningDialog from '@/components/lowStockWarningDialog';
+import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 import {
   GuestCreateNewOrderType,
@@ -38,6 +40,7 @@ import {
 const initFromDate = startOfDay(new Date());
 const initToDate = endOfDay(new Date());
 export default function DashboardMain() {
+  const { t } = useI18n();
   const [fromDate, setFromDate] = useState(initFromDate);
   const [toDate, setToDate] = useState(initToDate);
   const { data, isLoading, error } = useDashBoardIndicators({
@@ -149,20 +152,20 @@ export default function DashboardMain() {
       <div className="flex flex-wrap gap-2">
         <div className="flex items-center">
           <NewOrderSound hasNewOrder={hasNewOrder} />
-          <span className="mr-2">Từ</span>
+          <span className="mr-2">{t("Từ")}</span>
           <Input
             type="datetime-local"
-            placeholder="Từ ngày"
+            placeholder={t("Từ ngày")}
             className="text-sm"
             value={format(fromDate, 'yyyy-MM-dd HH:mm').replace(' ', 'T')}
             onChange={(event) => setFromDate(new Date(event.target.value))}
           />
         </div>
         <div className="flex items-center">
-          <span className="mr-2">Đến</span>
+          <span className="mr-2">{t("Đến")}</span>
           <Input
             type="datetime-local"
-            placeholder="Đến ngày"
+            placeholder={t("Đến ngày")}
             value={format(toDate, 'yyyy-MM-dd HH:mm').replace(' ', 'T')}
             onChange={(event) => setToDate(new Date(event.target.value))}
           />
@@ -175,7 +178,7 @@ export default function DashboardMain() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Tổng doanh thu
+              <T>Tổng doanh thu</T>
             </CardTitle>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -196,7 +199,7 @@ export default function DashboardMain() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Khách</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("Khách")}</CardTitle>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -214,12 +217,12 @@ export default function DashboardMain() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{guestCount}</div>
-            <p className="text-xs text-muted-foreground">Gọi món</p>
+            <p className="text-xs text-muted-foreground">{t("Gọi món")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Đơn hàng</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("Đơn hàng")}</CardTitle>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -236,13 +239,13 @@ export default function DashboardMain() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{orderCount}</div>
-            <p className="text-xs text-muted-foreground">Đã thanh toán</p>
+            <p className="text-xs text-muted-foreground">{t("Đã thanh toán")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Bàn đang phục vụ
+              <T>Bàn đang phục vụ</T>
             </CardTitle>
             <svg
               xmlns="http://www.w3.org/2000/svg"

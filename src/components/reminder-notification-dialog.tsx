@@ -18,6 +18,8 @@ import {
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
+import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 interface ReminderEventData {
   reminderId: number;
@@ -37,6 +39,7 @@ export default function ReminderNotificationDialog({
   reminder,
   onClose,
 }: ReminderNotificationDialogProps) {
+  const { t } = useI18n();
   const [isOpen, setIsOpen] = React.useState(true);
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -75,7 +78,7 @@ export default function ReminderNotificationDialog({
 
   const handleComplete = async () => {
     if (!pendingLog) {
-      toast.warning('Không tìm thấy log để đánh dấu hoàn thành');
+      toast.warning(t("Không tìm thấy log để đánh dấu hoàn thành"));
       return;
     }
 
@@ -89,7 +92,7 @@ export default function ReminderNotificationDialog({
         id: reminder.reminderId,
         logId: Number(pendingLog.id),
       });
-      toast.success('Đã đánh dấu lời nhắc hoàn thành!');
+      toast.success(t("Đã đánh dấu lời nhắc hoàn thành!"));
       // Refetch bảng lời nhắc sau khi hoàn thành
       queryClient.invalidateQueries({ queryKey: ['reminders'] });
     } catch (error: any) {
@@ -122,10 +125,10 @@ export default function ReminderNotificationDialog({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Bell className="h-5 w-5 text-primary" />
-            Lời nhắc
+            <T>Lời nhắc</T>
           </DialogTitle>
           <DialogDescription>
-            Bạn có một lời nhắc mới cần thực hiện
+            <T>Bạn có một lời nhắc mới cần thực hiện</T>
           </DialogDescription>
         </DialogHeader>
 
@@ -163,10 +166,10 @@ export default function ReminderNotificationDialog({
               onClick={handleViewAll}
               className="flex-1"
             >
-              Xem tất cả
+              <T>Xem tất cả</T>
             </Button>
             <Button variant="outline" onClick={handleClose} className="flex-1">
-              Đóng
+              <T>Đóng</T>
             </Button>
             {pendingLog && (
               <Button
@@ -177,12 +180,12 @@ export default function ReminderNotificationDialog({
                 {completeReminderLog.isPending ? (
                   <>
                     <div className="animate-spin rounded-full h-4 w-4 border-2 border-current border-t-transparent" />
-                    Đang xử lý...
+                    <T>Đang xử lý...</T>
                   </>
                 ) : (
                   <>
                     <CheckCircle className="h-4 w-4" />
-                    Đã hoàn thành
+                    <T>Đã hoàn thành</T>
                   </>
                 )}
               </Button>

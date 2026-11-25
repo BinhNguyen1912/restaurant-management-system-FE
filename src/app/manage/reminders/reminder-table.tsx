@@ -55,6 +55,9 @@ import EditReminder from '@/app/manage/reminders/edit-reminder';
 import { QuickReminderDialog } from '@/components/reminderDialog';
 import { RepeatModeType } from '@/app/constants/reminder.constant';
 import { useGetRoleListQuery } from '@/app/queries/useRole';
+import { useI18n } from '@/i18n/locale-provider';
+import { tr } from '@/i18n/tr';
+import { T } from '@/components/t';
 
 type ReminderItem = ReminderResType;
 
@@ -173,7 +176,7 @@ export const columns: ColumnDef<ReminderItem>[] = [
         return (
           <div className="flex items-center gap-2">
             <User className="h-4 w-4 text-muted-foreground" />
-            <Badge variant="outline">Tất cả</Badge>
+            <Badge variant="outline">{tr("Tất cả")}</Badge>
           </div>
         );
       }
@@ -250,7 +253,7 @@ export const columns: ColumnDef<ReminderItem>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Thao tác</DropdownMenuLabel>
+            <DropdownMenuLabel>{tr("Thao tác")}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={openViewLogs}>
               <Eye className="mr-2 h-4 w-4" />
@@ -258,11 +261,11 @@ export const columns: ColumnDef<ReminderItem>[] = [
             </DropdownMenuItem>
             <DropdownMenuItem onClick={openEdit}>
               <Edit className="mr-2 h-4 w-4" />
-              Sửa
+              <T>Sửa</T>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={openDelete} className="text-destructive">
               <Trash2 className="mr-2 h-4 w-4" />
-              Xóa
+              <T>Xóa</T>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -278,6 +281,7 @@ function AlertDialogDeleteReminder({
   reminderDelete: ReminderItem | null;
   setReminderDelete: (value: ReminderItem | null) => void;
 }) {
+  const { t } = useI18n();
   const { mutateAsync } = useDeleteReminder();
 
   const deleteReminder = async () => {
@@ -285,7 +289,7 @@ function AlertDialogDeleteReminder({
       try {
         await mutateAsync(reminderDelete.id);
         setReminderDelete(null);
-        toast.success('Xóa lời nhắc thành công', {
+        toast.success(tr("Xóa lời nhắc thành công"), {
           hideProgressBar: true,
           autoClose: 1000,
         });
@@ -308,7 +312,7 @@ function AlertDialogDeleteReminder({
     >
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Xóa lời nhắc?</AlertDialogTitle>
+          <AlertDialogTitle>{tr("Xóa lời nhắc?")}</AlertDialogTitle>
           <AlertDialogDescription>
             Lời nhắc{' '}
             <span className="bg-foreground text-primary-foreground rounded px-1">
@@ -318,12 +322,12 @@ function AlertDialogDeleteReminder({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Hủy</AlertDialogCancel>
+          <AlertDialogCancel>{tr("Hủy")}</AlertDialogCancel>
           <AlertDialogAction
             onClick={deleteReminder}
             className="bg-destructive text-destructive-foreground"
           >
-            Xóa
+            <T>Xóa</T>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -334,6 +338,7 @@ function AlertDialogDeleteReminder({
 const PAGE_SIZE = 10;
 
 export default function ReminderTable() {
+  const { t } = useI18n();
   const [reminderIdEdit, setReminderIdEdit] = useState<number | undefined>();
   const [reminderDelete, setReminderDelete] = useState<ReminderItem | null>(
     null,
@@ -438,7 +443,7 @@ export default function ReminderTable() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-8">
-        <div className="text-muted-foreground">Đang tải...</div>
+        <div className="text-muted-foreground">{tr("Đang tải...")}</div>
       </div>
     );
   }
@@ -462,7 +467,7 @@ export default function ReminderTable() {
         />
         <div className="flex items-center justify-between py-4">
           <Input
-            placeholder="Lọc theo tiêu đề..."
+            placeholder={tr("Lọc theo tiêu đề...")}
             value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
             onChange={(event) =>
               table.getColumn('title')?.setFilterValue(event.target.value)
@@ -512,7 +517,7 @@ export default function ReminderTable() {
                     colSpan={columns.length}
                     className="h-24 text-center"
                   >
-                    Không có lời nhắc nào.
+                    <T>Không có lời nhắc nào.</T>
                   </TableCell>
                 </TableRow>
               )}
@@ -530,7 +535,7 @@ export default function ReminderTable() {
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
-              Trước
+              <T>Trước</T>
             </Button>
             <Button
               variant="outline"

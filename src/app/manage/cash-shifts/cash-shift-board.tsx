@@ -44,6 +44,8 @@ import {
 } from '@/app/queries/useCashShift';
 import { mediaApiRequest } from '@/apiRequest/media';
 import { formatCurrency } from '@/lib/utils';
+import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 /*
  * Ảnh chứng từ hiển thị bằng <img> thường (không qua next/image): URL Cloudinary do
@@ -89,6 +91,7 @@ function Stat({
 }
 
 export default function CashShiftBoard() {
+  const { t } = useI18n();
   const current = useGetCashShiftCurrent();
   const history = useGetCashShifts({ limit: 20 });
   const { mutateAsync: openShift, isPending: isOpening } = useOpenCashShift();
@@ -129,7 +132,7 @@ export default function CashShiftBoard() {
         note: openNote.trim() || undefined,
       });
       setOpenNote('');
-      toast.success('Đã mở ca');
+      toast.success(t("Đã mở ca"));
     } catch (error: any) {
       toast.error(error?.message ?? 'Không mở được ca');
     }
@@ -192,7 +195,7 @@ export default function CashShiftBoard() {
       const variance = closed.payload?.variance ?? 0;
       setCountedCash('');
       setCloseNote('');
-      if (variance === 0) toast.success('Đóng ca: két khớp');
+      if (variance === 0) toast.success(t("Đóng ca: két khớp"));
       else if (variance < 0)
         toast.warn(`Đóng ca: thiếu ${formatCurrency(Math.abs(variance))} — đã ghi sổ thiếu quỹ`);
       else toast.info(`Đóng ca: thừa ${formatCurrency(variance)} — đã ghi sổ thừa quỹ`);
@@ -206,7 +209,7 @@ export default function CashShiftBoard() {
       {current.isLoading ? (
         <Card>
           <CardContent className="py-6 text-sm text-muted-foreground">
-            Đang tải ca làm việc…
+            <T>Đang tải ca làm việc…</T>
           </CardContent>
         </Card>
       ) : shift ? (
@@ -222,9 +225,9 @@ export default function CashShiftBoard() {
           </CardHeader>
           <CardContent className="grid gap-4">
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-              <Stat label="Tiền lẻ đầu ca" value={totals?.openingFloat ?? 0} />
+              <Stat label={t("Tiền lẻ đầu ca")} value={totals?.openingFloat ?? 0} />
               <Stat
-                label="Thu tiền mặt trong ca"
+                label={t("Thu tiền mặt trong ca")}
                 value={(totals?.cashIn ?? 0) + (totals?.cashInMovements ?? 0)}
                 hint={
                   movementSum.IN > 0
@@ -235,13 +238,13 @@ export default function CashShiftBoard() {
               />
               <Stat label="Chi trong ca" value={totals?.cashOut ?? 0} tone="danger" />
               <Stat
-                label="Két phải có"
+                label={t("Két phải có")}
                 value={totals?.expectedCash ?? 0}
                 hint="tiền lẻ + thu − chi"
               />
               <div className="rounded-lg border p-3">
                 <div className="text-xs uppercase text-muted-foreground">
-                  Đơn tiền mặt chưa thu
+                  <T>Đơn tiền mặt chưa thu</T>
                 </div>
                 <div
                   className={
@@ -257,7 +260,7 @@ export default function CashShiftBoard() {
                 </div>
                 {(totals?.unpaidCashOrders ?? 0) > 0 ? (
                   <div className="text-xs text-destructive">
-                    Phải thu hết mới đóng ca được
+                    <T>Phải thu hết mới đóng ca được</T>
                   </div>
                 ) : null}
               </div>
@@ -265,10 +268,10 @@ export default function CashShiftBoard() {
 
             <div className="grid gap-4 lg:grid-cols-2">
               <div>
-                <h3 className="mb-2 text-sm font-semibold">Thu / chi tiền mặt</h3>
+                <h3 className="mb-2 text-sm font-semibold">{t("Thu / chi tiền mặt")}</h3>
                 <form className="mb-3 flex flex-wrap items-end gap-2" onSubmit={handleMovement}>
                   <div className="grid gap-1">
-                    <Label htmlFor="movement-type">Loại</Label>
+                    <Label htmlFor="movement-type">{t("Loại")}</Label>
                     <select
                       id="movement-type"
                       className="h-9 rounded-md border bg-background px-2 text-sm"
@@ -278,21 +281,21 @@ export default function CashShiftBoard() {
                       }
                     >
                       <option value="OUT">Chi ra</option>
-                      <option value="IN">Thu vào</option>
+                      <option value="IN">{t("Thu vào")}</option>
                     </select>
                   </div>
                   <div className="grid min-w-[12rem] flex-1 gap-1">
-                    <Label htmlFor="movement-reason">Lý do</Label>
+                    <Label htmlFor="movement-reason">{t("Lý do")}</Label>
                     <Input
                       id="movement-reason"
                       value={movementReason}
                       onChange={(event) => setMovementReason(event.target.value)}
-                      placeholder="mua đá, trả tiền rau…"
+                      placeholder={t("mua đá, trả tiền rau…")}
                       required
                     />
                   </div>
                   <div className="grid w-32 gap-1">
-                    <Label htmlFor="movement-amount">Số tiền</Label>
+                    <Label htmlFor="movement-amount">{t("Số tiền")}</Label>
                     <Input
                       id="movement-amount"
                       inputMode="numeric"
@@ -355,7 +358,7 @@ export default function CashShiftBoard() {
                           )}
                           <button
                             type="button"
-                            aria-label="Bỏ chứng từ"
+                            aria-label={t("Bỏ chứng từ")}
                             className="absolute right-0 top-0 rounded-bl bg-background/90 p-0.5"
                             onClick={() =>
                               setEvidenceUrls((current) => current.filter((item) => item !== url))
@@ -371,17 +374,17 @@ export default function CashShiftBoard() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Loại</TableHead>
-                      <TableHead>Lý do</TableHead>
-                      <TableHead>Chứng từ</TableHead>
-                      <TableHead className="text-right">Số tiền</TableHead>
+                      <TableHead>{t("Loại")}</TableHead>
+                      <TableHead>{t("Lý do")}</TableHead>
+                      <TableHead>{t("Chứng từ")}</TableHead>
+                      <TableHead className="text-right">{t("Số tiền")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {movements.length === 0 ? (
                       <TableRow>
                         <TableCell colSpan={4} className="text-sm text-muted-foreground">
-                          Chưa có khoản thu/chi nào trong ca
+                          <T>Chưa có khoản thu/chi nào trong ca</T>
                         </TableCell>
                       </TableRow>
                     ) : (
@@ -446,10 +449,10 @@ export default function CashShiftBoard() {
               </div>
 
               <div>
-                <h3 className="mb-2 text-sm font-semibold">Đóng ca — đếm két</h3>
+                <h3 className="mb-2 text-sm font-semibold">{t("Đóng ca — đếm két")}</h3>
                 <form className="grid gap-3" onSubmit={handleClose}>
                   <div className="grid gap-1">
-                    <Label htmlFor="counted-cash">Tiền mặt thực đếm</Label>
+                    <Label htmlFor="counted-cash">{t("Tiền mặt thực đếm")}</Label>
                     <Input
                       id="counted-cash"
                       inputMode="numeric"
@@ -464,7 +467,7 @@ export default function CashShiftBoard() {
                     </p>
                   </div>
                   <div className="grid gap-1">
-                    <Label htmlFor="close-note">Ghi chú (tuỳ chọn)</Label>
+                    <Label htmlFor="close-note">{t("Ghi chú (tuỳ chọn)")}</Label>
                     <Textarea
                       id="close-note"
                       value={closeNote}
@@ -491,13 +494,13 @@ export default function CashShiftBoard() {
               <UnlockKeyhole className="h-5 w-5" /> Mở ca làm việc
             </CardTitle>
             <CardDescription>
-              Mỗi chi nhánh chỉ có 1 ca mở. Đếm tiền lẻ có sẵn trong két trước khi mở ca.
+              <T>Mỗi chi nhánh chỉ có 1 ca mở. Đếm tiền lẻ có sẵn trong két trước khi mở ca.</T>
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form className="flex flex-wrap items-end gap-2" onSubmit={handleOpen}>
               <div className="grid w-40 gap-1">
-                <Label htmlFor="opening-float">Tiền lẻ đầu ca</Label>
+                <Label htmlFor="opening-float">{t("Tiền lẻ đầu ca")}</Label>
                 <Input
                   id="opening-float"
                   inputMode="numeric"
@@ -507,7 +510,7 @@ export default function CashShiftBoard() {
                 />
               </div>
               <div className="grid min-w-[14rem] flex-1 gap-1">
-                <Label htmlFor="open-note">Ghi chú (tuỳ chọn)</Label>
+                <Label htmlFor="open-note">{t("Ghi chú (tuỳ chọn)")}</Label>
                 <Input
                   id="open-note"
                   value={openNote}
@@ -515,7 +518,7 @@ export default function CashShiftBoard() {
                 />
               </div>
               <Button type="submit" disabled={isOpening}>
-                Mở ca
+                <T>Mở ca</T>
               </Button>
             </form>
           </CardContent>
@@ -524,9 +527,9 @@ export default function CashShiftBoard() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Lịch sử ca</CardTitle>
+          <CardTitle>{t("Lịch sử ca")}</CardTitle>
           <CardDescription>
-            20 ca gần nhất của chi nhánh. Lệch két đã ghi sổ cái ở tài khoản thiếu/thừa quỹ.
+            <T>20 ca gần nhất của chi nhánh. Lệch két đã ghi sổ cái ở tài khoản thiếu/thừa quỹ.</T>
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -534,21 +537,21 @@ export default function CashShiftBoard() {
             <TableHeader>
               <TableRow>
                 <TableHead>Ca</TableHead>
-                <TableHead>Mở</TableHead>
-                <TableHead>Đóng</TableHead>
-                <TableHead className="text-right">Đầu ca</TableHead>
-                <TableHead className="text-right">Thu tiền mặt</TableHead>
+                <TableHead>{t("Mở")}</TableHead>
+                <TableHead>{t("Đóng")}</TableHead>
+                <TableHead className="text-right">{t("Đầu ca")}</TableHead>
+                <TableHead className="text-right">{t("Thu tiền mặt")}</TableHead>
                 <TableHead className="text-right">Chi</TableHead>
-                <TableHead className="text-right">Két phải có</TableHead>
-                <TableHead className="text-right">Đếm được</TableHead>
-                <TableHead className="text-right">Lệch</TableHead>
+                <TableHead className="text-right">{t("Két phải có")}</TableHead>
+                <TableHead className="text-right">{t("Đếm được")}</TableHead>
+                <TableHead className="text-right">{t("Lệch")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {historyRows.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={9} className="text-sm text-muted-foreground">
-                    Chưa có ca nào
+                    <T>Chưa có ca nào</T>
                   </TableCell>
                 </TableRow>
               ) : (

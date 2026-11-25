@@ -17,8 +17,11 @@ import {
 import { toast } from 'react-toastify';
 import { useAppStore } from '@/components/app-provider';
 import { formatDateTimeToLocaleString } from '@/lib/utils';
+import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 export default function AdminMessageNotifications() {
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const [selectedMessageIds, setSelectedMessageIds] = useState<number[]>([]);
   const socket = useAppStore((state) => state.socket);
@@ -99,19 +102,19 @@ export default function AdminMessageNotifications() {
       const messageIds = messageId ? [messageId] : selectedMessageIds;
 
       if (messageIds.length === 0) {
-        toast.warning('Vui lòng chọn tin nhắn để đánh dấu đã đọc');
+        toast.warning(t("Vui lòng chọn tin nhắn để đánh dấu đã đọc"));
         return;
       }
 
       await markAsRead.mutateAsync({ messageIds });
 
-      toast.success('Đã đánh dấu đã đọc!');
+      toast.success(t("Đã đánh dấu đã đọc!"));
 
       // Refresh messages
       refetch();
       setSelectedMessageIds([]);
     } catch (error) {
-      toast.error('Không thể đánh dấu đã đọc');
+      toast.error(t("Không thể đánh dấu đã đọc"));
     }
   };
 
@@ -129,11 +132,11 @@ export default function AdminMessageNotifications() {
         <DialogContent className="max-w-2xl max-h-[80vh] overflow-hidden flex flex-col">
           <DialogHeader>
             <DialogTitle className="flex items-center justify-between">
-              <span>Tin nhắn từ khách hàng</span>
+              <span>{t("Tin nhắn từ khách hàng")}</span>
               <Badge variant="secondary">{unreadCountLocal} chưa đọc</Badge>
             </DialogTitle>
             <DialogDescription>
-              Các tin nhắn yêu cầu hỗ trợ từ khách hàng
+              <T>Các tin nhắn yêu cầu hỗ trợ từ khách hàng</T>
             </DialogDescription>
           </DialogHeader>
 
@@ -141,7 +144,7 @@ export default function AdminMessageNotifications() {
             {unreadMessages.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
                 <MessageSquare className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                <p>Không có tin nhắn mới</p>
+                <p>{t("Không có tin nhắn mới")}</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -193,7 +196,7 @@ export default function AdminMessageNotifications() {
                   onClick={() => handleMarkAsRead()}
                   disabled={markAsRead.isPending}
                 >
-                  Đánh dấu đã đọc
+                  <T>Đánh dấu đã đọc</T>
                 </Button>
               )}
               <Button
@@ -201,7 +204,7 @@ export default function AdminMessageNotifications() {
                 size="sm"
                 onClick={() => setOpen(false)}
               >
-                Đóng
+                <T>Đóng</T>
               </Button>
             </div>
           </div>

@@ -35,12 +35,14 @@ import { TableData } from '@/app/manage/setting-table/types/table';
 import Sidebar from '@/app/manage/setting-table/sidebar';
 import Toolbar from '@/app/manage/setting-table/toolbar';
 import AddAreaDialog from '@/app/manage/setting-table/addAreaDialog';
+import { useI18n } from '@/i18n/locale-provider';
 
 const nodeTypes: NodeTypes = {
   table: TableNode,
 };
 
 export default function TableManagementPage() {
+  const { t } = useI18n();
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const [reactFlowInstance, setReactFlowInstance] =
     useState<ReactFlowInstance | null>(null);
@@ -117,7 +119,7 @@ export default function TableManagementPage() {
       saveHistory();
     } catch (error) {
       console.error('Failed to load table layout:', error);
-      toast.error('Lỗi khi tải bố cục bàn');
+      toast.error(t("Lỗi khi tải bố cục bàn"));
     }
   };
 
@@ -201,7 +203,7 @@ export default function TableManagementPage() {
           if ((payload as any).layoutId === null)
             delete (payload as any).layoutId;
           await updateTableNodeMutation.mutateAsync(payload);
-          toast.success('Đã cập nhật bàn');
+          toast.success(t("Đã cập nhật bàn"));
         } catch (error) {
           console.error('Update table error', error);
           toast.error(
@@ -224,10 +226,10 @@ export default function TableManagementPage() {
         await deleteTableNodeMutation.mutateAsync(parseInt(tableId));
         setNodes((nds) => nds.filter((node) => node.id !== tableId));
         saveHistory();
-        toast.success('Đã xóa bàn');
+        toast.success(t("Đã xóa bàn"));
       } catch (error) {
         console.error('Failed to delete table:', error);
-        toast.error('Xóa bàn thất bại');
+        toast.error(t("Xóa bàn thất bại"));
       }
     },
     [setNodes, saveHistory, deleteTableNodeMutation],
@@ -397,7 +399,7 @@ export default function TableManagementPage() {
       });
       await Promise.all(savePromises);
       await refetchTableNodes();
-      toast.success('Đã lưu bố cục bàn!');
+      toast.success(t("Đã lưu bố cục bàn!"));
     } catch (error) {
       console.error('Failed to save layout:', error);
       const message =

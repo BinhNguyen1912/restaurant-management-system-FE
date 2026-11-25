@@ -13,8 +13,11 @@ import { Button } from '@/components/ui/button';
 import { XCircle, AlertCircle } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import Link from 'next/link';
+import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 
 function PaymentFailedContent() {
+  const { t } = useI18n();
   const searchParams = useSearchParams();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -95,7 +98,7 @@ function PaymentFailedContent() {
             </div>
           </div>
           <DialogTitle className="text-2xl font-bold text-red-600">
-            Thanh toán thất bại
+            <T>Thanh toán thất bại</T>
           </DialogTitle>
           <DialogDescription className="text-base mt-4">
             {data?.message || 'Đã xảy ra lỗi trong quá trình thanh toán'}
@@ -116,7 +119,7 @@ function PaymentFailedContent() {
 
           <div className="flex justify-between p-3 bg-gray-50 rounded-lg">
             <span className="font-medium text-gray-600">
-              Số tiền cần thanh toán:
+              <T>Số tiền cần thanh toán:</T>
             </span>
             <span className="font-bold text-lg text-orange-600">
               {data?.amount ? formatCurrency(Number(data.amount)) : ''}
@@ -125,7 +128,7 @@ function PaymentFailedContent() {
 
           {data?.errorCode && (
             <div className="flex justify-between p-3 bg-gray-50 rounded-lg">
-              <span className="font-medium text-gray-600">Mã lỗi:</span>
+              <span className="font-medium text-gray-600">{t("Mã lỗi:")}</span>
               <span className="font-semibold text-red-600">
                 {data.errorCode}
               </span>
@@ -133,7 +136,7 @@ function PaymentFailedContent() {
           )}
 
           <div className="flex justify-between p-3 bg-gray-50 rounded-lg">
-            <span className="font-medium text-gray-600">Mã khách:</span>
+            <span className="font-medium text-gray-600">{t("Mã khách:")}</span>
             <span className="font-semibold">#{data?.guestId}</span>
           </div>
         </div>
@@ -143,14 +146,14 @@ function PaymentFailedContent() {
             onClick={handleTryAgain}
             className="w-full bg-orange-600 hover:bg-orange-700 text-white"
           >
-            Thử lại
+            <T>Thử lại</T>
           </Button>
           <Button
             variant="outline"
             onClick={() => router.push('/guest/orders')}
             className="w-full"
           >
-            Về đơn hàng
+            <T>Về đơn hàng</T>
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -163,11 +166,12 @@ function PaymentFailedContent() {
  * nếu không `next build` fail ở bước export (trước đây build đỏ vì thiếu boundary này).
  */
 export default function PaymentFailedPage() {
+  const { t } = useI18n();
   return (
     <Suspense
       fallback={
         <div className="flex min-h-screen items-center justify-center">
-          <p className="text-muted-foreground">Đang tải kết quả thanh toán...</p>
+          <p className="text-muted-foreground">{t("Đang tải kết quả thanh toán...")}</p>
         </div>
       }
     >

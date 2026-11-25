@@ -70,6 +70,9 @@ import { GetAllIngredientResType } from '@/app/ValidationSchemas/ingredient.mode
 import { Badge } from '@/components/ui/badge';
 import AddIngredient from '@/app/manage/ingredients/add-ingredient';
 import EditIngredient from '@/app/manage/ingredients/edit-ingredient';
+import { useI18n } from '@/i18n/locale-provider';
+import { tr } from '@/i18n/tr';
+import { T } from '@/components/t';
 
 type ingredientItem = GetAllIngredientResType['data'][0];
 
@@ -141,9 +144,9 @@ export const columns: ColumnDef<GetAllIngredientResType['data'][0]>[] = [
           className={`px-2 py-1 flex items-center justify-center rounded-full text-center text-xs font-semibold `}
         >
           {isPublic ? (
-            <Badge>Đang hoạt động</Badge>
+            <Badge>{tr("Đang hoạt động")}</Badge>
           ) : (
-            <Badge>Chưa hoạt động</Badge>
+            <Badge>{tr("Chưa hoạt động")}</Badge>
           )}
         </span>
       );
@@ -199,13 +202,13 @@ export const columns: ColumnDef<GetAllIngredientResType['data'][0]>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={openEditIngredient}>
-              Sửa
+              <T>Sửa</T>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={openDeleteIngredient}>
-              Xóa
+              <T>Xóa</T>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={openDeleteIngredient}>
-              Xem chi tiết
+              <T>Xem chi tiết</T>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -221,6 +224,7 @@ function AlertDialogDeleteDish({
   ingredientDelete: ingredientItem | null;
   setIngredientDelete: (value: ingredientItem | null) => void;
 }) {
+  const { t } = useI18n();
   const { mutateAsync } = useDeleteIngredientMutation();
   const deleteIngredientDelete = async () => {
     console.log('hihi');
@@ -229,7 +233,7 @@ function AlertDialogDeleteDish({
       try {
         await mutateAsync(ingredientDelete.id);
         setIngredientDelete(null);
-        toast.success('Xóa nguyên liệu thành công', {
+        toast.success(tr("Xóa nguyên liệu thành công"), {
           hideProgressBar: true,
           autoClose: 1000,
         });
@@ -249,7 +253,7 @@ function AlertDialogDeleteDish({
     >
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Xóa nguyên liệu?</AlertDialogTitle>
+          <AlertDialogTitle>{tr("Xóa nguyên liệu?")}</AlertDialogTitle>
           <AlertDialogDescription>
             Món{' '}
             <span className="bg-foreground text-primary-foreground rounded px-1">
@@ -271,6 +275,7 @@ function AlertDialogDeleteDish({
 // Số lượng item trên 1 trang
 const PAGE_SIZE = 10;
 export default function IngredientTable() {
+  const { t } = useI18n();
   const searchParam = useSearchParams();
   const page = searchParam.get('page') ? Number(searchParam.get('page')) : 1;
   const pageIndex = page - 1;
@@ -345,7 +350,7 @@ export default function IngredientTable() {
         />
         <div className="flex items-center py-4">
           <Input
-            placeholder="Lọc tên"
+            placeholder={tr("Lọc tên")}
             value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
             onChange={(event) =>
               table.getColumn('name')?.setFilterValue(event.target.value)

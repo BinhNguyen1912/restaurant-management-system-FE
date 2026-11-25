@@ -33,6 +33,8 @@ import { toast } from 'react-toastify';
 import { Bell, CreditCard, Wallet } from 'lucide-react';
 import { useCallStaffMutation } from '@/app/queries/useAccount';
 import { useCreatePaymentUrlMutation } from '@/app/queries/usePayment';
+import { useI18n } from '@/i18n/locale-provider';
+import { T } from '@/components/t';
 import {
   Dialog,
   DialogContent,
@@ -44,6 +46,7 @@ import {
 } from '@/components/ui/dialog';
 
 export default function OrderList() {
+  const { t } = useI18n();
   const { data, refetch } = useGetGuestOrderList();
   const socket = useAppStore((state) => state.socket);
   const orders = data?.payload?.data || [];
@@ -193,7 +196,7 @@ export default function OrderList() {
 
   const handleCallStaff = async () => {
     if (!mounted || !guestInfo?.tableNodeId || !guestInfo?.tableName) {
-      toast.error('Không thể xác định thông tin bàn');
+      toast.error(t("Không thể xác định thông tin bàn"));
       return;
     }
 
@@ -206,7 +209,7 @@ export default function OrderList() {
 
     try {
       await callStaffMutation.mutateAsync(callStaffData);
-      toast.success('Quý khách đợi xíu, nhân viên sẽ đến ngay!', {
+      toast.success(t("Quý khách đợi xíu, nhân viên sẽ đến ngay!"), {
         autoClose: 2000,
         hideProgressBar: true,
       });
@@ -219,7 +222,7 @@ export default function OrderList() {
     console.log('guestInfo', guestInfo);
 
     if (!guestInfo?.id) {
-      toast.error('Không thể xác định thông tin khách hàng');
+      toast.error(t("Không thể xác định thông tin khách hàng"));
       return;
     }
 
@@ -233,7 +236,7 @@ export default function OrderList() {
         }
       } else if (method === 'cash') {
         // Cash payment disabled for guest
-        toast.info('Hãy nhấn chuông để gọi nhân viên thanh toán', {
+        toast.info(t("Hãy nhấn chuông để gọi nhân viên thanh toán"), {
           autoClose: 3000,
         });
       }
@@ -245,7 +248,7 @@ export default function OrderList() {
   return (
     <>
       <div className="flex items-center justify-between mb-4 md:mb-6">
-        <h1 className="text-lg md:text-xl lg:text-2xl font-bold">Đơn hàng</h1>
+        <h1 className="text-lg md:text-xl lg:text-2xl font-bold">{t("Đơn hàng")}</h1>
 
         <div className="hidden md:block">
           <TooltipProvider>
@@ -262,7 +265,7 @@ export default function OrderList() {
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Gọi nhân viên</p>
+                <p>{t("Gọi nhân viên")}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -283,7 +286,7 @@ export default function OrderList() {
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Gọi nhân viên</p>
+                <p>{t("Gọi nhân viên")}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -306,7 +309,7 @@ export default function OrderList() {
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Gọi nhân viên</p>
+              <p>{t("Gọi nhân viên")}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -428,7 +431,7 @@ export default function OrderList() {
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-xl md:text-2xl font-bold text-center">
-              Chọn phương thức thanh toán
+              <T>Chọn phương thức thanh toán</T>
             </DialogTitle>
             <DialogDescription className="text-center text-base md:text-lg mt-2">
               Tổng cần thanh toán:{' '}
@@ -448,10 +451,10 @@ export default function OrderList() {
               </div>
               <div className="flex-1 text-left min-w-0">
                 <h3 className="font-semibold text-base md:text-lg text-gray-500">
-                  Thanh toán tiền mặt
+                  <T>Thanh toán tiền mặt</T>
                 </h3>
                 <p className="text-xs md:text-sm text-orange-600 mt-1 font-medium">
-                  Hãy nhấn chuông để gọi nhân viên thanh toán
+                  <T>Hãy nhấn chuông để gọi nhân viên thanh toán</T>
                 </p>
               </div>
               <div className="text-gray-400 font-bold text-lg md:text-xl flex-shrink-0">
@@ -469,10 +472,10 @@ export default function OrderList() {
               </div>
               <div className="flex-1 text-left min-w-0">
                 <h3 className="font-semibold text-base md:text-lg text-gray-900">
-                  Thanh toán VNPay
+                  <T>Thanh toán VNPay</T>
                 </h3>
                 <p className="text-xs md:text-sm text-gray-600 mt-1">
-                  Thanh toán qua ngân hàng
+                  <T>Thanh toán qua ngân hàng</T>
                 </p>
               </div>
               {createPaymentUrl.isPending ? (
@@ -493,7 +496,7 @@ export default function OrderList() {
               onClick={() => setShowPaymentDialog(false)}
               className="w-full sm:w-auto"
             >
-              Hủy
+              <T>Hủy</T>
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -507,7 +510,7 @@ export default function OrderList() {
                 <div className="flex items-center gap-2">
                   <CreditCard className="w-5 h-5 md:w-6 md:h-6" />
                   <span className="text-sm md:text-base font-medium">
-                    Chưa thanh toán
+                    <T>Chưa thanh toán</T>
                   </span>
                 </div>
                 <span className="text-lg md:text-xl font-bold">
@@ -522,7 +525,7 @@ export default function OrderList() {
                 onClick={() => setShowPaymentDialog(true)}
               >
                 <Wallet className="w-4 h-4 md:w-5 md:h-5 mr-2" />
-                Thanh toán ngay
+                <T>Thanh toán ngay</T>
               </Button>
             </div>
           </div>

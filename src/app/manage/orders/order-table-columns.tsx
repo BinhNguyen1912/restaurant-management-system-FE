@@ -41,6 +41,9 @@ import {
   OrderType,
 } from '@/app/constants/type';
 import { OrdersListResType } from '@/app/ValidationSchemas/order.schema';
+import { T } from '@/components/t';
+import { useI18n } from '@/i18n/locale-provider';
+import { tr } from '@/i18n/tr';
 
 type OrderItem = OrdersListResType['data'][0];
 const orderTableColumns: ColumnDef<OrderItem>[] = [
@@ -108,7 +111,7 @@ const orderTableColumns: ColumnDef<OrderItem>[] = [
         <div>
           {!guest && (
             <div>
-              <span>Đã bị xóa</span>
+              <span>{tr("Đã bị xóa")}</span>
             </div>
           )}
           {guest && (
@@ -240,7 +243,7 @@ const orderTableColumns: ColumnDef<OrderItem>[] = [
   },
   {
     accessorKey: 'createdAt',
-    header: () => <div>Tạo/Cập nhật</div>,
+    header: () => <div>{tr("Tạo/Cập nhật")}</div>,
     cell: ({ row }) => (
       <div className="space-y-2 text-sm">
         <div className="flex items-center space-x-4">
@@ -274,7 +277,7 @@ const orderTableColumns: ColumnDef<OrderItem>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={openEditOrder}>Sửa</DropdownMenuItem>
+            <DropdownMenuItem onClick={openEditOrder}>{tr("Sửa")}</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

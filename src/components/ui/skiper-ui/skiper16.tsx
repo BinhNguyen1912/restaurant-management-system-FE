@@ -84,6 +84,7 @@
 import { motion, useTransform } from 'framer-motion';
 import React, { useRef } from 'react';
 import { Badge, ShoppingCart, Star, Heart, ArrowRight } from 'lucide-react';
+import { T } from '@/components/t';
 
 // Card riêng
 export const StickyCard_001 = ({
@@ -182,7 +183,7 @@ export const StickyCard_001 = ({
               <div className="flex space-x-3">
                 <button className="flex items-center justify-center px-5 py-3 bg-black text-white rounded-full hover:bg-gray-800 transition-colors text-sm font-medium">
                   <ShoppingCart size={16} className="mr-2" />
-                  Thêm vào giỏ
+                  <T>Thêm vào giỏ</T>
                 </button>
                 <button className="flex items-center justify-center p-3 border border-gray-300 rounded-full hover:border-gray-500 transition-colors">
                   <ArrowRight size={16} />
