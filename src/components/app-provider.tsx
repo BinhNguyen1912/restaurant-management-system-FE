@@ -42,7 +42,14 @@ const queryClient = new QueryClient({
     queries: {
       // Không tự động refetch khi người dùng quay lại tab (giảm gọi API không cần thiết)
       refetchOnWindowFocus: false,
-      // Không refetch lại mỗi khi component mount (nếu đã có cache)
+      /**
+       * Dữ liệu coi là "còn mới" trong 30s: quay lại một trang vừa xem sẽ dùng cache thay vì gọi
+       * API lại toàn bộ. Mutation vẫn `invalidateQueries` nên sau khi sửa dữ liệu vẫn thấy số mới.
+       * Trước đây không đặt staleTime -> mỗi lần vào lại trang là refetch hết (chậm, nặng BE).
+       */
+      staleTime: 30_000,
+      gcTime: 5 * 60_000,
+      retry: 1,
     },
   },
 });
