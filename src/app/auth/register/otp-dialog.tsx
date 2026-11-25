@@ -28,8 +28,10 @@ import { Loader } from 'lucide-react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import { useI18n } from '@/i18n/locale-provider';
 
 export default function OTPDialog() {
+  const { t } = useI18n();
   const sendOTPMutation = useSendOTPMutation();
   const [open, setOpen] = React.useState(false);
   const form = useForm<OtpBodyType>({
@@ -44,7 +46,7 @@ export default function OTPDialog() {
     if (sendOTPMutation.isPending) return;
     try {
       await sendOTPMutation.mutateAsync(values);
-      toast.success('Gửi thành công! Vui lòng kiểm tra Email của bạn');
+      toast.success(t("Gửi thành công! Vui lòng kiểm tra Email của bạn"));
       setOpen(false);
     } catch (error) {
       handleErrorApi({
@@ -86,7 +88,7 @@ export default function OTPDialog() {
 
             <DialogFooter>
               <DialogClose asChild>
-                <Button variant="outline">Hủy</Button>
+                <Button variant="outline">{t("Hủy")}</Button>
               </DialogClose>
               <Button type="submit" disabled={sendOTPMutation.isPending}>
                 {sendOTPMutation.isPending && (

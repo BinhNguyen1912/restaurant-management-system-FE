@@ -13,8 +13,10 @@ import { Button } from '@/components/ui/button';
 import { XCircle, AlertCircle } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import Link from 'next/link';
+import { useI18n } from '@/i18n/locale-provider';
 
 function PaymentFailedContent() {
+  const { t } = useI18n();
   const searchParams = useSearchParams();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -125,7 +127,7 @@ function PaymentFailedContent() {
 
           {data?.errorCode && (
             <div className="flex justify-between p-3 bg-gray-50 rounded-lg">
-              <span className="font-medium text-gray-600">Mã lỗi:</span>
+              <span className="font-medium text-gray-600">{t("Mã lỗi:")}</span>
               <span className="font-semibold text-red-600">
                 {data.errorCode}
               </span>
@@ -133,7 +135,7 @@ function PaymentFailedContent() {
           )}
 
           <div className="flex justify-between p-3 bg-gray-50 rounded-lg">
-            <span className="font-medium text-gray-600">Mã khách:</span>
+            <span className="font-medium text-gray-600">{t("Mã khách:")}</span>
             <span className="font-semibold">#{data?.guestId}</span>
           </div>
         </div>
@@ -163,11 +165,12 @@ function PaymentFailedContent() {
  * nếu không `next build` fail ở bước export (trước đây build đỏ vì thiếu boundary này).
  */
 export default function PaymentFailedPage() {
+  const { t } = useI18n();
   return (
     <Suspense
       fallback={
         <div className="flex min-h-screen items-center justify-center">
-          <p className="text-muted-foreground">Đang tải kết quả thanh toán...</p>
+          <p className="text-muted-foreground">{t("Đang tải kết quả thanh toán...")}</p>
         </div>
       }
     >

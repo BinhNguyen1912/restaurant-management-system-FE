@@ -18,6 +18,7 @@ import {
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
+import { useI18n } from '@/i18n/locale-provider';
 
 interface ReminderEventData {
   reminderId: number;
@@ -37,6 +38,7 @@ export default function ReminderNotificationDialog({
   reminder,
   onClose,
 }: ReminderNotificationDialogProps) {
+  const { t } = useI18n();
   const [isOpen, setIsOpen] = React.useState(true);
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -75,7 +77,7 @@ export default function ReminderNotificationDialog({
 
   const handleComplete = async () => {
     if (!pendingLog) {
-      toast.warning('Không tìm thấy log để đánh dấu hoàn thành');
+      toast.warning(t("Không tìm thấy log để đánh dấu hoàn thành"));
       return;
     }
 
@@ -89,7 +91,7 @@ export default function ReminderNotificationDialog({
         id: reminder.reminderId,
         logId: Number(pendingLog.id),
       });
-      toast.success('Đã đánh dấu lời nhắc hoàn thành!');
+      toast.success(t("Đã đánh dấu lời nhắc hoàn thành!"));
       // Refetch bảng lời nhắc sau khi hoàn thành
       queryClient.invalidateQueries({ queryKey: ['reminders'] });
     } catch (error: any) {

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import SafeImage from '@/components/SafeImage';
+import { useI18n } from '@/i18n/locale-provider';
 
 interface Category {
   id: number;
@@ -22,6 +23,7 @@ export default function CategoryTabs({
   onCategorySelect,
   className = '',
 }: CategoryTabsProps) {
+  const { t } = useI18n();
   return (
     <div
       className={`bg-white border-b border-gray-200 sticky top-[57px] z-10 ${className}`}
@@ -45,7 +47,7 @@ export default function CategoryTabs({
           >
             <span className="text-lg">🍽️</span>
           </div>
-          <span className="text-xs mt-1 font-medium">Tất cả</span>
+          <span className="text-xs mt-1 font-medium">{t("Tất cả")}</span>
         </button>
 
         {/* Category Buttons */}

@@ -21,8 +21,10 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { getVietNameseRole, roleNameType } from '@/app/constants/role.constant';
 import { RoleType } from '@/app/ValidationSchemas/role.schema';
+import { useI18n } from '@/i18n/locale-provider';
 
 export default function UpdateProfileForm() {
+  const { t } = useI18n();
   const [file, setFile] = useState<File | undefined>(undefined);
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const { data, refetch } = useMeProfile();
@@ -73,7 +75,7 @@ export default function UpdateProfileForm() {
         const upload = await mediaApiRequest.upload(formData);
         const uploadedUrl = upload.payload?.data?.[0]?.url;
         if (!uploadedUrl) {
-          toast.error('Upload ảnh đại diện thất bại');
+          toast.error(t("Upload ảnh đại diện thất bại"));
           return;
         }
         body = {
@@ -82,7 +84,7 @@ export default function UpdateProfileForm() {
         };
       }
       const resuft = await updateMutation.mutateAsync(body);
-      toast.success('Cập nhật trang cá nhân thành công');
+      toast.success(t("Cập nhật trang cá nhân thành công"));
       refetch();
     } catch (error) {
       handleErrorApi({
@@ -103,7 +105,7 @@ export default function UpdateProfileForm() {
         <Card x-chunk="dashboard-07-chunk-0">
           <div className="flex items-center justify-between pr-3">
             <CardHeader>
-              <CardTitle>Thông tin cá nhân</CardTitle>
+              <CardTitle>{t("Thông tin cá nhân")}</CardTitle>
             </CardHeader>
             <Badge variant={'outline'} className="text-md">
               {getVietNameseRole(role as roleNameType)}
@@ -156,7 +158,7 @@ export default function UpdateProfileForm() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid gap-3">
-                      <Label htmlFor="name">Tên</Label>
+                      <Label htmlFor="name">{t("Tên")}</Label>
                       <Input
                         id="name"
                         type="text"
@@ -174,7 +176,7 @@ export default function UpdateProfileForm() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid gap-3">
-                      <Label htmlFor="phoneNumber">Số điện thoại</Label>
+                      <Label htmlFor="phoneNumber">{t("Số điện thoại")}</Label>
                       <Input
                         id="phoneNumber"
                         type="text"

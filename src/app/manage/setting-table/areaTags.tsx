@@ -18,6 +18,7 @@ import {
 import { toast } from 'react-toastify';
 import { AreaType } from '@/app/ValidationSchemas/area.schema';
 import EditAreaDialog from '@/app/manage/setting-table/editAreaDialog';
+import { useI18n } from '@/i18n/locale-provider';
 
 interface AreaTagsProps {
   currentArea: string;
@@ -30,6 +31,7 @@ export default function AreaTags({
   onAreaChange,
   onAddArea,
 }: AreaTagsProps) {
+  const { t } = useI18n();
   const { data, isLoading, isError, refetch } = useListArea();
   const deleteAreaMutation = useDeleteAreaMutation();
   const [hoveredArea, setHoveredArea] = useState<number | null>(null);
@@ -40,7 +42,7 @@ export default function AreaTags({
 
   const areaTags = data?.payload?.data || [];
   if (isLoading) {
-    return <div>Đang tải khu vực...</div>;
+    return <div>{t("Đang tải khu vực...")}</div>;
   }
 
   if (isError) {
@@ -52,11 +54,11 @@ export default function AreaTags({
 
     try {
       await deleteAreaMutation.mutateAsync(areaToDelete.id);
-      toast.success('Xóa khu vực thành công');
+      toast.success(t("Xóa khu vực thành công"));
       setDeleteDialogOpen(false);
       setAreaToDelete(null);
     } catch (error) {
-      toast.error('Xóa khu vực thất bại');
+      toast.error(t("Xóa khu vực thất bại"));
       console.error('Delete area error:', error);
     }
   };
@@ -77,7 +79,7 @@ export default function AreaTags({
     <>
       <div className="mb-4">
         <div className="flex items-center justify-between mb-2">
-          <h2 className="text-xl font-bold">Khu vực</h2>
+          <h2 className="text-xl font-bold">{t("Khu vực")}</h2>
           <Button
             variant="outline"
             size="sm"
@@ -158,14 +160,14 @@ export default function AreaTags({
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
+            <AlertDialogTitle>{t("Xác nhận xóa")}</AlertDialogTitle>
             <AlertDialogDescription>
               Bạn có chắc chắn muốn xóa khu vực "{areaToDelete?.name}"? Hành
               động này không thể hoàn tác.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Hủy</AlertDialogCancel>
+            <AlertDialogCancel>{t("Hủy")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               className="bg-red-600 hover:bg-red-700"

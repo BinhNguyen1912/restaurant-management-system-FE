@@ -64,6 +64,7 @@ import TableSkeleton from './table-skeleton';
 import OrderStatics from './order-statics';
 import NewOrderSound from '@/components/newOrderSound';
 import AddOrder from './add-order';
+import { useI18n } from '@/i18n/locale-provider';
 
 const PAGE_SIZE = 10;
 const initFromDate = startOfDay(new Date());
@@ -94,6 +95,7 @@ export const OrderTableContext = createContext({
 });
 
 export default function OrderTable() {
+  const { t } = useI18n();
   const searchParam = useSearchParams();
   const page = searchParam.get('page') ? Number(searchParam.get('page')) : 1;
   const pageIndex = page - 1;
@@ -320,7 +322,7 @@ export default function OrderTable() {
   const confirmCancel = async () => {
     if (!cancelRequest) return;
     if (!cancelRequest.reason.trim()) {
-      toast.error('Nhập lý do huỷ đơn');
+      toast.error(t("Nhập lý do huỷ đơn"));
       return;
     }
     setIsCancelSubmitting(true);
@@ -535,20 +537,20 @@ export default function OrderTable() {
         <div className="flex items-center">
           <div className="flex flex-wrap gap-2">
             <div className="flex items-center">
-              <span className="mr-2">Từ</span>
+              <span className="mr-2">{t("Từ")}</span>
               <Input
                 type="datetime-local"
-                placeholder="Từ ngày"
+                placeholder={t("Từ ngày")}
                 className="text-sm"
                 value={format(fromDate, 'yyyy-MM-dd HH:mm').replace(' ', 'T')}
                 onChange={(event) => setFromDate(new Date(event.target.value))}
               />
             </div>
             <div className="flex items-center">
-              <span className="mr-2">Đến</span>
+              <span className="mr-2">{t("Đến")}</span>
               <Input
                 type="datetime-local"
-                placeholder="Đến ngày"
+                placeholder={t("Đến ngày")}
                 value={format(toDate, 'yyyy-MM-dd HH:mm').replace(' ', 'T')}
                 onChange={(event) => setToDate(new Date(event.target.value))}
               />
@@ -564,7 +566,7 @@ export default function OrderTable() {
         {/* Table Filters */}
         <div className="flex flex-wrap items-center gap-4 py-4">
           <Input
-            placeholder="Tên khách"
+            placeholder={t("Tên khách")}
             value={
               (table.getColumn('guestName')?.getFilterValue() as string) ?? ''
             }
@@ -574,7 +576,7 @@ export default function OrderTable() {
             className="max-w-[100px]"
           />
           <Input
-            placeholder="Số bàn"
+            placeholder={t("Số bàn")}
             value={
               (table.getColumn('tableNodeId')?.getFilterValue() as string) ?? ''
             }

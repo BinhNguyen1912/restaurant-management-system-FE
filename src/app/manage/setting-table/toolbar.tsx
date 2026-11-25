@@ -23,6 +23,7 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog';
 import { toast } from 'react-toastify';
+import { useI18n } from '@/i18n/locale-provider';
 
 interface ToolbarProps {
   onSave: () => void;
@@ -53,6 +54,7 @@ export default function Toolbar({
   canRedo,
   areaId,
 }: ToolbarProps) {
+  const { t } = useI18n();
   const [openConfirm, setOpenConfirm] = useState(false);
   const deleteAllMutation = useDeleteAllTableNodeByAreaMutation();
   const handleDeleteAll = () => setOpenConfirm(true);
@@ -126,7 +128,7 @@ export default function Toolbar({
       <Dialog open={openConfirm} onOpenChange={setOpenConfirm}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Xác nhận xóa tất cả bàn</DialogTitle>
+            <DialogTitle>{t("Xác nhận xóa tất cả bàn")}</DialogTitle>
             <DialogDescription>
               Bạn có chắc chắn muốn xóa tất cả bàn trong khu vực này? Hành động
               này không thể hoàn tác.

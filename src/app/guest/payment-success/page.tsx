@@ -13,8 +13,10 @@ import { Button } from '@/components/ui/button';
 import { CheckCircle } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import Link from 'next/link';
+import { useI18n } from '@/i18n/locale-provider';
 
 function PaymentSuccessContent() {
+  const { t } = useI18n();
   const searchParams = useSearchParams();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -88,16 +90,16 @@ function PaymentSuccessContent() {
 
         <div className="space-y-3 py-4">
           <div className="flex justify-between p-3 bg-gray-50 rounded-lg">
-            <span className="font-medium text-gray-600">Tên khách hàng :</span>
+            <span className="font-medium text-gray-600">{t("Tên khách hàng :")}</span>
             <span className="font-semibold">{data?.guestName}</span>
           </div>
           <div className="flex justify-between p-3 bg-gray-50 rounded-lg">
-            <span className="font-medium text-gray-600">Mã khách hàng :</span>
+            <span className="font-medium text-gray-600">{t("Mã khách hàng :")}</span>
             <span className="font-semibold">#{data?.guestId}</span>
           </div>
 
           <div className="flex justify-between p-3 bg-gray-50 rounded-lg">
-            <span className="font-medium text-gray-600">Số tiền:</span>
+            <span className="font-medium text-gray-600">{t("Số tiền:")}</span>
             <span className="font-bold text-lg text-green-600">
               {data?.amount ? formatCurrency(Number(data.amount)) : ''}
             </span>
@@ -105,7 +107,7 @@ function PaymentSuccessContent() {
 
           {data?.bankCode && (
             <div className="flex justify-between p-3 bg-gray-50 rounded-lg">
-              <span className="font-medium text-gray-600">Ngân hàng:</span>
+              <span className="font-medium text-gray-600">{t("Ngân hàng:")}</span>
               <span className="font-semibold text-blue-600">
                 {data.bankCode}
               </span>
@@ -113,7 +115,7 @@ function PaymentSuccessContent() {
           )}
 
           <div className="flex justify-between p-3 bg-gray-50 rounded-lg">
-            <span className="font-medium text-gray-600">Chổ ngồi:</span>
+            <span className="font-medium text-gray-600">{t("Chổ ngồi:")}</span>
             <span className="font-semibold">{data?.tableName}</span>
           </div>
         </div>
@@ -141,11 +143,12 @@ function PaymentSuccessContent() {
  * nếu không `next build` fail ở bước export (trước đây build đỏ vì thiếu boundary này).
  */
 export default function PaymentSuccessPage() {
+  const { t } = useI18n();
   return (
     <Suspense
       fallback={
         <div className="flex min-h-screen items-center justify-center">
-          <p className="text-muted-foreground">Đang tải kết quả thanh toán...</p>
+          <p className="text-muted-foreground">{t("Đang tải kết quả thanh toán...")}</p>
         </div>
       }
     >

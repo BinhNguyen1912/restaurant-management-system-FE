@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { CheckCircle } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
+import { useI18n } from '@/i18n/locale-provider';
 
 type PaymentSuccessData = {
   guestId?: number | string;
@@ -33,6 +34,7 @@ export default function PaymentSuccessDialog({
   onOpenChange: (v: boolean) => void;
   data: PaymentSuccessData | null;
 }) {
+  const { t } = useI18n();
   const title = 'Thanh toán thành công!';
   const resolvedAmountText =
     data?.amountText ??
@@ -85,7 +87,7 @@ export default function PaymentSuccessDialog({
                   )}
                   {data?.tableName && (
                     <div>
-                      <div className="text-xs text-muted-foreground">Bàn</div>
+                      <div className="text-xs text-muted-foreground">{t("Bàn")}</div>
                       <div className="font-medium truncate">
                         {data.tableName}
                       </div>

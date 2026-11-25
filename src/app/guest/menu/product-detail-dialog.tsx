@@ -16,6 +16,7 @@ import { useCreateGuestOrderMutation } from '@/app/queries/useOrder';
 import { GuestCreateNewOrderType } from '@/app/ValidationSchemas/order.schema';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
+import { useI18n } from '@/i18n/locale-provider';
 
 interface ProductDetailDialogProps {
   productId: number | null;
@@ -37,6 +38,7 @@ export default function ProductDetailDialog({
   onAddToCart,
   onPlaceOrder,
 }: ProductDetailDialogProps) {
+  const { t } = useI18n();
   const [selectedSKUs, setSelectedSKUs] = useState<SKUSelection[]>([]);
   const [note, setNote] = useState('');
   const [entered, setEntered] = useState(false);
@@ -122,7 +124,7 @@ export default function ProductDetailDialog({
 
       const result = await mutateAsync({ data: orderData });
       console.log('Order result:', result);
-      toast.success('Đặt món thành công!');
+      toast.success(t("Đặt món thành công!"));
       onClose();
       router.push('/guest/orders');
     } catch (error) {
@@ -137,7 +139,7 @@ export default function ProductDetailDialog({
           <div className="flex items-center justify-center h-64">
             <div className="text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto mb-4"></div>
-              <p>Đang tải thông tin món ăn...</p>
+              <p>{t("Đang tải thông tin món ăn...")}</p>
             </div>
           </div>
         </DialogContent>
@@ -242,7 +244,7 @@ export default function ProductDetailDialog({
 
               {/* SKU Selection */}
               <div className="space-y-3 md:space-y-4">
-                <h3 className="font-medium text-gray-900">Chọn loại:</h3>
+                <h3 className="font-medium text-gray-900">{t("Chọn loại:")}</h3>
 
                 {product.skus.map((sku) => {
                   const qty = getSKUQuantity(sku.id);
@@ -309,12 +311,12 @@ export default function ProductDetailDialog({
               {/* Add Note */}
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <span>Thêm ghi chú</span>
+                  <span>{t("Thêm ghi chú")}</span>
                 </div>
                 <textarea
                   value={note}
                   onChange={(e) => setNote(e.target.value)}
-                  placeholder="Ghi chú cho món ăn..."
+                  placeholder={t("Ghi chú cho món ăn...")}
                   className="w-full p-2 border border-gray-300 rounded-lg text-sm resize-none focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-300 transition"
                   rows={2}
                 />
@@ -333,7 +335,7 @@ export default function ProductDetailDialog({
             style={{ transitionDelay: entered ? '220ms' : '0ms' }}
           >
             <div className="text-sm">
-              <span className="font-semibold mr-2">Tổng:</span>
+              <span className="font-semibold mr-2">{t("Tổng:")}</span>
               <span className="text-base font-bold text-red-600">
                 {formatCurrency(getTotalPrice())}
               </span>

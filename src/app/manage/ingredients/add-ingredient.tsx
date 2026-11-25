@@ -53,6 +53,7 @@ import {
 } from '@/components/ui/select';
 import DialogAddUnit from '@/app/manage/ingredients/add-unit';
 import { handleErrorApi } from '@/lib/utils';
+import { useI18n } from '@/i18n/locale-provider';
 
 interface AddIngredientProps {
   onIngredientCreated?: () => void;
@@ -61,6 +62,7 @@ interface AddIngredientProps {
 export default function AddIngredient({
   onIngredientCreated,
 }: AddIngredientProps) {
+  const { t } = useI18n();
   const [files, setFiles] = useState<File[]>([]);
 
   const [open, setOpen] = useState(false);
@@ -114,7 +116,7 @@ export default function AddIngredient({
         form.setValue('image', imageUrls[0]);
       } catch (error) {
         console.error('Upload failed:', error);
-        toast.error('Upload ảnh thất bại');
+        toast.error(t("Upload ảnh thất bại"));
         // Fallback: vẫn set preview nhưng cảnh báo
         form.setValue('image', previewUrls[0]);
       }
@@ -158,7 +160,7 @@ export default function AddIngredient({
       };
       const resuft = await addIngredientMutation.mutateAsync(body);
       console.log('resuft:', resuft);
-      toast.success('Nguyên liệu đã được thêm thành công!');
+      toast.success(t("Nguyên liệu đã được thêm thành công!"));
       onIngredientCreated?.();
       reset();
     } catch (error) {
@@ -182,7 +184,7 @@ export default function AddIngredient({
 
       <DialogContent className="sm:max-w-[900px] max-h-screen overflow-auto">
         <DialogHeader>
-          <DialogTitle>Thêm nguyên liệu</DialogTitle>
+          <DialogTitle>{t("Thêm nguyên liệu")}</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -253,7 +255,7 @@ export default function AddIngredient({
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <Label htmlFor="name">Tên nguyên liệu</Label>
+                      <Label htmlFor="name">{t("Tên nguyên liệu")}</Label>
                       <FormControl>
                         <Input id="name" {...field} />
                       </FormControl>
@@ -266,7 +268,7 @@ export default function AddIngredient({
                   name="stock"
                   render={({ field }) => (
                     <FormItem>
-                      <Label htmlFor="stock">Số lượng nhập</Label>
+                      <Label htmlFor="stock">{t("Số lượng nhập")}</Label>
                       <FormControl>
                         <Input id="stock" {...field} />
                       </FormControl>
@@ -282,7 +284,7 @@ export default function AddIngredient({
                       <div className="flex flex-col gap-3">
                         <div className="flex items-center justify-between">
                           <div className="space-y-0.5 text-sm">
-                            <FormLabel>Cảnh báo tồn kho thấp</FormLabel>
+                            <FormLabel>{t("Cảnh báo tồn kho thấp")}</FormLabel>
                             <p className="text-[12px] text-muted-foreground">
                               {field.value ? 'Bật cảnh báo' : 'Tắt cảnh báo'}
                             </p>
@@ -310,7 +312,7 @@ export default function AddIngredient({
                   name="unitCost"
                   render={({ field }) => (
                     <FormItem>
-                      <Label htmlFor="unitCost">Giá nhập / 1 đơn vị (đồng)</Label>
+                      <Label htmlFor="unitCost">{t("Giá nhập / 1 đơn vị (đồng)")}</Label>
                       <FormControl>
                         <Input
                           id="unitCost"
@@ -336,7 +338,7 @@ export default function AddIngredient({
                     name="minStock"
                     render={({ field }) => (
                       <FormItem>
-                        <Label htmlFor="minStock">Mức tồn kho cảnh báo</Label>
+                        <Label htmlFor="minStock">{t("Mức tồn kho cảnh báo")}</Label>
                         <FormControl>
                           <Input
                             id="minStock"
@@ -364,7 +366,7 @@ export default function AddIngredient({
                         <div className="flex flex-col gap-3">
                           <div className="flex items-center justify-between">
                             <div className="space-y-0.5 text-sm">
-                              <FormLabel>Trạng thái công khai</FormLabel>
+                              <FormLabel>{t("Trạng thái công khai")}</FormLabel>
                               <p className="text-[12px] text-muted-foreground">
                                 {isActive ? 'Đang hoạt động' : 'Chưa hoạt động'}
                               </p>
@@ -390,7 +392,7 @@ export default function AddIngredient({
                   name="unitId"
                   render={({ field }) => (
                     <FormItem>
-                      <Label htmlFor="unitId">Đơn vị</Label>
+                      <Label htmlFor="unitId">{t("Đơn vị")}</Label>
                       <div className="flex items-center gap-2">
                         <FormControl>
                           <Select
@@ -398,7 +400,7 @@ export default function AddIngredient({
                             onValueChange={field.onChange}
                           >
                             <SelectTrigger className="min-w-[220px]">
-                              <SelectValue placeholder="Chọn đơn vị" />
+                              <SelectValue placeholder={t("Chọn đơn vị")} />
                             </SelectTrigger>
                             <SelectContent>
                               {unitsQuery.data?.payload?.data?.map((unit) => (
@@ -431,7 +433,7 @@ export default function AddIngredient({
                     name="basePrice"
                     render={({ field }) => (
                       <FormItem>
-                        <Label htmlFor="price">Giá cơ bản</Label>
+                        <Label htmlFor="price">{t("Giá cơ bản")}</Label>
                         <FormControl>
                           <Input
                             id="price"
@@ -452,7 +454,7 @@ export default function AddIngredient({
                     name="virtualPrice"
                     render={({ field }) => (
                       <FormItem>
-                        <Label htmlFor="price">Giá Ảo</Label>
+                        <Label htmlFor="price">{t("Giá Ảo")}</Label>
                         <FormControl>
                           <Input
                             id="price"
@@ -476,7 +478,7 @@ export default function AddIngredient({
                     name="categories"
                     render={({ field }) => (
                       <FormItem>
-                        <Label>Danh mục</Label>
+                        <Label>{t("Danh mục")}</Label>
                         <FormControl>
                           <DialogCategory
                             selectedCategories={field.value || []}
@@ -505,7 +507,7 @@ export default function AddIngredient({
                         <div className="flex flex-col gap-3">
                           <div className="flex items-center justify-between">
                             <div className="space-y-0.5 text-sm">
-                              <Label>Trạng thái công khai</Label>
+                              <Label>{t("Trạng thái công khai")}</Label>
                               <p className="text-[12px] text-muted-foreground">
                                 {isPublished ? 'Đã công khai' : 'Riêng tư'}
                               </p>
@@ -558,7 +560,7 @@ export default function AddIngredient({
                           <div className="flex flex-col gap-3">
                             <div className="flex items-center justify-between">
                               <div className="space-y-0.5 text-sm">
-                                <FormLabel>Trạng thái công khai</FormLabel>
+                                <FormLabel>{t("Trạng thái công khai")}</FormLabel>
                                 <p className="text-[12px] text-muted-foreground">
                                   {isPublished ? 'Đã công khai' : 'Riêng tư'}
                                 </p>
@@ -609,7 +611,7 @@ export default function AddIngredient({
                   name="categories"
                   render={({ field }) => (
                     <FormItem>
-                      <Label>Danh mục</Label>
+                      <Label>{t("Danh mục")}</Label>
                       <FormControl>
                         <DialogCategory
                           selectedCategories={field.value || []}
@@ -630,7 +632,7 @@ export default function AddIngredient({
                   render={({ field }) => (
                     <div className="flex flex-col gap-2">
                       <div className="flex items-center gap-2">
-                        <Label>Bật public</Label>
+                        <Label>{t("Bật public")}</Label>
                         <Switch
                           checked={field.value !== null}
                           onCheckedChange={(val) => {

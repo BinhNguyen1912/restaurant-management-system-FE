@@ -33,12 +33,14 @@ import {
 import { useCreateTableMutation } from '@/app/useTable';
 import { toast } from 'react-toastify';
 import { TableStatus, TableStatusValues } from '@/app/constants/table.constant';
+import { useI18n } from '@/i18n/locale-provider';
 import {
   CreateTableBodySchema,
   CreateTableBodyType,
 } from '@/app/ValidationSchemas/table.schema';
 
 export default function AddTable() {
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const createTableMutaion = useCreateTableMutation();
   const form = useForm<CreateTableBodyType>({
@@ -84,7 +86,7 @@ export default function AddTable() {
         onCloseAutoFocus={() => form.reset()}
       >
         <DialogHeader>
-          <DialogTitle>Thêm bàn</DialogTitle>
+          <DialogTitle>{t("Thêm bàn")}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -99,7 +101,7 @@ export default function AddTable() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="name">Số hiệu bàn</Label>
+                      <Label htmlFor="name">{t("Số hiệu bàn")}</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Input
                           id="number"
@@ -119,7 +121,7 @@ export default function AddTable() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="price">Lượng khách cho phép</Label>
+                      <Label htmlFor="price">{t("Lượng khách cho phép")}</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Input
                           id="capacity"
@@ -139,7 +141,7 @@ export default function AddTable() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="description">Trạng thái</Label>
+                      <Label htmlFor="description">{t("Trạng thái")}</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Select
                           onValueChange={field.onChange}
@@ -147,7 +149,7 @@ export default function AddTable() {
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Chọn trạng thái" />
+                              <SelectValue placeholder={t("Chọn trạng thái")} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>

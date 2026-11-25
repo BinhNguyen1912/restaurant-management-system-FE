@@ -29,6 +29,7 @@ import {
   useRunReconciliation,
 } from '@/app/queries/useLedgerReconciliation';
 import { formatCurrency } from '@/lib/utils';
+import { useI18n } from '@/i18n/locale-provider';
 
 const KIND_LABEL: Record<string, string> = {
   MATCHED: 'Khớp',
@@ -61,6 +62,7 @@ const formatDateTime = (value?: string | null) => (value ? new Date(value).toLoc
  * Khác khối phía trên (tính live): ở đây có bằng chứng để giải trình về sau.
  */
 export default function ReconciliationRuns() {
+  const { t } = useI18n();
   const [fromDate, setFromDate] = useState(yesterdayISO());
   const [toDate, setToDate] = useState(yesterdayISO());
   const [openRunId, setOpenRunId] = useState<number | null>(null);
@@ -88,7 +90,7 @@ export default function ReconciliationRuns() {
       }
       setOpenRunId(run?.id ?? null);
     } catch {
-      toast.error('Không chạy được đối soát');
+      toast.error(t("Không chạy được đối soát"));
     }
   };
 
@@ -97,7 +99,7 @@ export default function ReconciliationRuns() {
       await resolveItem({ id, status });
       toast.success(status === 'RESOLVED' ? 'Đã đánh dấu xử lý' : 'Đã bỏ qua sai lệch');
     } catch {
-      toast.error('Không cập nhật được');
+      toast.error(t("Không cập nhật được"));
     }
   };
 
@@ -115,7 +117,7 @@ export default function ReconciliationRuns() {
       <CardContent className="grid gap-4">
         <div className="flex flex-wrap items-end gap-2">
           <div className="grid gap-1">
-            <Label htmlFor="run-from">Từ ngày</Label>
+            <Label htmlFor="run-from">{t("Từ ngày")}</Label>
             <Input
               id="run-from"
               type="date"
@@ -124,7 +126,7 @@ export default function ReconciliationRuns() {
             />
           </div>
           <div className="grid gap-1">
-            <Label htmlFor="run-to">Đến ngày</Label>
+            <Label htmlFor="run-to">{t("Đến ngày")}</Label>
             <Input id="run-to" type="date" value={toDate} onChange={(event) => setToDate(event.target.value)} />
           </div>
           <Button onClick={handleRun} disabled={isPending}>
@@ -139,12 +141,12 @@ export default function ReconciliationRuns() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Lần chạy</TableHead>
-                <TableHead>Kỳ</TableHead>
-                <TableHead>Chi nhánh</TableHead>
-                <TableHead>Trạng thái</TableHead>
-                <TableHead className="text-right">Kết quả</TableHead>
-                <TableHead className="text-right">Chênh lệch</TableHead>
+                <TableHead>{t("Lần chạy")}</TableHead>
+                <TableHead>{t("Kỳ")}</TableHead>
+                <TableHead>{t("Chi nhánh")}</TableHead>
+                <TableHead>{t("Trạng thái")}</TableHead>
+                <TableHead className="text-right">{t("Kết quả")}</TableHead>
+                <TableHead className="text-right">{t("Chênh lệch")}</TableHead>
                 <TableHead />
               </TableRow>
             </TableHeader>
@@ -219,13 +221,13 @@ export default function ReconciliationRuns() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Phân loại</TableHead>
+                    <TableHead>{t("Phân loại")}</TableHead>
                     <TableHead>Payment</TableHead>
-                    <TableHead>Bút toán</TableHead>
-                    <TableHead className="text-right">Phải có</TableHead>
-                    <TableHead className="text-right">Thực tế</TableHead>
-                    <TableHead className="text-right">Lệch</TableHead>
-                    <TableHead>Xử lý</TableHead>
+                    <TableHead>{t("Bút toán")}</TableHead>
+                    <TableHead className="text-right">{t("Phải có")}</TableHead>
+                    <TableHead className="text-right">{t("Thực tế")}</TableHead>
+                    <TableHead className="text-right">{t("Lệch")}</TableHead>
+                    <TableHead>{t("Xử lý")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>

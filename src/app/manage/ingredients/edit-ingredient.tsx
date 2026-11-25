@@ -57,6 +57,7 @@ import {
 } from '@/components/ui/select';
 import { useGetUnits } from '@/app/queries/useUnit';
 import DialogAddUnit from '@/app/manage/ingredients/add-unit';
+import { useI18n } from '@/i18n/locale-provider';
 
 export default function EditIngredient({
   id,
@@ -67,6 +68,7 @@ export default function EditIngredient({
   setId: (value: number | undefined) => void;
   onSubmitSuccess?: () => void;
 }) {
+  const { t } = useI18n();
   const [files, setFiles] = useState<File[]>([]);
   const [image, setImage] = useState<string>('');
 
@@ -150,7 +152,7 @@ export default function EditIngredient({
       console.log('Final body:', body);
 
       await updateMutation.mutateAsync({ id: id as number, ...body });
-      toast.success('Cập nhật thành công', {
+      toast.success(t("Cập nhật thành công"), {
         hideProgressBar: true,
         autoClose: 1000,
       });
@@ -196,7 +198,7 @@ export default function EditIngredient({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Phần hình ảnh */}
               <div className="md:col-span-1">
-                <h3 className="text-lg font-medium mb-3">Hình ảnh sản phẩm</h3>
+                <h3 className="text-lg font-medium mb-3">{t("Hình ảnh sản phẩm")}</h3>
                 <FormField
                   control={form.control}
                   name="image"
@@ -270,7 +272,7 @@ export default function EditIngredient({
               {/* Phần thông tin cơ bản */}
               <div className="md:col-span-2 space-y-6">
                 <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Thông tin cơ bản</h3>
+                  <h3 className="text-lg font-medium">{t("Thông tin cơ bản")}</h3>
 
                   <FormField
                     control={form.control}
@@ -283,7 +285,7 @@ export default function EditIngredient({
                         <Input
                           id="name"
                           {...field}
-                          placeholder="Nhập tên nguyên liệu"
+                          placeholder={t("Nhập tên nguyên liệu")}
                           className="mt-1"
                         />
                         <FormMessage />
@@ -326,7 +328,7 @@ export default function EditIngredient({
                           <div className="flex flex-col gap-3">
                             <div className="flex items-center justify-between">
                               <div className="space-y-0.5 text-sm">
-                                <FormLabel>Cảnh báo tồn kho thấp</FormLabel>
+                                <FormLabel>{t("Cảnh báo tồn kho thấp")}</FormLabel>
                                 <p className="text-[12px] text-muted-foreground">
                                   {field.value
                                     ? 'Bật cảnh báo'
@@ -414,7 +416,7 @@ export default function EditIngredient({
                         <div className="flex flex-col gap-3">
                           <div className="flex items-center justify-between">
                             <div className="space-y-0.5 text-sm">
-                              <FormLabel>Trạng thái công khai</FormLabel>
+                              <FormLabel>{t("Trạng thái công khai")}</FormLabel>
                               <p className="text-[12px] text-muted-foreground">
                                 {field.value
                                   ? 'Đang hoạt động'
@@ -442,7 +444,7 @@ export default function EditIngredient({
                   name="unitId"
                   render={({ field }) => (
                     <FormItem>
-                      <Label htmlFor="unitId">Đơn vị</Label>
+                      <Label htmlFor="unitId">{t("Đơn vị")}</Label>
                       <div className="flex items-center gap-2">
                         <FormControl>
                           <Select
@@ -450,7 +452,7 @@ export default function EditIngredient({
                             onValueChange={field.onChange}
                           >
                             <SelectTrigger>
-                              <SelectValue placeholder="Chọn đơn vị" />
+                              <SelectValue placeholder={t("Chọn đơn vị")} />
                             </SelectTrigger>
                             <SelectContent>
                               {unitsQuery?.payload?.data.map((unit) => (

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { X, Plus, Minus } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import SafeImage from '@/components/SafeImage';
+import { useI18n } from '@/i18n/locale-provider';
 
 interface SkuSelection {
   skuId: number;
@@ -45,6 +46,7 @@ export default function MobileCartModal({
   totalPrice,
   onOrder,
 }: MobileCartModalProps) {
+  const { t } = useI18n();
   if (!isOpen) return null;
 
   return (
@@ -56,7 +58,7 @@ export default function MobileCartModal({
       <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl max-h-[80vh] overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <h2 className="text-lg font-semibold text-gray-900">Thêm món mới</h2>
+          <h2 className="text-lg font-semibold text-gray-900">{t("Thêm món mới")}</h2>
           <Button
             variant="ghost"
             size="sm"
@@ -72,7 +74,7 @@ export default function MobileCartModal({
           {selectedSkus.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
               <div className="text-4xl mb-4">📝</div>
-              <p className="text-gray-500">Chưa có món được chọn</p>
+              <p className="text-gray-500">{t("Chưa có món được chọn")}</p>
             </div>
           ) : (
             <div className="p-4 space-y-4">
@@ -105,10 +107,10 @@ export default function MobileCartModal({
 
                       {/* Stats */}
                       <div className="flex items-center gap-3 text-xs text-gray-500 mb-2">
-                        <span>406 đã đặt</span>
+                        <span>{t("406 đã đặt")}</span>
                         <span className="flex items-center gap-1">
                           <span>❤️</span>
-                          <span>124 thích</span>
+                          <span>{t("124 thích")}</span>
                         </span>
                       </div>
 
@@ -167,7 +169,7 @@ export default function MobileCartModal({
         {/* Footer */}
         <div className="border-t border-gray-200 p-4 bg-white">
           <div className="flex items-center justify-between mb-3">
-            <span className="font-semibold text-gray-900">Tổng số tiền</span>
+            <span className="font-semibold text-gray-900">{t("Tổng số tiền")}</span>
             <span className="text-lg font-bold text-red-600">
               {formatCurrency(totalPrice)}
             </span>

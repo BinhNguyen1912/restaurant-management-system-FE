@@ -10,6 +10,7 @@ import {
   CommandItem,
 } from '@/components/ui/command';
 import React, { useMemo, useRef, useEffect } from 'react';
+import { useI18n } from '@/i18n/locale-provider';
 
 interface DialogCategoryProps {
   selectedCategories: number[];
@@ -24,6 +25,7 @@ export default function DialogCategory({
   showCategoryDropdown,
   setShowCategoryDropdown,
 }: DialogCategoryProps) {
+  const { t } = useI18n();
   const { data: initialCategories, isLoading, error } = useGetCategories();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -87,7 +89,7 @@ export default function DialogCategory({
             className="absolute z-50 mt-8 w-72 bg-white border rounded-md shadow-lg max-h-80 overflow-auto"
           >
             <Command>
-              <CommandInput placeholder="Tìm danh mục..." />
+              <CommandInput placeholder={t("Tìm danh mục...")} />
               <CommandList>
                 {parentCategories.map((parent) => {
                   const children = childCategories.filter(

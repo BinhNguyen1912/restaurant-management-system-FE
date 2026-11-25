@@ -43,10 +43,12 @@ import {
 } from '@/app/queries/useLedgerAccount';
 import { formatCurrency } from '@/lib/utils';
 import CreateLedgerAccountDialog from '@/app/manage/ledger-accounts/create-ledger-account-dialog';
+import { useI18n } from '@/i18n/locale-provider';
 
 const TYPE_OPTIONS = ['ALL', 'ASSET', 'LIABILITY', 'EQUITY', 'REVENUE', 'EXPENSE'] as const;
 
 export default function LedgerAccountTable() {
+  const { t } = useI18n();
   const { data, isLoading, isError } = useGetLedgerAccounts();
   const { mutateAsync: updateAccount, isPending: isUpdating } =
     useUpdateLedgerAccount();
@@ -86,7 +88,7 @@ export default function LedgerAccountTable() {
     if (!renaming) return;
     try {
       await updateAccount({ id: renaming.id, body: { name: renameValue.trim() } });
-      toast.success('Đã đổi tên tài khoản');
+      toast.success(t("Đã đổi tên tài khoản"));
       setRenaming(null);
     } catch (error: any) {
       toast.error(error?.payload?.message ?? 'Không đổi được tên');
@@ -109,7 +111,7 @@ export default function LedgerAccountTable() {
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-1 flex-col gap-2 sm:flex-row">
           <Input
-            placeholder="Tìm theo mã hoặc tên…"
+            placeholder={t("Tìm theo mã hoặc tên…")}
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             className="sm:max-w-xs"
@@ -137,13 +139,13 @@ export default function LedgerAccountTable() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[170px]">Mã</TableHead>
-              <TableHead>Tên</TableHead>
-              <TableHead className="w-[120px]">Loại</TableHead>
-              <TableHead className="w-[130px] text-right">Tổng Nợ</TableHead>
-              <TableHead className="w-[130px] text-right">Tổng Có</TableHead>
-              <TableHead className="w-[130px] text-right">Số dư</TableHead>
-              <TableHead className="w-[90px] text-center">Đang dùng</TableHead>
+              <TableHead className="w-[170px]">{t("Mã")}</TableHead>
+              <TableHead>{t("Tên")}</TableHead>
+              <TableHead className="w-[120px]">{t("Loại")}</TableHead>
+              <TableHead className="w-[130px] text-right">{t("Tổng Nợ")}</TableHead>
+              <TableHead className="w-[130px] text-right">{t("Tổng Có")}</TableHead>
+              <TableHead className="w-[130px] text-right">{t("Số dư")}</TableHead>
+              <TableHead className="w-[90px] text-center">{t("Đang dùng")}</TableHead>
               <TableHead className="w-[100px]" />
             </TableRow>
           </TableHeader>
@@ -184,7 +186,7 @@ export default function LedgerAccountTable() {
                 <TableCell>{account.name}</TableCell>
                 <TableCell className="text-xs">
                   {LEDGER_ACCOUNT_TYPE_LABEL[account.type]}
-                  {account.isCash && <span className="ml-1 text-muted-foreground">(tiền mặt)</span>}
+                  {account.isCash && <span className="ml-1 text-muted-foreground">{t("(tiền mặt)")}</span>}
                 </TableCell>
                 <TableCell className="text-right tabular-nums">
                   {formatCurrency(account.totalDebit)}
@@ -248,7 +250,7 @@ export default function LedgerAccountTable() {
           </AlertDialogHeader>
           <Input value={renameValue} onChange={(event) => setRenameValue(event.target.value)} />
           <AlertDialogFooter>
-            <AlertDialogCancel>Huỷ</AlertDialogCancel>
+            <AlertDialogCancel>{t("Huỷ")}</AlertDialogCancel>
             <AlertDialogAction onClick={submitRename} disabled={isUpdating || !renameValue.trim()}>
               Lưu
             </AlertDialogAction>
@@ -265,7 +267,7 @@ export default function LedgerAccountTable() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Huỷ</AlertDialogCancel>
+            <AlertDialogCancel>{t("Huỷ")}</AlertDialogCancel>
             <AlertDialogAction onClick={confirmDelete} disabled={isDeleting}>
               Xoá
             </AlertDialogAction>

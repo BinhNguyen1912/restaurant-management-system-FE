@@ -29,6 +29,7 @@ import {
   useRecomputeRevenue,
 } from '@/app/queries/useRevenueReport';
 import { formatCurrency } from '@/lib/utils';
+import { useI18n } from '@/i18n/locale-provider';
 
 const METHOD_LABEL: Record<string, string> = {
   CASH: 'Tiền mặt',
@@ -60,6 +61,7 @@ const COLUMNS: { key: string; label: string }[] = [
 ];
 
 export default function RevenueReportBoard() {
+  const { t } = useI18n();
   const [fromDate, setFromDate] = useState(firstDayOfMonth());
   const [toDate, setToDate] = useState(todayISO());
 
@@ -76,7 +78,7 @@ export default function RevenueReportBoard() {
       const result = await recompute({ fromDate, toDate });
       toast.success(`Đã tính lại ${result.payload?.written ?? 0} ô số liệu`);
     } catch {
-      toast.error('Không tính lại được báo cáo');
+      toast.error(t("Không tính lại được báo cáo"));
     }
   };
 
@@ -122,7 +124,7 @@ export default function RevenueReportBoard() {
         </CardHeader>
         <CardContent className="flex flex-wrap items-end gap-3">
           <div className="grid gap-1">
-            <Label htmlFor="report-from">Từ ngày</Label>
+            <Label htmlFor="report-from">{t("Từ ngày")}</Label>
             <Input
               id="report-from"
               type="date"
@@ -132,7 +134,7 @@ export default function RevenueReportBoard() {
             />
           </div>
           <div className="grid gap-1">
-            <Label htmlFor="report-to">Đến ngày</Label>
+            <Label htmlFor="report-to">{t("Đến ngày")}</Label>
             <Input
               id="report-to"
               type="date"
@@ -156,7 +158,7 @@ export default function RevenueReportBoard() {
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>Khách đã trả</CardDescription>
+            <CardDescription>{t("Khách đã trả")}</CardDescription>
             <CardTitle className="text-2xl">
               {formatCurrency(report?.totals.grandTotal ?? 0)}
             </CardTitle>
@@ -167,7 +169,7 @@ export default function RevenueReportBoard() {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>Doanh thu thuần</CardDescription>
+            <CardDescription>{t("Doanh thu thuần")}</CardDescription>
             <CardTitle className="text-2xl">{formatCurrency(report?.totals.net ?? 0)}</CardTitle>
           </CardHeader>
           <CardContent className="text-xs text-muted-foreground">
@@ -176,7 +178,7 @@ export default function RevenueReportBoard() {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>Thuế phải nộp (VAT)</CardDescription>
+            <CardDescription>{t("Thuế phải nộp (VAT)")}</CardDescription>
             <CardTitle className="text-2xl">{formatCurrency(report?.totals.tax ?? 0)}</CardTitle>
           </CardHeader>
           <CardContent className="text-xs text-muted-foreground">
@@ -185,7 +187,7 @@ export default function RevenueReportBoard() {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>Giá vốn (COGS)</CardDescription>
+            <CardDescription>{t("Giá vốn (COGS)")}</CardDescription>
             <CardTitle className="text-2xl">{formatCurrency(report?.totals.cogs ?? 0)}</CardTitle>
           </CardHeader>
           <CardContent className="text-xs text-muted-foreground">
@@ -194,7 +196,7 @@ export default function RevenueReportBoard() {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>Lãi gộp</CardDescription>
+            <CardDescription>{t("Lãi gộp")}</CardDescription>
             <CardTitle
               className={`text-2xl ${(report?.totals.net ?? 0) - (report?.totals.cogs ?? 0) < 0 ? 'text-destructive' : ''}`}
             >
@@ -221,14 +223,14 @@ export default function RevenueReportBoard() {
             </div>
           ))}
           {(report?.byMethod ?? []).length === 0 && (
-            <span className="text-sm text-muted-foreground">Chưa có giao dịch trong kỳ</span>
+            <span className="text-sm text-muted-foreground">{t("Chưa có giao dịch trong kỳ")}</span>
           )}
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base">Theo ngày và chi nhánh</CardTitle>
+          <CardTitle className="text-base">{t("Theo ngày và chi nhánh")}</CardTitle>
           <CardDescription>
             {formatDay(report?.fromDate ?? fromDate)} – {formatDay(report?.toDate ?? toDate)}
           </CardDescription>
@@ -237,14 +239,14 @@ export default function RevenueReportBoard() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Ngày</TableHead>
-                <TableHead>Chi nhánh</TableHead>
+                <TableHead>{t("Ngày")}</TableHead>
+                <TableHead>{t("Chi nhánh")}</TableHead>
                 {COLUMNS.map((column) => (
                   <TableHead key={column.key} className="text-right">
                     {column.label}
                   </TableHead>
                 ))}
-                <TableHead className="text-right">Số đơn</TableHead>
+                <TableHead className="text-right">{t("Số đơn")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -282,7 +284,7 @@ export default function RevenueReportBoard() {
             {!!report?.rows.length && (
               <TableFooter>
                 <TableRow>
-                  <TableCell colSpan={2}>Tổng kỳ</TableCell>
+                  <TableCell colSpan={2}>{t("Tổng kỳ")}</TableCell>
                   {COLUMNS.map((column) => (
                     <TableCell key={column.key} className="text-right font-semibold whitespace-nowrap">
                       {formatCurrency(
@@ -300,15 +302,15 @@ export default function RevenueReportBoard() {
 
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base">Món bán chạy trong kỳ</CardTitle>
-          <CardDescription>Nguồn: đơn đã thu tiền, giá snapshot tại thời điểm bán</CardDescription>
+          <CardTitle className="text-base">{t("Món bán chạy trong kỳ")}</CardTitle>
+          <CardDescription>{t("Nguồn: đơn đã thu tiền, giá snapshot tại thời điểm bán")}</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Món</TableHead>
-                <TableHead className="text-right">Số lượng</TableHead>
+                <TableHead>{t("Món")}</TableHead>
+                <TableHead className="text-right">{t("Số lượng")}</TableHead>
                 <TableHead className="text-right">Doanh thu</TableHead>
               </TableRow>
             </TableHeader>

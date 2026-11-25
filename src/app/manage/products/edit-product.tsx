@@ -41,6 +41,7 @@ import DialogCategory from '@/app/manage/products/dialog-category';
 import { useGetCategories } from '@/app/queries/useCategory';
 import { Switch } from '@/components/ui/switch';
 import { UpsertSKUBody } from '@/app/ValidationSchemas/sku.schema';
+import { useI18n } from '@/i18n/locale-provider';
 
 // Định nghĩa types cho biến thể
 type VariantOption = {
@@ -66,6 +67,7 @@ export default function EditProduct({
   setId: (value: number | undefined) => void;
   onSubmitSuccess?: () => void;
 }) {
+  const { t } = useI18n();
   const [pendingImages, setPendingImages] = useState<PendingImage[]>([]);
   const [images, setImages] = useState<string[]>([]);
   const [variants, setVariants] = useState<VariantType[]>([]);
@@ -327,7 +329,7 @@ export default function EditProduct({
       };
 
       await updateMutation.mutateAsync({ id: id as number, ...body });
-      toast.success('Cập nhật thành công');
+      toast.success(t("Cập nhật thành công"));
       await revalidateApiRequest('products');
 
       setId(undefined);
@@ -372,7 +374,7 @@ export default function EditProduct({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Phần hình ảnh */}
               <div className="md:col-span-1">
-                <h3 className="text-lg font-medium mb-3">Hình ảnh sản phẩm</h3>
+                <h3 className="text-lg font-medium mb-3">{t("Hình ảnh sản phẩm")}</h3>
                 <FormField
                   control={form.control}
                   name="images"
@@ -462,7 +464,7 @@ export default function EditProduct({
               {/* Phần thông tin cơ bản */}
               <div className="md:col-span-2 space-y-6">
                 <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Thông tin cơ bản</h3>
+                  <h3 className="text-lg font-medium">{t("Thông tin cơ bản")}</h3>
 
                   <FormField
                     control={form.control}
@@ -475,7 +477,7 @@ export default function EditProduct({
                         <Input
                           id="name"
                           {...field}
-                          placeholder="Nhập tên sản phẩm"
+                          placeholder={t("Nhập tên sản phẩm")}
                           className="mt-1"
                         />
                         <FormMessage />
@@ -495,7 +497,7 @@ export default function EditProduct({
                           id="description"
                           rows={2}
                           maxLength={500}
-                          placeholder="Mô tả ngắn về món ăn (không bắt buộc)"
+                          placeholder={t("Mô tả ngắn về món ăn (không bắt buộc)")}
                           className="mt-1"
                           {...field}
                           value={field.value ?? ''}
@@ -576,7 +578,7 @@ export default function EditProduct({
                           <div className="flex flex-col gap-3">
                             <div className="flex items-center justify-between">
                               <div className="space-y-0.5 text-sm">
-                                <FormLabel>Trạng thái công khai</FormLabel>
+                                <FormLabel>{t("Trạng thái công khai")}</FormLabel>
                                 <p className="text-[12px] text-muted-foreground">
                                   {isPublished ? 'Đã công khai' : 'Riêng tư'}
                                 </p>
@@ -619,7 +621,7 @@ export default function EditProduct({
 
                 {/* Danh mục */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Danh mục</h3>
+                  <h3 className="text-lg font-medium">{t("Danh mục")}</h3>
                   <FormField
                     control={form.control}
                     name="categories"
@@ -680,10 +682,10 @@ export default function EditProduct({
 
                 {/* Biến thể */}
                 <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Biến thể</h3>
+                  <h3 className="text-lg font-medium">{t("Biến thể")}</h3>
                   <div className="border rounded-lg p-4">
                     <div className="flex justify-between items-center mb-4">
-                      <h4 className="font-medium">Các biến thể sản phẩm</h4>
+                      <h4 className="font-medium">{t("Các biến thể sản phẩm")}</h4>
                       <Button
                         type="button"
                         variant="outline"
@@ -713,7 +715,7 @@ export default function EditProduct({
                             </Button>
                           </div>
                           <Input
-                            placeholder="Tên biến thể"
+                            placeholder={t("Tên biến thể")}
                             value={variant.value}
                             onChange={(e) =>
                               handleVariantChange(vi, e.target.value)
@@ -726,9 +728,9 @@ export default function EditProduct({
                               className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end p-3 bg-gray-50 rounded-md mb-2"
                             >
                               <div>
-                                <Label>Giá trị</Label>
+                                <Label>{t("Giá trị")}</Label>
                                 <Input
-                                  placeholder="Giá trị"
+                                  placeholder={t("Giá trị")}
                                   value={opt.value}
                                   onChange={(e) =>
                                     handleVariantOptionChange(
@@ -741,9 +743,9 @@ export default function EditProduct({
                                 />
                               </div>
                               <div>
-                                <Label>Giá</Label>
+                                <Label>{t("Giá")}</Label>
                                 <Input
-                                  placeholder="Giá"
+                                  placeholder={t("Giá")}
                                   type="number"
                                   value={opt.price}
                                   onChange={(e) =>
@@ -758,7 +760,7 @@ export default function EditProduct({
                               </div>
                               <div className="flex items-end gap-2">
                                 <div className="flex-1">
-                                  <Label>Ảnh</Label>
+                                  <Label>{t("Ảnh")}</Label>
                                   <div className="relative w-full mt-1">
                                     {opt.image ? (
                                       <img

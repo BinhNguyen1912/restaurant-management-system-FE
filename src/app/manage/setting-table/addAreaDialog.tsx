@@ -27,6 +27,7 @@ import {
   AreaBodyType,
 } from '@/app/ValidationSchemas/area.schema';
 import { toast } from 'react-toastify';
+import { useI18n } from '@/i18n/locale-provider';
 
 interface AddAreaDialogProps {
   open: boolean;
@@ -37,6 +38,7 @@ export default function AddAreaDialog({
   open,
   onOpenChange,
 }: AddAreaDialogProps) {
+  const { t } = useI18n();
   const form = useForm<AreaBodyType>({
     resolver: zodResolver(areaBodySchema),
     defaultValues: {
@@ -89,7 +91,7 @@ export default function AddAreaDialog({
                   <FormControl>
                     <Input
                       {...field}
-                      placeholder="Nhập tên khu vực..."
+                      placeholder={t("Nhập tên khu vực...")}
                       className="h-12 px-4 text-base border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-lg"
                     />
                   </FormControl>

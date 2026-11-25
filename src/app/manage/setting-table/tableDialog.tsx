@@ -16,6 +16,7 @@ import { TableData, TableStatus } from './types/table';
 import { TableStatusValues } from '@/app/constants/table.constant';
 import { keyof } from 'zod';
 import { getVietnameseTableStatus } from '@/lib/utils';
+import { useI18n } from '@/i18n/locale-provider';
 
 interface TableDialogProps {
   open: boolean;
@@ -30,6 +31,7 @@ export default function TableDialog({
   table,
   onSave,
 }: TableDialogProps) {
+  const { t } = useI18n();
   const [name, setName] = useState(table.name);
   const [seats, setSeats] = useState(table.seats.toString());
   const [status, setStatus] = useState(table.status || TableStatusValues[0]);
@@ -49,7 +51,7 @@ export default function TableDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Chỉnh sửa bàn</DialogTitle>
+          <DialogTitle>{t("Chỉnh sửa bàn")}</DialogTitle>
           <DialogDescription>
             Cập nhật thông tin chi tiết cho bàn này.
           </DialogDescription>
@@ -99,7 +101,7 @@ export default function TableDialog({
           </div>
 
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label className="text-right">Loại</Label>
+            <Label className="text-right">{t("Loại")}</Label>
             <div className="col-span-3 text-sm text-gray-500">{table.type}</div>
           </div>
         </div>
@@ -108,7 +110,7 @@ export default function TableDialog({
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Hủy
           </Button>
-          <Button onClick={handleSave}>Lưu thay đổi</Button>
+          <Button onClick={handleSave}>{t("Lưu thay đổi")}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

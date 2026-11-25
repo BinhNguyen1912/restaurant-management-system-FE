@@ -15,8 +15,10 @@ import { useRouter } from 'next/navigation';
 import { handleErrorApi } from '@/lib/utils';
 import { useMeProfile } from '@/app/queries/useAccount';
 import { useAppStore } from '@/components/app-provider';
+import { useI18n } from '@/i18n/locale-provider';
 
 export default function DropdownAvatar() {
+  const { t } = useI18n();
   const LogoutMutation = useLogoutMutation();
   const router = useRouter();
   const payload = useMeProfile();
@@ -65,9 +67,9 @@ export default function DropdownAvatar() {
             Cài đặt
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem>Hỗ trợ</DropdownMenuItem>
+        <DropdownMenuItem>{t("Hỗ trợ")}</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={logout}>Đăng xuất</DropdownMenuItem>
+        <DropdownMenuItem onClick={logout}>{t("Đăng xuất")}</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

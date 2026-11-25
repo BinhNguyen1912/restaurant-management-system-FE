@@ -20,12 +20,14 @@ import { AreaType } from '@/app/ValidationSchemas/area.schema';
 import { useListArea } from '@/app/queries/useArea';
 import { Button } from '@/components/ui/button';
 import { Select } from '@/components/ui/select';
+import { useI18n } from '@/i18n/locale-provider';
 
 const nodeTypes: NodeTypes = {
   table: TableNode,
 };
 
 export default function TableSelectionPage() {
+  const { t } = useI18n();
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const [reactFlowInstance, setReactFlowInstance] =
     useState<ReactFlowInstance | null>(null);
@@ -85,7 +87,7 @@ export default function TableSelectionPage() {
       const node = nodes.find((n) => n.id === tableId);
       if (!node) return;
       if (node.data.status !== 'available') {
-        toast.warning('Bàn này hiện không trống!');
+        toast.warning(t("Bàn này hiện không trống!"));
         return;
       }
       // Đánh dấu bàn đã chọn tạm thời

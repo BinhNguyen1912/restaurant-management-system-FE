@@ -36,6 +36,7 @@ import {
   useGetLedgerIntegrity,
 } from '@/app/queries/useLedgerEntry';
 import { formatCurrency } from '@/lib/utils';
+import { useI18n } from '@/i18n/locale-provider';
 
 const REF_TYPES: LedgerRefTypeValue[] = [
   'ORDER_PAID_CASH',
@@ -51,6 +52,7 @@ const formatTime = (value: string | null) =>
   value ? new Date(value).toLocaleString('vi-VN') : '—';
 
 export default function LedgerJournal() {
+  const { t } = useI18n();
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [refType, setRefType] = useState<'' | LedgerRefTypeValue>('');
@@ -104,26 +106,26 @@ export default function LedgerJournal() {
             Sổ cái có cân không?
           </CardTitle>
           <CardDescription>
-            Sổ kép phải luôn <b>Tổng Nợ = Tổng Có</b>. Nếu chênh lệch ≠ 0 hoặc có bút toán lệch,
+            Sổ kép phải luôn <b>{t("Tổng Nợ = Tổng Có")}</b>. Nếu chênh lệch ≠ 0 hoặc có bút toán lệch,
             dữ liệu đã bị ghi sai và phải tìm đúng bút toán trong nhật ký bên dưới.
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-3">
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <div className="rounded-lg border p-3">
-              <div className="text-xs uppercase text-muted-foreground">Tổng Nợ (Debit)</div>
+              <div className="text-xs uppercase text-muted-foreground">{t("Tổng Nợ (Debit)")}</div>
               <div className="text-xl font-semibold">
                 {formatCurrency(report?.totalDebit ?? 0)}
               </div>
             </div>
             <div className="rounded-lg border p-3">
-              <div className="text-xs uppercase text-muted-foreground">Tổng Có (Credit)</div>
+              <div className="text-xs uppercase text-muted-foreground">{t("Tổng Có (Credit)")}</div>
               <div className="text-xl font-semibold">
                 {formatCurrency(report?.totalCredit ?? 0)}
               </div>
             </div>
             <div className="rounded-lg border p-3">
-              <div className="text-xs uppercase text-muted-foreground">Chênh lệch</div>
+              <div className="text-xs uppercase text-muted-foreground">{t("Chênh lệch")}</div>
               <div
                 className={
                   (report?.difference ?? 0) === 0
@@ -135,7 +137,7 @@ export default function LedgerJournal() {
               </div>
             </div>
             <div className="rounded-lg border p-3">
-              <div className="text-xs uppercase text-muted-foreground">Bút toán</div>
+              <div className="text-xs uppercase text-muted-foreground">{t("Bút toán")}</div>
               <div className="text-xl font-semibold">
                 {report?.postedEntries ?? 0}
                 <span className="text-sm font-normal text-muted-foreground">
@@ -193,7 +195,7 @@ export default function LedgerJournal() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Nhật ký bút toán (audit)</CardTitle>
+          <CardTitle>{t("Nhật ký bút toán (audit)")}</CardTitle>
           <CardDescription>
             Bấm vào dòng để xem các dòng Nợ/Có của bút toán. Sổ cái là append-only: sai thì ghi
             bút toán đảo, không sửa/xoá.
@@ -202,7 +204,7 @@ export default function LedgerJournal() {
         <CardContent className="grid gap-3">
           <div className="flex flex-wrap items-end gap-2">
             <div className="grid gap-1">
-              <Label htmlFor="from">Từ ngày</Label>
+              <Label htmlFor="from">{t("Từ ngày")}</Label>
               <Input
                 id="from"
                 type="date"
@@ -214,7 +216,7 @@ export default function LedgerJournal() {
               />
             </div>
             <div className="grid gap-1">
-              <Label htmlFor="to">Đến ngày</Label>
+              <Label htmlFor="to">{t("Đến ngày")}</Label>
               <Input
                 id="to"
                 type="date"
@@ -226,7 +228,7 @@ export default function LedgerJournal() {
               />
             </div>
             <div className="grid gap-1">
-              <Label htmlFor="refType">Loại nghiệp vụ</Label>
+              <Label htmlFor="refType">{t("Loại nghiệp vụ")}</Label>
               <select
                 id="refType"
                 className="h-9 rounded-md border bg-background px-2 text-sm"
@@ -236,7 +238,7 @@ export default function LedgerJournal() {
                   setPage(1);
                 }}
               >
-                <option value="">Tất cả</option>
+                <option value="">{t("Tất cả")}</option>
                 {REF_TYPES.map((value) => (
                   <option key={value} value={value}>
                     {LEDGER_REF_TYPE_LABEL[value]}
@@ -245,7 +247,7 @@ export default function LedgerJournal() {
               </select>
             </div>
             <div className="grid gap-1">
-              <Label htmlFor="account">Tài khoản (mã)</Label>
+              <Label htmlFor="account">{t("Tài khoản (mã)")}</Label>
               <Input
                 id="account"
                 placeholder="CASH, TAX_PAYABLE…"
@@ -258,7 +260,7 @@ export default function LedgerJournal() {
               />
             </div>
             <div className="grid min-w-[12rem] flex-1 gap-1">
-              <Label htmlFor="search">Tìm</Label>
+              <Label htmlFor="search">{t("Tìm")}</Label>
               <Input
                 id="search"
                 placeholder="memo / eventKey / refId"
@@ -289,13 +291,13 @@ export default function LedgerJournal() {
             <TableHeader>
               <TableRow>
                 <TableHead className="w-8" />
-                <TableHead>Bút toán</TableHead>
-                <TableHead>Ngày</TableHead>
-                <TableHead>Nghiệp vụ</TableHead>
-                <TableHead>Ghi chú</TableHead>
-                <TableHead className="text-right">Nợ</TableHead>
-                <TableHead className="text-right">Có</TableHead>
-                <TableHead>Cân</TableHead>
+                <TableHead>{t("Bút toán")}</TableHead>
+                <TableHead>{t("Ngày")}</TableHead>
+                <TableHead>{t("Nghiệp vụ")}</TableHead>
+                <TableHead>{t("Ghi chú")}</TableHead>
+                <TableHead className="text-right">{t("Nợ")}</TableHead>
+                <TableHead className="text-right">{t("Có")}</TableHead>
+                <TableHead>{t("Cân")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -370,11 +372,11 @@ export default function LedgerJournal() {
                             <Table>
                               <TableHeader>
                                 <TableRow>
-                                  <TableHead>Tài khoản</TableHead>
-                                  <TableHead>Diễn giải</TableHead>
-                                  <TableHead className="text-right">Nợ</TableHead>
-                                  <TableHead className="text-right">Có</TableHead>
-                                  <TableHead>Tham chiếu</TableHead>
+                                  <TableHead>{t("Tài khoản")}</TableHead>
+                                  <TableHead>{t("Diễn giải")}</TableHead>
+                                  <TableHead className="text-right">{t("Nợ")}</TableHead>
+                                  <TableHead className="text-right">{t("Có")}</TableHead>
+                                  <TableHead>{t("Tham chiếu")}</TableHead>
                                 </TableRow>
                               </TableHeader>
                               <TableBody>

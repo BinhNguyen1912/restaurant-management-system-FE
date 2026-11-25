@@ -46,6 +46,7 @@ import { RepeatModeType } from '@/app/constants/reminder.constant';
 import type { UpdateReminderType } from '@/app/ValidationSchemas/reminder.schema';
 import { roleName } from '@/app/constants/role.constant';
 import { getVietnameseRoleStatus } from '@/lib/utils';
+import { useI18n } from '@/i18n/locale-provider';
 
 export default function EditReminder({
   id,
@@ -54,6 +55,7 @@ export default function EditReminder({
   id?: number;
   setId: (value: number | undefined) => void;
 }) {
+  const { t } = useI18n();
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState<UpdateReminderType>({
     title: '',
@@ -224,7 +226,7 @@ export default function EditReminder({
 
       console.log('Sending reminder update data:', submitData);
       await updateReminderMutation.mutateAsync(submitData);
-      toast.success('Đã cập nhật lời nhắc thành công!');
+      toast.success(t("Đã cập nhật lời nhắc thành công!"));
 
       // Reset state trước khi đóng dialog
       setId(undefined);
@@ -336,12 +338,12 @@ export default function EditReminder({
             <Bell className="h-5 w-5" />
             Chỉnh sửa lời nhắc
           </DialogTitle>
-          <DialogDescription>Cập nhật thông tin lời nhắc</DialogDescription>
+          <DialogDescription>{t("Cập nhật thông tin lời nhắc")}</DialogDescription>
         </DialogHeader>
 
         {isLoading ? (
           <div className="flex items-center justify-center py-8">
-            <div className="text-muted-foreground">Đang tải...</div>
+            <div className="text-muted-foreground">{t("Đang tải...")}</div>
           </div>
         ) : (
           <form onSubmit={handleSubmit}>
@@ -350,18 +352,18 @@ export default function EditReminder({
               <div className="space-y-4">
                 <Card>
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-sm">Thông tin cơ bản</CardTitle>
+                    <CardTitle className="text-sm">{t("Thông tin cơ bản")}</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     {/* Tiêu đề */}
                     <div className="space-y-2">
-                      <Label htmlFor="edit-title">Tiêu đề lời nhắc *</Label>
+                      <Label htmlFor="edit-title">{t("Tiêu đề lời nhắc *")}</Label>
                       <Input
                         id="edit-title"
                         required
                         value={formData.title || ''}
                         onChange={(e) => handleChange('title', e.target.value)}
-                        placeholder="Nhập tiêu đề lời nhắc..."
+                        placeholder={t("Nhập tiêu đề lời nhắc...")}
                       />
                     </div>
 
@@ -425,7 +427,7 @@ export default function EditReminder({
                             handleChange('scheduled_date', null);
                           }
                         }}
-                        placeholder="Chọn ngày cụ thể"
+                        placeholder={t("Chọn ngày cụ thể")}
                       />
                     </div>
 
@@ -448,7 +450,7 @@ export default function EditReminder({
                         }
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="Chọn chế độ lặp lại" />
+                          <SelectValue placeholder={t("Chọn chế độ lặp lại")} />
                         </SelectTrigger>
                         <SelectContent>
                           {repeatModes.map((mode) => (
@@ -483,7 +485,7 @@ export default function EditReminder({
                 {/* Người nhận */}
                 <Card>
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-sm">Phân công</CardTitle>
+                    <CardTitle className="text-sm">{t("Phân công")}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-2">
@@ -609,7 +611,7 @@ export default function EditReminder({
                 {/* Mô tả */}
                 <Card>
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-sm">Mô tả chi tiết</CardTitle>
+                    <CardTitle className="text-sm">{t("Mô tả chi tiết")}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <Textarea
@@ -617,7 +619,7 @@ export default function EditReminder({
                       onChange={(e) =>
                         handleChange('description', e.target.value)
                       }
-                      placeholder="Mô tả công việc cần thực hiện..."
+                      placeholder={t("Mô tả công việc cần thực hiện...")}
                       rows={5}
                       className="resize-none"
                     />
@@ -627,19 +629,19 @@ export default function EditReminder({
                 {/* Preview */}
                 <Card>
                   <CardHeader className="pb-3">
-                    <CardTitle className="text-sm">Xem trước</CardTitle>
+                    <CardTitle className="text-sm">{t("Xem trước")}</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="font-medium">Tiêu đề:</span>
+                      <span className="font-medium">{t("Tiêu đề:")}</span>
                       <span>{formData.title || 'Chưa có'}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="font-medium">Thời gian:</span>
+                      <span className="font-medium">{t("Thời gian:")}</span>
                       <span>{formData.time_to_remind || 'Chưa có'}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="font-medium">Ngày nhắc:</span>
+                      <span className="font-medium">{t("Ngày nhắc:")}</span>
                       <span>
                         {formData.scheduled_date
                           ? (() => {
@@ -660,7 +662,7 @@ export default function EditReminder({
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="font-medium">Lặp lại:</span>
+                      <span className="font-medium">{t("Lặp lại:")}</span>
                       <span>
                         {
                           repeatModes.find(
@@ -670,7 +672,7 @@ export default function EditReminder({
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="font-medium">Trạng thái:</span>
+                      <span className="font-medium">{t("Trạng thái:")}</span>
                       <Badge
                         variant={formData.is_active ? 'default' : 'secondary'}
                       >
@@ -678,7 +680,7 @@ export default function EditReminder({
                       </Badge>
                     </div>
                     <div className="flex justify-between">
-                      <span className="font-medium">Người nhận:</span>
+                      <span className="font-medium">{t("Người nhận:")}</span>
                       <span className="text-right">
                         {!formData.assigned_role ||
                         formData.assigned_role.length === 0
@@ -699,7 +701,7 @@ export default function EditReminder({
                       formData.repeat_days &&
                       formData.repeat_days.length > 0 && (
                         <div className="flex justify-between">
-                          <span className="font-medium">Ngày lặp lại:</span>
+                          <span className="font-medium">{t("Ngày lặp lại:")}</span>
                           <span className="text-right">
                             {formData.repeat_mode === RepeatModeType.WEEKLY
                               ? formData.repeat_days
@@ -722,7 +724,7 @@ export default function EditReminder({
             {showRepeatDays && (
               <Card className="mt-6">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-sm">Chọn ngày lặp lại *</CardTitle>
+                  <CardTitle className="text-sm">{t("Chọn ngày lặp lại *")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   {formData.repeat_mode === RepeatModeType.WEEKLY && (

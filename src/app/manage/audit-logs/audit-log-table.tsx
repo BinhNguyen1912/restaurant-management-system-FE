@@ -30,6 +30,7 @@ import {
 } from '@/components/ui/table';
 import { useGetAuditLogs } from '@/app/queries/useAuditLog';
 import { AuditLogType } from '@/app/ValidationSchemas/audit-log.schema';
+import { useI18n } from '@/i18n/locale-provider';
 
 const ACTION_LABEL: Record<string, string> = {
   ORDER_CANCELLED: 'Huỷ đơn',
@@ -73,6 +74,7 @@ const summarize = (value: unknown): string => {
  * Không có nút sửa/xoá — cố ý: nhật ký sửa được thì không còn là bằng chứng.
  */
 export default function AuditLogTable() {
+  const { t } = useI18n();
   const [action, setAction] = useState<string>('all');
   const [entityType, setEntityType] = useState<string>('all');
   const [entityId, setEntityId] = useState('');
@@ -113,7 +115,7 @@ export default function AuditLogTable() {
       <CardContent className="grid gap-4">
         <div className="flex flex-wrap items-end gap-2">
           <div className="grid gap-1">
-            <Label>Hành động</Label>
+            <Label>{t("Hành động")}</Label>
             <Select
               value={action}
               onValueChange={(value) => {
@@ -125,7 +127,7 @@ export default function AuditLogTable() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Tất cả</SelectItem>
+                <SelectItem value="all">{t("Tất cả")}</SelectItem>
                 {Object.entries(ACTION_LABEL).map(([value, label]) => (
                   <SelectItem key={value} value={value}>
                     {label}
@@ -135,7 +137,7 @@ export default function AuditLogTable() {
             </Select>
           </div>
           <div className="grid gap-1">
-            <Label>Đối tượng</Label>
+            <Label>{t("Đối tượng")}</Label>
             <Select
               value={entityType}
               onValueChange={(value) => {
@@ -147,7 +149,7 @@ export default function AuditLogTable() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Tất cả</SelectItem>
+                <SelectItem value="all">{t("Tất cả")}</SelectItem>
                 {Object.entries(ENTITY_LABEL).map(([value, label]) => (
                   <SelectItem key={value} value={value}>
                     {label}
@@ -157,7 +159,7 @@ export default function AuditLogTable() {
             </Select>
           </div>
           <div className="grid gap-1">
-            <Label htmlFor="audit-entity-id">ID đối tượng</Label>
+            <Label htmlFor="audit-entity-id">{t("ID đối tượng")}</Label>
             <Input
               id="audit-entity-id"
               inputMode="numeric"
@@ -170,7 +172,7 @@ export default function AuditLogTable() {
             />
           </div>
           <div className="grid gap-1">
-            <Label htmlFor="audit-from">Từ ngày</Label>
+            <Label htmlFor="audit-from">{t("Từ ngày")}</Label>
             <Input
               id="audit-from"
               type="date"
@@ -182,7 +184,7 @@ export default function AuditLogTable() {
             />
           </div>
           <div className="grid gap-1">
-            <Label htmlFor="audit-to">Đến ngày</Label>
+            <Label htmlFor="audit-to">{t("Đến ngày")}</Label>
             <Input
               id="audit-to"
               type="date"
@@ -200,12 +202,12 @@ export default function AuditLogTable() {
             <TableHeader>
               <TableRow>
                 <TableHead />
-                <TableHead>Thời điểm</TableHead>
-                <TableHead>Hành động</TableHead>
-                <TableHead>Đối tượng</TableHead>
-                <TableHead>Người làm</TableHead>
-                <TableHead>Lý do</TableHead>
-                <TableHead>Thay đổi</TableHead>
+                <TableHead>{t("Thời điểm")}</TableHead>
+                <TableHead>{t("Hành động")}</TableHead>
+                <TableHead>{t("Đối tượng")}</TableHead>
+                <TableHead>{t("Người làm")}</TableHead>
+                <TableHead>{t("Lý do")}</TableHead>
+                <TableHead>{t("Thay đổi")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -240,7 +242,7 @@ export default function AuditLogTable() {
                       <TableCell colSpan={7} className="bg-muted/40">
                         <div className="grid gap-2 text-xs sm:grid-cols-2">
                           <div>
-                            <div className="mb-1 font-medium">Trước</div>
+                            <div className="mb-1 font-medium">{t("Trước")}</div>
                             <pre className="overflow-x-auto rounded bg-background p-2">
                               {JSON.stringify(log.before ?? null, null, 2)}
                             </pre>
