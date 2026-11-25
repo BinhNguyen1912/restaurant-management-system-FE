@@ -25,6 +25,11 @@ export type DashboardOverviewType = {
     branchId: number | null;
     gross: number;
     tax: number;
+    discount: number;
+    serviceCharge: number;
+    tip: number;
+    cashIn: number;
+    vnpayIn: number;
     grandTotal: number;
     net: number;
     refund: number;
