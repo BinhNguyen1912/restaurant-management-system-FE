@@ -14,6 +14,7 @@ const onlyOwnerPaths = [
   '/manage/products',
   '/manage/ledger-accounts',
   '/manage/branches',
+  '/manage/roles',
 ];
 
 // /manage chi danh cho nhan vien van hanh va quan tri (khach hang vao /manage la sai luong).
