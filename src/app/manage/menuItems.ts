@@ -14,6 +14,7 @@ import {
   ScrollText,
   Percent,
   Landmark,
+  TicketPercent,
 } from 'lucide-react';
 
 const menuItems = [
@@ -51,6 +52,12 @@ const menuItems = [
     title: 'Đối soát',
     Icon: Landmark,
     href: '/manage/reconciliation',
+    roles: [Role.ADMIN],
+  },
+  {
+    title: 'Mã giảm giá',
+    Icon: TicketPercent,
+    href: '/manage/vouchers',
     roles: [Role.ADMIN],
   },
   {
