@@ -13,7 +13,11 @@ export const CreateVoucherBody = z
       .max(50, 'Mã tối đa 50 ký tự')
       .regex(/^[A-Za-z0-9_-]+$/, 'Chỉ dùng chữ, số, gạch ngang/gạch dưới'),
     discountType: VoucherTypeSchema,
-    discountValue: z.coerce.number().positive('Giá trị giảm phải lớn hơn 0'),
+    // trần theo cột Decimal(14,2) của BE
+    discountValue: z.coerce
+      .number()
+      .positive('Giá trị giảm phải lớn hơn 0')
+      .max(1_000_000_000, 'Giá trị giảm quá lớn'),
     startAt: z.string().min(1, 'Chọn thời gian bắt đầu'),
     endAt: z.string().min(1, 'Chọn thời gian kết thúc'),
     /** chuỗi rỗng = không giới hạn lượt */
@@ -34,11 +38,14 @@ export const CreateVoucherBody = z
         message: 'Kết thúc phải sau bắt đầu',
       });
     }
-    if (data.usageLimit && (!/^\d+$/.test(data.usageLimit) || Number(data.usageLimit) < 1)) {
+    if (
+      data.usageLimit &&
+      (!/^\d+$/.test(data.usageLimit) || Number(data.usageLimit) < 1 || Number(data.usageLimit) > 1_000_000)
+    ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ['usageLimit'],
-        message: 'Số lượt phải là số nguyên dương (để trống = không giới hạn)',
+        message: 'Số lượt phải là số nguyên dương, tối đa 1.000.000 (để trống = không giới hạn)',
       });
     }
   });

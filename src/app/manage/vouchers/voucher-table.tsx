@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Pencil, Plus, TicketPercent, Trash2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -110,7 +110,8 @@ export default function VoucherTable() {
     [page, search, status],
   );
 
-  const { data, isLoading } = useGetVouchers(params);
+  const { data, isLoading, isError, error } = useGetVouchers(params);
+  const listError = error as { payload?: { message?: string }; message?: string } | null;
   const { mutateAsync: createVoucher, isPending: creating } = useCreateVoucher();
   const { mutateAsync: updateVoucher, isPending: updating } = useUpdateVoucher();
   const { mutateAsync: updateStatus } = useUpdateVoucherStatus();
@@ -119,6 +120,11 @@ export default function VoucherTable() {
   const vouchers = data?.payload?.data ?? [];
   const totalItems = data?.payload?.totalItems ?? 0;
   const totalPages = Math.max(1, Math.ceil(totalItems / limit));
+
+  /** xoá row cuối của trang cuối -> trang hiện tại vượt quá tổng số trang, lùi lại cho khỏi hiện "Chưa có mã nào" */
+  useEffect(() => {
+    if (page > totalPages) setPage(totalPages);
+  }, [page, totalPages]);
 
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<VoucherResType | null>(null);
@@ -260,10 +266,19 @@ export default function VoucherTable() {
                   </TableCell>
                 </TableRow>
               )}
-              {!isLoading && vouchers.length === 0 && (
+              {isError && (
+                <TableRow>
+                  <TableCell colSpan={6} className="text-center text-destructive">
+                    {listError?.payload?.message ?? listError?.message ?? 'Không tải được danh sách mã'}
+                  </TableCell>
+                </TableRow>
+              )}
+              {!isLoading && !isError && vouchers.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={6} className="text-center text-muted-foreground">
-                    Chưa có mã nào. Bấm <strong>Tạo mã</strong> để bắt đầu.
+                    {search.trim() || status !== 'ALL'
+                      ? 'Không có mã nào khớp bộ lọc.'
+                      : 'Chưa có mã nào. Bấm Tạo mã để bắt đầu.'}
                   </TableCell>
                 </TableRow>
               )}
