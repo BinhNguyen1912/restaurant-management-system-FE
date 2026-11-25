@@ -9,6 +9,7 @@ const guestPaths = ['/guest'];
 // trong src/app/manage, neu khong la config chet.
 const onlyOwnerPaths = [
   '/manage/setting-table',
+  '/manage/categories',
   '/manage/accounts',
   '/manage/products',
   '/manage/ledger-accounts',
