@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import NavItems from '@/app/(public)/nav-items';
 import { ModeToggle } from '@/components/ToggleTheme';
+import { LocaleSwitcher } from '@/components/locale-switcher';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import GuestMessageDialog from '@/components/guest-message-dialog';
@@ -91,6 +92,7 @@ export default function PublicHeader() {
       </Sheet>
       <div className="ml-auto flex items-center gap-2">
         {isGuestRoute && <GuestMessageDialog />}
+        <LocaleSwitcher />
         <ModeToggle />
       </div>
     </header>

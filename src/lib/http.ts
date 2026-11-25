@@ -10,6 +10,7 @@ import {
   setRefreshTokenFormLocalStorage,
 } from '@/lib/utils';
 import { redirect } from 'next/navigation';
+import { readLocaleCookie } from '@/i18n/locale';
 
 //KHI ỬU DỤNG COOKIE , ACCESS TOKEN HẾT HẠN , SẼ TỰ ĐỘNG XÓA RA KHỎI COOKIE
 type CustomOptions = Omit<RequestInit, 'method'> & {
@@ -86,6 +87,9 @@ const request = async <Response>(
       : {
           'Content-Type': 'application/json',
         };
+  // BE chọn ngôn ngữ theo header này (?lang= > X-Locale > Accept-Language > vi).
+  // Đặt ở đây để mọi apiRequest đều gửi, không phải sửa từng hàm.
+  baseHeaders['X-Locale'] = readLocaleCookie();
   if (isClient) {
     const accessToken = getAccessTokenFormLocalStorage();
 
