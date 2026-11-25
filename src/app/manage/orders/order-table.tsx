@@ -17,6 +17,15 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import {
   Table,
   TableBody,
@@ -40,7 +49,7 @@ import {
 import { cn, getVietnameseOrderStatus, handleErrorApi } from '@/lib/utils';
 import { useAppStore } from '@/components/app-provider';
 import { getAccessTokenFormLocalStorage, generateSocketIo } from '@/lib/utils';
-import { OrderStatusValues } from '@/app/constants/type';
+import { OrderStatus, OrderStatusValues } from '@/app/constants/type';
 import {
   OrderResType,
   OrdersListResType,
@@ -308,17 +317,62 @@ export default function OrderTable() {
   // Mutations
   const updateOrderMutation = useUpdateOrderMutation();
 
+  const confirmCancel = async () => {
+    if (!cancelRequest) return;
+    if (!cancelRequest.reason.trim()) {
+      toast.error('Nhập lý do huỷ đơn');
+      return;
+    }
+    setIsCancelSubmitting(true);
+    try {
+      await changeStatus({
+        orderId: cancelRequest.orderId,
+        dishId: cancelRequest.dishId,
+        quantity: cancelRequest.quantity,
+        status: OrderStatus.CANCELLED,
+        reason: cancelRequest.reason,
+      });
+      setCancelRequest(null);
+    } finally {
+      setIsCancelSubmitting(false);
+    }
+  };
+
   // Order service
   const { statics, orderObjectByGuestId, servingGuestByTableNumber } =
     useOrderService(orderList);
 
   // Actions
+  /**
+   * Huỷ đơn: BE BẮT BUỘC có lý do (ticket #10) -> mở hộp thoại để nhập, không gửi request rỗng.
+   * Đây là thao tác nhạy cảm: lý do được ghi vào nhật ký thao tác để giải trình sau này.
+   */
+  const [cancelRequest, setCancelRequest] = useState<{
+    orderId: number;
+    dishId: number;
+    quantity: number;
+    reason: string;
+  } | null>(null);
+  const [isCancelSubmitting, setIsCancelSubmitting] = useState(false);
+
   const changeStatus = async (body: {
     orderId: number;
     dishId: number;
     status: (typeof OrderStatusValues)[number];
     quantity: number;
+    reason?: string;
   }) => {
+    // Chưa có lý do -> hỏi trước, chưa gọi API
+    if (body.status === OrderStatus.CANCELLED && !body.reason?.trim()) {
+      setCancelRequest({
+        orderId: body.orderId,
+        dishId: body.dishId,
+        quantity: body.quantity,
+        reason: '',
+      });
+      return;
+    }
+
     try {
       // Chuyển đổi sang format mới cho API
       await updateOrderMutation.mutateAsync({
@@ -327,6 +381,7 @@ export default function OrderTable() {
           status: body.status,
           quantity: body.quantity,
           skuId: body.dishId, // dishId được map thành skuId
+          ...(body.reason?.trim() ? { reason: body.reason.trim() } : {}),
         },
       });
 

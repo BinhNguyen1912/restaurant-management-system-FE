@@ -55,6 +55,7 @@ const COLUMNS: { key: string; label: string }[] = [
   { key: 'cashIn', label: 'Tiền mặt' },
   { key: 'vnpayIn', label: 'VNPay' },
   { key: 'refund', label: 'Hoàn tiền' },
+  { key: 'cogs', label: 'Giá vốn' },
   { key: 'grandTotal', label: 'Khách đã trả' },
 ];
 
@@ -184,11 +185,24 @@ export default function RevenueReportBoard() {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>Hoàn tiền</CardDescription>
-            <CardTitle className="text-2xl">{formatCurrency(report?.totals.refund ?? 0)}</CardTitle>
+            <CardDescription>Giá vốn (COGS)</CardDescription>
+            <CardTitle className="text-2xl">{formatCurrency(report?.totals.cogs ?? 0)}</CardTitle>
           </CardHeader>
           <CardContent className="text-xs text-muted-foreground">
-            Đã trừ khỏi doanh thu và tiền vào
+            Từ recipe × giá nhập nguyên liệu
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardDescription>Lãi gộp</CardDescription>
+            <CardTitle
+              className={`text-2xl ${(report?.totals.net ?? 0) - (report?.totals.cogs ?? 0) < 0 ? 'text-destructive' : ''}`}
+            >
+              {formatCurrency((report?.totals.net ?? 0) - (report?.totals.cogs ?? 0))}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="text-xs text-muted-foreground">
+            Doanh thu thuần − giá vốn (hoàn tiền {formatCurrency(report?.totals.refund ?? 0)})
           </CardContent>
         </Card>
       </div>
