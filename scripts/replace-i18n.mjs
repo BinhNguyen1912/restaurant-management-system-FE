@@ -32,7 +32,8 @@ const skipped = [];
 
 for (const file of walk('src')) {
   let text = readFileSync(file, 'utf8');
-  const isClient = text.trimStart().startsWith("'use client'");
+  // 'use client' có thể nằm sau dòng eslint-disable đầu file
+  const isClient = /^\s*(\/\*[\s\S]*?\*\/\s*)*['"]use client['"]/m.test(text.slice(0, 600));
   if (!VN.test(text)) continue;
 
   const keys = new Set();
@@ -76,15 +77,7 @@ for (const file of walk('src')) {
     const at = lastImport ? lastImport.index + lastImport[0].length : 0;
     text = `${text.slice(0, at)}\nimport { useI18n } from '@/i18n/locale-provider';${text.slice(at)}`;
   }
-  if (!/const\s*\{\s*t\s*[,}]/.test(text)) {
-    const m = text.match(/export default function\s+\w+\s*\([^)]*\)[^{]*\{/);
-    if (!m) {
-      skipped.push({ file, reason: 'không tìm được điểm chèn hook', keys: keys.size });
-      continue;
-    }
-    const at = m.index + m[0].length;
-    text = `${text.slice(0, at)}\n  const { t } = useI18n();${text.slice(at)}`;
-  }
+  // KHÔNG tự chèn hook: xem scripts/fix-hooks.py
 
   changed.push({ file, keys: keys.size });
   if (WRITE) {
