@@ -14,6 +14,11 @@ import http from '@/lib/http';
 const prefix = '/role';
 export const roleRequestApi = {
   list: () => http.get<GetRolesResType>(`${prefix}`),
+  create: (body: { name: string; description: string; isActive: boolean }) =>
+    http.post<RoleBodyResType>(`${prefix}`, body),
+  update: (id: number, body: { name?: string; description?: string; isActive?: boolean }) =>
+    http.put<RoleBodyResType>(`${prefix}/${id}`, body),
+  remove: (id: number) => http.delete<{ message: string }>(`${prefix}/${id}`),
   //   getDetail: (id: number) =>
   //     http.get<TableDetailResType>(`${prefix}/getTableDetail/${id}`),
   //   create: (data: CreateTableBodyType) =>
