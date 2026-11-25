@@ -43,3 +43,4 @@ bản gốc
 🔄 Đang tạo khách hàng mới...
 🔔 Lỗi tạo audio:
 🛒 Đang tạo đơn hàng cho guest ID:
+Mới
