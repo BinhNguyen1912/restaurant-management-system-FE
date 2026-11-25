@@ -49,6 +49,7 @@ import {
 import { useGetRoleListQuery } from '@/app/queries/useRole';
 import { z } from 'zod';
 import { useI18n } from '@/i18n/locale-provider';
+import { useGetBranches } from '@/app/queries/useBranch';
 import { T } from '@/components/t';
 
 export default function EditEmployee({
@@ -68,7 +69,7 @@ export default function EditEmployee({
     enabled: Boolean(id),
   });
   const roles = useGetRoleListQuery().data?.payload?.data || [];
-  console.log('roles', roles);
+  const branches = useGetBranches().data?.payload?.data || [];
 
   const dataUser = data?.payload;
   const updateAccountMutation = useUpdateEmployeeAccount();
@@ -80,6 +81,7 @@ export default function EditEmployee({
       email: '',
       name: '',
       roleId: 0,
+      branchId: null,
       avatar: '',
       confirmNewPassword: undefined,
       newPassword: undefined,
@@ -101,8 +103,8 @@ export default function EditEmployee({
 
   useEffect(() => {
     if (data) {
-      const { email, name, roleId, status, phoneNumber, avatar } =
-        (dataUser as UserTypeWithRolePermissions) || {};
+      const { email, name, roleId, status, phoneNumber, avatar, branchId } =
+        (dataUser as UserTypeWithRolePermissions & { branchId?: number | null }) || {};
       form.reset({
         avatar: avatar ?? '',
         email: email ?? '',
@@ -111,6 +113,7 @@ export default function EditEmployee({
         confirmNewPassword: '',
         newPassword: '',
         roleId: roleId ?? 0,
+        branchId: branchId ?? null,
         status: (status as 'ACTIVE' | 'INACTIVE' | 'BLOCKED') || 'ACTIVE',
         phoneNumber: phoneNumber ?? '',
       });
@@ -336,6 +339,40 @@ export default function EditEmployee({
                   </FormItem>
                 )}
               />
+
+              <FormField
+                control={form.control}
+                name={'branchId' as any}
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="grid grid-cols-4 items-center justify-items-start gap-4">
+                      <Label htmlFor="branchId">{t('Chi nhánh')}</Label>
+                      <div className="col-span-3 w-full space-y-2">
+                        <select
+                          id="branchId"
+                          className="w-full border rounded px-2 py-1"
+                          value={String(field.value ?? '')}
+                          onChange={(e) =>
+                            field.onChange(e.target.value ? Number(e.target.value) : null)
+                          }
+                        >
+                          <option value="">{t('Chưa gán chi nhánh')}</option>
+                          {branches.map((branch: any) => (
+                            <option key={branch.id} value={branch.id}>
+                              {branch.name} ({branch.code})
+                            </option>
+                          ))}
+                        </select>
+                        <p className="text-xs text-muted-foreground">
+                          {t('Nhân viên đăng nhập sẽ thấy dữ liệu của chi nhánh này.')}
+                        </p>
+                        <FormMessage />
+                      </div>
+                    </div>
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 control={form.control}
                 name="changePassword"

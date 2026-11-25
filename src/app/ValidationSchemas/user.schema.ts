@@ -71,6 +71,8 @@ export const UserBodySchema = UserSchema.pick({
       .enum(['ACTIVE', 'INACTIVE', 'BLOCKED'])
       .default('ACTIVE')
       .optional(),
+    /** chi nhánh nhân viên làm việc — quyết định dữ liệu họ nhìn thấy */
+    branchId: z.number().int().positive().nullable().optional(),
   })
   .strict();
 export const UpdateUserBodySchema = UserBodySchema.omit({
@@ -114,6 +116,12 @@ export const GetUsersQuerySchema = z.object({
   page: z.coerce.number().int().positive().default(1),
   limit: z.coerce.number().int().positive().default(10),
 });
+export const BranchRefSchema = z.object({
+  id: z.number(),
+  code: z.string(),
+  name: z.string(),
+});
+
 export const getListUsersSchema = z.object({
   data: z.array(
     UserSchema.omit({
@@ -124,6 +132,8 @@ export const getListUsersSchema = z.object({
         name: true,
         id: true,
       }),
+      /** BE trả kèm chi nhánh của nhân viên (GET /users) */
+      branch: BranchRefSchema.nullable().optional(),
     }),
   ),
   totalItems: z.number(),

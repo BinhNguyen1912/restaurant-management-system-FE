@@ -5,6 +5,7 @@ import { ModeToggle } from '@/components/ToggleTheme';
 import AdminConversationDialog from '@/components/admin-conversation-dialog';
 import { QuickReminderDialog } from '@/components/reminderDialog';
 import { LocaleSwitcher } from '@/components/locale-switcher';
+import { ActiveBranchBadge } from '@/components/active-branch-badge';
 
 export default function Layout({
   children,
@@ -19,6 +20,7 @@ export default function Layout({
           <MobileNavLinks />
           <div className="relative ml-auto flex-1 md:grow-0">
             <div className="flex items-center justify-end gap-2">
+              <ActiveBranchBadge className="hidden md:inline-flex" />
               <QuickReminderDialog triggerVariant="icon" />
               <AdminConversationDialog />
               <LocaleSwitcher />
