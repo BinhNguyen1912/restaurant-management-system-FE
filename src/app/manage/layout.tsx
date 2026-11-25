@@ -4,6 +4,7 @@ import NavLinks from '@/app/manage/nav-links';
 import { ModeToggle } from '@/components/ToggleTheme';
 import AdminConversationDialog from '@/components/admin-conversation-dialog';
 import { QuickReminderDialog } from '@/components/reminderDialog';
+import { LocaleSwitcher } from '@/components/locale-switcher';
 
 export default function Layout({
   children,
@@ -20,6 +21,7 @@ export default function Layout({
             <div className="flex items-center justify-end gap-2">
               <QuickReminderDialog triggerVariant="icon" />
               <AdminConversationDialog />
+              <LocaleSwitcher />
               <ModeToggle />
             </div>
           </div>

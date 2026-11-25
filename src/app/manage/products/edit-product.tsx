@@ -125,7 +125,10 @@ export default function EditProduct({
       setVariants(product.variants || []);
       form.reset({
         name: product.name,
-        description: product.productTranslations?.[0]?.description ?? '',
+        // chọn đúng bản dịch tiếng Việt, không tin thứ tự mảng (bản en có thể đứng trước)
+        description:
+          (product.productTranslations?.find((item) => item.languageId === 'vi') ??
+            product.productTranslations?.[0])?.description ?? '',
         basePrice: product.basePrice,
         virtualPrice: product.virtualPrice,
         categories: categoryIds,

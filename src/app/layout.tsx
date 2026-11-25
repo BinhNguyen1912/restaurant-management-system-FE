@@ -8,6 +8,8 @@ import { ThemeProvider } from '@/components/theme-provider';
 import AppProvider from '@/components/app-provider';
 import { ToastContainer } from 'react-toastify';
 import NextTopLoader from 'nextjs-toploader';
+import { LocaleProvider } from '@/i18n/locale-provider';
+import { getLocaleFromCookies, getMessagesFor } from '@/i18n/server';
 
 export const metadata: Metadata = {
   title: `B'Restaurant`,
@@ -21,8 +23,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = getLocaleFromCookies();
+  const messages = getMessagesFor(locale);
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body className={manropo.className}>
         <ThemeProvider
           attribute="class"
@@ -31,14 +36,16 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <NextTopLoader showSpinner={false} color="hsl(var(--foreground))" />
-          <AppProvider>
-            <main>{children}</main>
-            <ToastContainer
-              hideProgressBar={true}
-              autoClose={3000}
-              theme="light"
-            />
-          </AppProvider>
+          <LocaleProvider locale={locale} messages={messages}>
+            <AppProvider>
+              <main>{children}</main>
+              <ToastContainer
+                hideProgressBar={true}
+                autoClose={3000}
+                theme="light"
+              />
+            </AppProvider>
+          </LocaleProvider>
         </ThemeProvider>
       </body>
     </html>
