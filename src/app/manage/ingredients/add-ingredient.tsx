@@ -73,6 +73,7 @@ export default function AddIngredient({
       image: '',
       minStock: 0,
       stock: 0,
+      unitCost: 0,
       unitId: '',
       isActive: true,
       enableLowStockWarning: false,
@@ -152,6 +153,8 @@ export default function AddIngredient({
         ...(body.enableLowStockWarning
           ? { minStock: Number(body.minStock) }
           : {}),
+        // Giá nhập: nguồn duy nhất để tính COGS (ticket #11)
+        unitCost: Number(body.unitCost ?? 0),
       };
       const resuft = await addIngredientMutation.mutateAsync(body);
       console.log('resuft:', resuft);
@@ -297,6 +300,31 @@ export default function AddIngredient({
                           </FormControl>
                         </div>
                       </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="unitCost"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Label htmlFor="unitCost">Giá nhập / 1 đơn vị (đồng)</Label>
+                      <FormControl>
+                        <Input
+                          id="unitCost"
+                          type="number"
+                          min="0"
+                          step="1000"
+                          placeholder="VD: 300000"
+                          {...field}
+                          onChange={(e) => field.onChange(Number(e.target.value))}
+                        />
+                      </FormControl>
+                      <p className="text-xs text-muted-foreground">
+                        Dùng để tính giá vốn (COGS). Bỏ trống = 0 → báo cáo lãi gộp sẽ thiếu phần nguyên liệu này.
+                      </p>
                       <FormMessage />
                     </FormItem>
                   )}

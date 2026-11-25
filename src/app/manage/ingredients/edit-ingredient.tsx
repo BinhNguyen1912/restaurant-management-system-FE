@@ -90,6 +90,7 @@ export default function EditIngredient({
       isActive: true,
       minStock: 0,
       stock: 0,
+      unitCost: 0,
       unitId: '',
       enableLowStockWarning: false,
     },
@@ -105,6 +106,7 @@ export default function EditIngredient({
         isActive: !!data.payload.isActive,
         minStock: data.payload.minStock,
         stock: data.payload.stock,
+        unitCost: data.payload.unitCost ?? 0,
         unitId: data.payload.unitId,
         enableLowStockWarning: data.payload.minStock > 0,
       });
@@ -138,6 +140,7 @@ export default function EditIngredient({
 
       const body = {
         ...values,
+        unitCost: Number(values.unitCost ?? 0),
         image: finalImageUrls,
         isActive: Boolean(values.isActive),
         // Chỉ gửi minStock khi enableLowStockWarning = true
@@ -343,6 +346,31 @@ export default function EditIngredient({
                               </FormControl>
                             </div>
                           </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="unitCost"
+                      render={({ field }) => (
+                        <FormItem>
+                          <Label htmlFor="unitCost" className="text-sm font-medium">
+                            Giá nhập / 1 đơn vị (đồng)
+                          </Label>
+                          <Input
+                            id="unitCost"
+                            type="number"
+                            min="0"
+                            step="1000"
+                            className="mt-1"
+                            {...field}
+                            onChange={(e) => field.onChange(Number(e.target.value))}
+                          />
+                          <p className="text-xs text-muted-foreground">
+                            Dùng tính giá vốn (COGS). 0 = chưa khai giá.
+                          </p>
                           <FormMessage />
                         </FormItem>
                       )}
