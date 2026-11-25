@@ -8,13 +8,14 @@ import { join } from 'node:path';
 
 const VN = /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i;
 const LITERAL = /(?<![A-Za-z0-9_])'([^'\n]{2,300})'|(?<![A-Za-z0-9_])"([^"\n]{2,300})"/g;
-const SKIP_DIRS = new Set(['node_modules', '.next', 'src/i18n']);
+// so sánh theo path đã chuẩn hoá để chạy đúng trên Windows (dấu \\) lẫn Linux (dấu /)
+const SKIP_DIRS = new Set(['node_modules', '.next', 'src/i18n'].map((p) => p.replace(/\\/g, '/')));
 
 const walk = (dir) => {
   const out = [];
   for (const entry of readdirSync(dir)) {
     const path = join(dir, entry);
-    if (SKIP_DIRS.has(path)) continue;
+    if (SKIP_DIRS.has(path.replace(/\\/g, '/'))) continue;
     const stat = statSync(path);
     if (stat.isDirectory()) out.push(...walk(path));
     else if (/\.(ts|tsx)$/.test(path)) out.push(path);
