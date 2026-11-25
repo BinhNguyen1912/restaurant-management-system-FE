@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
-import menuItems from '@/app/manage/menuItems';
+import { menuGroups } from '@/app/manage/menuItems';
 import { useAppStore } from '@/components/app-provider';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -8,8 +8,10 @@ import { cn } from '@/lib/utils';
 import { Package2, PanelLeft } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useI18n } from '@/i18n/locale-provider';
 
 export default function MobileNavLinks() {
+  const { t } = useI18n();
   const pathname = usePathname();
   const role = useAppStore((state) => state.role);
   return (
@@ -29,24 +31,36 @@ export default function MobileNavLinks() {
             <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
             <span className="sr-only">Acme Inc</span>
           </Link>
-          {menuItems.map((Item, index) => {
-            const isActive = pathname === Item.href;
-            if (!Item.roles.includes(role as any)) return null;
+          {menuGroups.map((group) => {
+            const items = group.items.filter((item) =>
+              item.roles.includes(role as any)
+            );
+            if (!items.length) return null;
             return (
-              <Link
-                key={index}
-                href={Item.href}
-                className={cn(
-                  'flex items-center gap-4 px-2.5  hover:text-foreground',
-                  {
-                    'text-foreground': isActive,
-                    'text-muted-foreground': !isActive,
-                  }
-                )}
-              >
-                <Item.Icon className="h-5 w-5" />
-                {Item.title}
-              </Link>
+              <div key={group.label} className="grid gap-2">
+                <p className="px-2.5 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {t(group.label)}
+                </p>
+                {items.map((Item) => {
+                  const isActive = pathname === Item.href;
+                  return (
+                    <Link
+                      key={Item.href}
+                      href={Item.href}
+                      className={cn(
+                        'flex items-center gap-4 px-2.5 hover:text-foreground',
+                        {
+                          'text-foreground': isActive,
+                          'text-muted-foreground': !isActive,
+                        }
+                      )}
+                    >
+                      <Item.Icon className="h-5 w-5" />
+                      {t(Item.title)}
+                    </Link>
+                  );
+                })}
+              </div>
             );
           })}
         </nav>
