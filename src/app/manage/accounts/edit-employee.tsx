@@ -144,8 +144,10 @@ export default function EditEmployee({
       }
       if (!body.status) body.status = 'ACTIVE';
       if (!body.roleId) body.roleId = 0;
-      if (!body.phoneNumber) body.phoneNumber = '';
-      if (!body.avatar) body.avatar = '';
+      // KHÔNG gửi '' cho phoneNumber: BE yêu cầu min(10) nên chuỗi rỗng sẽ bị 400 —
+      // bỏ trống nghĩa là "không đổi / không có", không phải "đặt thành rỗng".
+      if (!body.phoneNumber) delete (body as any).phoneNumber;
+      if (!body.avatar) delete (body as any).avatar;
       const result = await updateAccountMutation.mutateAsync(body);
       toast.success(t("Cập nhật thành công"));
       reset();
