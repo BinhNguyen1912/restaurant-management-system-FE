@@ -57,7 +57,7 @@ export default function NavLinks() {
         </span>
       </div>
 
-      <nav className="flex flex-1 flex-col gap-1 overflow-y-auto overflow-x-hidden px-2 pb-4">
+      <nav className="no-scrollbar flex flex-1 flex-col gap-1 overflow-y-auto overflow-x-hidden px-2 pb-4">
         {menuGroups.map((group) => {
           const items = group.items.filter((item) => item.roles.includes(role as any));
           if (!items.length) return null; // role không xem được mục nào trong nhóm
