@@ -23,10 +23,29 @@ const walk = (dir) => {
   return out;
 };
 
+/**
+ * Bỏ qua chuỗi trong `console.log/warn/error/debug/info`: đó là log cho lập trình viên, không
+ * phải chữ trên giao diện. Trước đây chúng bị tính là "thiếu bản dịch" và làm nhiễu báo cáo.
+ */
+const isDevLog = (text, index) => {
+  const lineStart = text.lastIndexOf('\n', index) + 1;
+  if (/console\s*\.\s*(log|warn|error|debug|info)\s*\(/.test(text.slice(lineStart, index))) return true;
+  // chú thích không phải chữ trên giao diện (vd: giải thích trong JSDoc)
+  if (/^\s*(\/\/|\*|\/\*)/.test(text.slice(lineStart, index))) return true;
+  // `console.log(` có thể nằm ở dòng trước (đối số xuống dòng) -> nhìn lại 300 ký tự,
+  // nếu gặp `console.*(` mà chưa có `)` đóng lại thì chuỗi này thuộc lời gọi log đó
+  const window = text.slice(Math.max(0, index - 300), index);
+  const call = window.lastIndexOf('console');
+  if (call === -1) return false;
+  const tail = window.slice(call);
+  return /^console\s*\.\s*(log|warn|error|debug|info)\s*\(/.test(tail) && !tail.includes(')');
+};
+
 const found = new Map();
 for (const file of walk('src')) {
   const text = readFileSync(file, 'utf8');
   for (const match of text.matchAll(LITERAL)) {
+    if (isDevLog(text, match.index ?? 0)) continue;
     const value = (match[1] ?? match[2] ?? '').trim();
     if (!VN.test(value)) continue;
     if (value.startsWith('@/') || value.startsWith('http') || value.includes('${')) continue;
@@ -50,10 +69,20 @@ for (const [value, files] of [...found].sort(([a], [b]) => a.localeCompare(b, 'v
   }
 }
 
-const missing = Object.keys(next).filter((key) => !en[key] || !en[key].trim());
+// Chỉ báo thiếu với chuỗi CÒN dùng trong code: key cũ (chuỗi đã bị xoá khỏi giao diện,
+// hoặc log `console.*` mà extractor bỏ qua) vẫn được giữ để bản dịch en không mồ côi,
+// nhưng không tính vào "còn thiếu" — trước đây chúng làm báo cáo nhiễu.
+const used = new Set(found.keys());
+const missing = Object.keys(next).filter(
+  (key) => used.has(key) && (!en[key] || !en[key].trim()),
+);
+const stale = Object.keys(next).filter((key) => !used.has(key));
 writeFileSync('messages/vi.json', JSON.stringify(next, null, 1) + '\n', 'utf8');
 console.log(`messages/vi.json: ${Object.keys(next).length} chuỗi (thêm ${added})`);
-console.log(`messages/en.json: đã dịch ${Object.keys(next).length - missing.length}/${Object.keys(next).length}`);
+console.log(
+  `messages/en.json: đã dịch ${used.size - missing.length}/${used.size} chuỗi đang dùng` +
+    ` (${stale.length} key cũ không còn trong code)`,
+);
 if (missing.length) {
   writeFileSync('messages/en.missing.txt', missing.join('\n') + '\n', 'utf8');
   console.log(`-> ${missing.length} chuỗi chưa dịch, xem messages/en.missing.txt`);

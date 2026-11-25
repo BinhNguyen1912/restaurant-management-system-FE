@@ -6,10 +6,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { T } from '@/components/t';
 import { useI18n } from '@/i18n/locale-provider';
-import productsApiRequest from '@/apiRequest/products';
-import { GetListProductsResType } from '@/app/ValidationSchemas/product.schema';
+import { PublicProduct, usePublicProducts } from '@/hooks/usePublicProducts';
 
-type Dish = GetListProductsResType['data'][number];
+type Dish = PublicProduct;
 
 /** "Mới" = đăng bán trong 14 ngày gần đây (trước đây là cờ `isNew` viết cứng trong code) */
 const NEW_DAYS = 14;
@@ -29,38 +28,14 @@ const priceOf = (dish: Dish) => dish.virtualPrice || dish.basePrice;
  * món không tồn tại và không đổi theo ngôn ngữ. Tên món do BE trả theo `X-Locale`
  * (cookie `locale`), nên đổi VI/EN là gọi lại.
  */
-export default function HorizontalScrollDishes() {
+export default function HorizontalScrollDishes({ products }: { products?: PublicProduct[] } = {}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [viewportWidth, setViewportWidth] = useState(0);
   const { locale } = useI18n();
-  const [dishes, setDishes] = useState<Dish[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  // nạp món theo ngôn ngữ đang chọn: BE đã trả tên đã bản địa hoá
-  useEffect(() => {
-    let cancelled = false;
-    setIsLoading(true);
-    productsApiRequest
-      .getListProduct()
-      .then((res) => {
-        if (cancelled) return;
-        const active = (res.payload?.data ?? [])
-          .filter((dish) => dish.status === 'ACTIVE')
-          .slice(0, MAX_DISHES);
-        setDishes(active);
-      })
-      .catch(() => {
-        if (!cancelled) setDishes([]);
-      })
-      .finally(() => {
-        if (!cancelled) setIsLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [locale]);
+  const { products: loaded, isLoading } = usePublicProducts(products);
+  const dishes = loaded.slice(0, MAX_DISHES);
 
   useEffect(() => {
     const handleScroll = () => {
