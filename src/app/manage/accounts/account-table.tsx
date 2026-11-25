@@ -38,6 +38,7 @@ import {
 import AddEmployee from '@/app/manage/accounts/add-employee';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import EditEmployee from '@/app/manage/accounts/edit-employee';
+import Link from 'next/link';
 import { createContext, useContext, useEffect, useState } from 'react';
 import {
   AlertDialog,
@@ -178,6 +179,12 @@ export const columns: ColumnDef<AccountItem>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={openEditEmployee}>{tr("Sửa")}</DropdownMenuItem>
+            {/* bấm thẳng sang trang Phân quyền, mở đúng vai trò của nhân viên này */}
+            <DropdownMenuItem asChild>
+              <Link href={`/manage/roles?role=${(row.original as any).roleId ?? ''}`}>
+                {tr('Phân quyền')}
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={openDeleteEmployee}>
               <T>Xóa</T>
             </DropdownMenuItem>

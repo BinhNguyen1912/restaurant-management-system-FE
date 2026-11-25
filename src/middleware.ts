@@ -18,7 +18,7 @@ const onlyOwnerPaths = [
 ];
 
 // /manage chi danh cho nhan vien van hanh va quan tri (khach hang vao /manage la sai luong).
-const manageAllowedRoles = [Role.ADMIN, Role.STAFF];
+const manageAllowedRoles = [Role.ADMIN, Role.STAFF, Role.KE_TOAN];
 const privatePaths = [...managePaths, ...guestPaths];
 const publicPaths = ['/auth'];
 export function middleware(request: NextRequest) {
