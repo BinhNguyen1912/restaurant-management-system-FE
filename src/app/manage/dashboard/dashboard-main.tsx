@@ -32,6 +32,7 @@ import NewOrderSound from '@/components/newOrderSound';
 import LowStockWarningDialog from '@/components/lowStockWarningDialog';
 import { useI18n } from '@/i18n/locale-provider';
 import { T } from '@/components/t';
+import OverviewCards from '@/app/manage/dashboard/overview-cards';
 
 import {
   GuestCreateNewOrderType,
@@ -48,13 +49,6 @@ export default function DashboardMain() {
     toDate: toDate.toISOString(),
   });
 
-  console.log('Dashboard Debug:', {
-    fromDate: fromDate.toISOString(),
-    toDate: toDate.toISOString(),
-    isLoading,
-    error,
-    data,
-  });
   const revenue = data?.payload?.revenue || 0;
   const guestCount = data?.payload?.guestCount || 0;
   const orderCount = data?.payload?.orderCount || 0;
@@ -147,6 +141,10 @@ export default function DashboardMain() {
     };
   }, [socket]);
 
+  // `yyyy-MM-dd` theo giờ địa phương: cắt chuỗi ISO để không bị lùi/tiến 1 ngày do UTC
+  const toDayString = (date: Date) =>
+    `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2">
@@ -174,6 +172,9 @@ export default function DashboardMain() {
           Reset
         </Button>
       </div>
+      {/* Tổng quan: doanh thu / sau thuế / hoá đơn / trả hàng / thuần + % so kỳ trước và tháng trước */}
+      <OverviewCards fromDate={toDayString(fromDate)} toDate={toDayString(toDate)} />
+
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
