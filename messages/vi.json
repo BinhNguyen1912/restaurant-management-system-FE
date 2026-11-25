@@ -782,5 +782,11 @@
  "👤 Sử dụng khách hàng có sẵn với ID:": "👤 Sử dụng khách hàng có sẵn với ID:",
  "🔄 Đang tạo khách hàng mới...": "🔄 Đang tạo khách hàng mới...",
  "🔔 Lỗi tạo audio:": "🔔 Lỗi tạo audio:",
- "🛒 Đang tạo đơn hàng cho guest ID:": "🛒 Đang tạo đơn hàng cho guest ID:"
+ "🛒 Đang tạo đơn hàng cho guest ID:": "🛒 Đang tạo đơn hàng cho guest ID:",
+ "Bản dịch": "Bản dịch",
+ "bản gốc": "bản gốc",
+ "Đã lưu bản dịch": "Đã lưu bản dịch",
+ "Khách xem menu bằng ngôn ngữ nào sẽ thấy tên/mô tả của ngôn ngữ đó; thiếu bản dịch thì hiện tiếng Việt.": "Khách xem menu bằng ngôn ngữ nào sẽ thấy tên/mô tả của ngôn ngữ đó; thiếu bản dịch thì hiện tiếng Việt.",
+ "Không có thay đổi nào": "Không có thay đổi nào",
+ "Không lưu được bản dịch": "Không lưu được bản dịch"
 }
