@@ -59,6 +59,8 @@ import {
 } from '@/app/queries/useTableNode';
 import { Wrench, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
+import { useI18n } from '@/i18n/locale-provider';
+import { tr } from '@/i18n/tr';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -140,8 +142,8 @@ export const columns: ColumnDef<TableItem>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={openEditTable}>Sửa</DropdownMenuItem>
-            <DropdownMenuItem onClick={openDeleteTable}>Xóa</DropdownMenuItem>
+            <DropdownMenuItem onClick={openEditTable}>{tr("Sửa")}</DropdownMenuItem>
+            <DropdownMenuItem onClick={openDeleteTable}>{tr("Xóa")}</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -156,13 +158,14 @@ function AlertDialogDeleteTable({
   tableDelete: TableItem | null;
   setTableDelete: (value: TableItem | null) => void;
 }) {
+  const { t } = useI18n();
   const { mutateAsync } = useDeleteTableNodeMutation();
   const deleteTable = async () => {
     if (tableDelete) {
       try {
         const result = await mutateAsync(tableDelete.id);
         setTableDelete(null);
-        toast.success('Xóa bàn thành công', {
+        toast.success(tr("Xóa bàn thành công"), {
           hideProgressBar: true,
           autoClose: 1000,
         });
@@ -184,7 +187,7 @@ function AlertDialogDeleteTable({
     >
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Xóa bàn ăn?</AlertDialogTitle>
+          <AlertDialogTitle>{tr("Xóa bàn ăn?")}</AlertDialogTitle>
           <AlertDialogDescription>
             Bàn{' '}
             <span className="bg-foreground text-primary-foreground rounded px-1">
@@ -204,6 +207,7 @@ function AlertDialogDeleteTable({
 // Số lượng item trên 1 trang
 const PAGE_SIZE = 10;
 export default function TableTable() {
+  const { t } = useI18n();
   const searchParam = useSearchParams();
   const page = searchParam.get('page') ? Number(searchParam.get('page')) : 1;
   const pageIndex = page - 1;
@@ -275,7 +279,7 @@ export default function TableTable() {
       );
 
       if (tablesToUpdate.length === 0) {
-        toast.warning('Không có bàn nào để cập nhật token', {
+        toast.warning(tr("Không có bàn nào để cập nhật token"), {
           hideProgressBar: true,
           autoClose: 2000,
         });
@@ -334,7 +338,7 @@ export default function TableTable() {
         >
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Đổi token cho tất cả bàn?</AlertDialogTitle>
+              <AlertDialogTitle>{tr("Đổi token cho tất cả bàn?")}</AlertDialogTitle>
               <AlertDialogDescription>
                 Bạn có chắc chắn muốn đổi token cho tất cả các bàn ăn? Hành động
                 này sẽ làm vô hiệu tất cả các QR code hiện tại và tạo QR code
@@ -348,7 +352,7 @@ export default function TableTable() {
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Hủy</AlertDialogCancel>
+              <AlertDialogCancel>{tr("Hủy")}</AlertDialogCancel>
               <AlertDialogAction
                 onClick={handleChangeAllTokens}
                 disabled={updateTableNodeMutation.isPending}
@@ -364,7 +368,7 @@ export default function TableTable() {
           <div className="flex items-center gap-4 py-4">
             {' '}
             <Input
-              placeholder="Lọc số bàn"
+              placeholder={tr("Lọc số bàn")}
               value={
                 (table.getColumn('name')?.getFilterValue() as string) ?? ''
               }
@@ -381,10 +385,10 @@ export default function TableTable() {
               }
             >
               <SelectTrigger className="w-[200px]">
-                <SelectValue placeholder="Chọn khu vực" />
+                <SelectValue placeholder={tr("Chọn khu vực")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Tất cả khu vực</SelectItem>
+                <SelectItem value="all">{tr("Tất cả khu vực")}</SelectItem>
                 {areaListQuery.data?.payload?.data?.map((area) => (
                   <SelectItem key={area.id} value={area.id.toString()}>
                     {area.name}

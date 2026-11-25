@@ -27,6 +27,7 @@ import {
   UserBodyType,
 } from '@/app/ValidationSchemas/user.schema';
 import { useGetRoleListQuery } from '@/app/queries/useRole';
+import { useI18n } from '@/i18n/locale-provider';
 
 type CreateUserForm = UserBodyType & {
   phoneNumber: string;
@@ -35,6 +36,7 @@ type CreateUserForm = UserBodyType & {
 };
 
 export default function AddEmployee() {
+  const { t } = useI18n();
   const [file, setFile] = useState<File | null>(null);
   const [open, setOpen] = useState(false);
   const avatarInputRef = useRef<HTMLInputElement | null>(null);
@@ -94,7 +96,7 @@ export default function AddEmployee() {
       await addEmployeeMutation.mutate(body, {
         onSuccess: () => {
           reset();
-          toast.success('Tạo tài khoản thành công');
+          toast.success(t("Tạo tài khoản thành công"));
           setOpen(false);
         },
         onError: (error: any) => {
@@ -123,7 +125,7 @@ export default function AddEmployee() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] max-h-screen overflow-auto">
         <DialogHeader>
-          <DialogTitle>Tạo tài khoản</DialogTitle>
+          <DialogTitle>{t("Tạo tài khoản")}</DialogTitle>
           <DialogDescription>
             Các trường tên, email, mật khẩu là bắt buộc
           </DialogDescription>
@@ -184,7 +186,7 @@ export default function AddEmployee() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="name">Tên</Label>
+                      <Label htmlFor="name">{t("Tên")}</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Input id="name" className="w-full" {...field} />
                         <FormMessage />
@@ -216,7 +218,7 @@ export default function AddEmployee() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="phoneNumber">Số điện thoại</Label>
+                      <Label htmlFor="phoneNumber">{t("Số điện thoại")}</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Input id="phoneNumber" className="w-full" {...field} />
                         <FormMessage />
@@ -232,7 +234,7 @@ export default function AddEmployee() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="roleId">Vai trò</Label>
+                      <Label htmlFor="roleId">{t("Vai trò")}</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <select
                           id="roleId"
@@ -242,7 +244,7 @@ export default function AddEmployee() {
                             field.onChange(Number(e.target.value))
                           }
                         >
-                          <option value={0}>Chọn vai trò</option>
+                          <option value={0}>{t("Chọn vai trò")}</option>
                           {roles.map((role: any) => {
                             if (role.name === 'GUEST') return null;
                             return (
@@ -265,16 +267,16 @@ export default function AddEmployee() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="status">Trạng thái</Label>
+                      <Label htmlFor="status">{t("Trạng thái")}</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <select
                           id="status"
                           {...field}
                           className="w-full border rounded px-2 py-1"
                         >
-                          <option value="ACTIVE">Hoạt động</option>
-                          <option value="INACTIVE">Không hoạt động</option>
-                          <option value="BLOCKED">Bị khóa</option>
+                          <option value="ACTIVE">{t("Hoạt động")}</option>
+                          <option value="INACTIVE">{t("Không hoạt động")}</option>
+                          <option value="BLOCKED">{t("Bị khóa")}</option>
                         </select>
                         <FormMessage />
                       </div>
@@ -289,7 +291,7 @@ export default function AddEmployee() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="password">Mật khẩu</Label>
+                      <Label htmlFor="password">{t("Mật khẩu")}</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Input
                           id="password"

@@ -35,6 +35,7 @@ import { GuestCreateNewOrderType } from '@/app/ValidationSchemas/order.schema';
 import { useGetProducts } from '@/app/queries/useProducts';
 import { useCreateOrderForGuestMutation } from '@/app/queries/useOrder';
 import { useCreateGuest } from '@/app/queries/useAccount';
+import { useI18n } from '@/i18n/locale-provider';
 
 interface SkuSelection {
   skuId: number;
@@ -43,6 +44,7 @@ interface SkuSelection {
 }
 
 export default function AddOrder() {
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const [selectedGuest, setSelectedGuest] = useState<
     GuestListType['data'][0] | null
@@ -136,11 +138,11 @@ export default function AddOrder() {
       if (isNewGuest) {
         // Validate form trước khi tạo guest
         if (!name.trim()) {
-          toast.error('Vui lòng nhập tên khách hàng');
+          toast.error(t("Vui lòng nhập tên khách hàng"));
           return;
         }
         if (!tableNodeId) {
-          toast.error('Vui lòng chọn bàn');
+          toast.error(t("Vui lòng chọn bàn"));
           return;
         }
 
@@ -160,13 +162,13 @@ export default function AddOrder() {
 
       // Bước 2: Kiểm tra guestId
       if (!guestId) {
-        toast.error('Không thể xác định khách hàng');
+        toast.error(t("Không thể xác định khách hàng"));
         return;
       }
 
       // Bước 3: Kiểm tra có món nào được chọn không
       if (orders.length === 0) {
-        toast.error('Vui lòng chọn ít nhất một món');
+        toast.error(t("Vui lòng chọn ít nhất một món"));
         return;
       }
 
@@ -182,7 +184,7 @@ export default function AddOrder() {
         orders: orders,
       });
 
-      toast.success('Tạo đơn hàng thành công!');
+      toast.success(t("Tạo đơn hàng thành công!"));
       reset();
     } catch (error) {
       console.error('❌ Lỗi khi tạo đơn hàng:', error);
@@ -219,7 +221,7 @@ export default function AddOrder() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[1200px] max-h-[90vh] overflow-auto">
         <DialogHeader>
-          <DialogTitle>Tạo đơn hàng</DialogTitle>
+          <DialogTitle>{t("Tạo đơn hàng")}</DialogTitle>
         </DialogHeader>
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
           <div className="flex items-center justify-between">
@@ -264,7 +266,7 @@ export default function AddOrder() {
                       <Input
                         id="name"
                         className="mt-1"
-                        placeholder="Nhập tên khách hàng"
+                        placeholder={t("Nhập tên khách hàng")}
                         {...field}
                       />
                       <FormMessage />
@@ -324,7 +326,7 @@ export default function AddOrder() {
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-sm font-medium text-green-900">Bàn</p>
+                <p className="text-sm font-medium text-green-900">{t("Bàn")}</p>
                 <p className="text-sm text-green-700">
                   {selectedGuest.tableNode?.name || 'N/A'}
                 </p>
@@ -431,13 +433,13 @@ export default function AddOrder() {
         <DialogFooter className="bg-gray-50 -mx-6 -mb-6 px-6 py-4 rounded-b-lg">
           <div className="w-full space-y-3">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-600">Tổng số món:</span>
+              <span className="text-gray-600">{t("Tổng số món:")}</span>
               <span className="font-semibold text-gray-900">
                 {orders.length} món
               </span>
             </div>
             <div className="flex items-center justify-between text-lg">
-              <span className="font-semibold text-gray-900">Tổng tiền:</span>
+              <span className="font-semibold text-gray-900">{t("Tổng tiền:")}</span>
               <span className="font-bold text-red-600">
                 {formatCurrency(totalPrice)}
               </span>

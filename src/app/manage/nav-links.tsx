@@ -12,8 +12,10 @@ import { cn } from '@/lib/utils';
 import { Package2, Settings } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useI18n } from '@/i18n/locale-provider';
 
 export default function NavLinks() {
+  const { t } = useI18n();
   const pathname = usePathname();
   const role = useAppStore((state) => state.role);
   return (
@@ -68,10 +70,10 @@ export default function NavLinks() {
                 )}
               >
                 <Settings className="h-5 w-5" />
-                <span className="sr-only">Cài đặt</span>
+                <span className="sr-only">{t("Cài đặt")}</span>
               </Link>
             </TooltipTrigger>
-            <TooltipContent side="right">Cài đặt</TooltipContent>
+            <TooltipContent side="right">{t("Cài đặt")}</TooltipContent>
           </Tooltip>
         </nav>
       </aside>

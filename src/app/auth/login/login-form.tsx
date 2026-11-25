@@ -33,6 +33,7 @@ import Link from 'next/link';
 // import { Loader } from 'lucide-react';
 import { TextShimmer } from '../../../../components/motion-primitives/text-shimmer';
 import { RoleType } from '@/types/jwt.types';
+import { useI18n } from '@/i18n/locale-provider';
 const getOauthGoogleUrl = () => {
   const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth';
   const options = {
@@ -51,6 +52,7 @@ const getOauthGoogleUrl = () => {
 };
 const googleOauthUrl = getOauthGoogleUrl();
 function Login() {
+  const { t } = useI18n();
   const loginMutation = useLoginMutation();
   const searchParams = useSearchParams();
   const clearTokens = searchParams.get('clearTokens');
@@ -76,7 +78,7 @@ function Login() {
       const resuft = await loginMutation.mutateAsync(values);
       console.log('resuft', resuft);
 
-      toast.success('Đăng nhập thành công');
+      toast.success(t("Đăng nhập thành công"));
 
       // Lưu tokens vào localStorage
       setAccessTokenFormLocalStorage(resuft?.payload?.accessToken!);
@@ -130,7 +132,7 @@ function Login() {
             <form
               onSubmit={loginform.handleSubmit(onSubmit, (error) => {
                 console.warn(error);
-                toast.error('Đăng nhập thất bại');
+                toast.error(t("Đăng nhập thất bại"));
               })}
               className=""
               noValidate
@@ -141,7 +143,7 @@ function Login() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Tên đăng nhập</FormLabel>
+                      <FormLabel>{t("Tên đăng nhập")}</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -155,7 +157,7 @@ function Login() {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Mật khẩu</FormLabel>
+                      <FormLabel>{t("Mật khẩu")}</FormLabel>
                       <FormControl>
                         <Input {...field} className="w-full" type="password" />
                       </FormControl>

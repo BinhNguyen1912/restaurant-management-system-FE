@@ -62,6 +62,8 @@ import {
 } from '@/app/queries/useProducts';
 import { GetListProductsResType } from '@/app/ValidationSchemas/product.schema';
 import { LockKeyhole, LockKeyholeOpen } from 'lucide-react';
+import { useI18n } from '@/i18n/locale-provider';
+import { tr } from '@/i18n/tr';
 
 type ProductItem = GetListProductsResType['data'][0];
 
@@ -168,8 +170,8 @@ export const columns: ColumnDef<GetListProductsResType['data'][0]>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={openEditDish}>Sửa</DropdownMenuItem>
-            <DropdownMenuItem onClick={openDeleteDish}>Xóa</DropdownMenuItem>
+            <DropdownMenuItem onClick={openEditDish}>{tr("Sửa")}</DropdownMenuItem>
+            <DropdownMenuItem onClick={openDeleteDish}>{tr("Xóa")}</DropdownMenuItem>
             <DropdownMenuItem onClick={openDeleteDish}>
               Xem chi tiết
             </DropdownMenuItem>
@@ -187,6 +189,7 @@ function AlertDialogDeleteDish({
   dishDelete: ProductItem | null;
   setDishDelete: (value: ProductItem | null) => void;
 }) {
+  const { t } = useI18n();
   const { mutateAsync } = useDeleteProductMutation();
   const deleteDish = async () => {
     console.log('hihi');
@@ -195,7 +198,7 @@ function AlertDialogDeleteDish({
       try {
         await mutateAsync(dishDelete.id);
         setDishDelete(null);
-        toast.success('Xóa món thành coong');
+        toast.success(tr("Xóa món thành coong"));
       } catch (error) {
         throw error;
       }
@@ -212,7 +215,7 @@ function AlertDialogDeleteDish({
     >
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Xóa món ăn?</AlertDialogTitle>
+          <AlertDialogTitle>{tr("Xóa món ăn?")}</AlertDialogTitle>
           <AlertDialogDescription>
             Món{' '}
             <span className="bg-foreground text-primary-foreground rounded px-1">
@@ -232,6 +235,7 @@ function AlertDialogDeleteDish({
 // Số lượng item trên 1 trang
 const PAGE_SIZE = 10;
 export default function DishTable() {
+  const { t } = useI18n();
   const searchParam = useSearchParams();
   const page = searchParam.get('page') ? Number(searchParam.get('page')) : 1;
   const pageIndex = page - 1;
@@ -297,7 +301,7 @@ export default function DishTable() {
         />
         <div className="flex items-center py-4">
           <Input
-            placeholder="Lọc tên"
+            placeholder={tr("Lọc tên")}
             value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
             onChange={(event) =>
               table.getColumn('name')?.setFilterValue(event.target.value)

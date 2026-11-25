@@ -43,6 +43,7 @@ import { use, useEffect } from 'react';
 import QrCodeTable from '@/components/qrcode-table';
 import { toast } from 'react-toastify';
 import { T } from '@/components/t';
+import { useI18n } from '@/i18n/locale-provider';
 import {
   UpdateTableBodySchema,
   UpdateTableBodyType,
@@ -71,6 +72,7 @@ export default function EditTable({
   setId: (value: number | undefined) => void;
   onSubmitSuccess?: () => void;
 }) {
+  const { t } = useI18n();
   const resuft = useGetTableNodeDetail(id as number, Boolean(id));
   const data = resuft?.data?.payload as TableNodeType | undefined;
 
@@ -114,7 +116,7 @@ export default function EditTable({
     console.log('payload', payload);
 
     await updateTableMutation.mutateAsync(payload);
-    toast.success('Cập nhật thành công');
+    toast.success(t("Cập nhật thành công"));
     reset();
   }
   const reset = () => {
@@ -137,7 +139,7 @@ export default function EditTable({
         }}
       >
         <DialogHeader>
-          <DialogTitle><T>Cập nhật bàn ăn</T></DialogTitle>
+          <DialogTitle>{t("Cập nhật bàn ăn")}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -149,7 +151,7 @@ export default function EditTable({
             <div className="grid gap-4 py-4">
               <FormItem>
                 <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                  <Label htmlFor="id"><T>ID bàn</T></Label>
+                  <Label htmlFor="id">{t("ID bàn")}</Label>
                   <div className="col-span-3 w-full space-y-2">
                     <Input
                       id="id"
@@ -168,7 +170,7 @@ export default function EditTable({
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="name"><T>Tên bàn</T></Label>
+                      <Label htmlFor="name">{t("Tên bàn")}</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Input id="name" className="w-full" {...field} />
                         <FormMessage />
@@ -183,7 +185,7 @@ export default function EditTable({
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="seats"><T>Số ghế</T></Label>
+                      <Label htmlFor="seats">{t("Số ghế")}</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Input
                           id="seats"
@@ -203,7 +205,7 @@ export default function EditTable({
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="type"><T>Loại bàn</T></Label>
+                      <Label htmlFor="type">{t("Loại bàn")}</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Select
                           value={field.value}
@@ -211,7 +213,7 @@ export default function EditTable({
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Chọn loại bàn" />
+                              <SelectValue placeholder={t("Chọn loại bàn")} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -234,7 +236,7 @@ export default function EditTable({
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="status"><T>Trạng thái</T></Label>
+                      <Label htmlFor="status">{t("Trạng thái")}</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Select
                           value={field.value}
@@ -242,7 +244,7 @@ export default function EditTable({
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Chọn trạng thái" />
+                              <SelectValue placeholder={t("Chọn trạng thái")} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -265,7 +267,7 @@ export default function EditTable({
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="areaId"><T>Khu vực</T></Label>
+                      <Label htmlFor="areaId">{t("Khu vực")}</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <Input
                           id="areaId"
@@ -285,7 +287,7 @@ export default function EditTable({
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="changeToken"><T>Đổi QR Code</T></Label>
+                      <Label htmlFor="changeToken">{t("Đổi QR Code")}</Label>
                       <div className="col-span-3 w-full space-y-2">
                         <div className="flex items-center space-x-2">
                           <Switch
@@ -316,7 +318,7 @@ export default function EditTable({
               </FormItem>
               <FormItem>
                 <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                  <Label><T>URL gọi món</T></Label>
+                  <Label>{t("URL gọi món")}</Label>
                   <div className="col-span-3 w-full space-y-2">
                     {data && (
                       <Link

@@ -33,6 +33,7 @@ import { toast } from 'react-toastify';
 import { Bell, CreditCard, Wallet } from 'lucide-react';
 import { useCallStaffMutation } from '@/app/queries/useAccount';
 import { useCreatePaymentUrlMutation } from '@/app/queries/usePayment';
+import { useI18n } from '@/i18n/locale-provider';
 import {
   Dialog,
   DialogContent,
@@ -44,6 +45,7 @@ import {
 } from '@/components/ui/dialog';
 
 export default function OrderList() {
+  const { t } = useI18n();
   const { data, refetch } = useGetGuestOrderList();
   const socket = useAppStore((state) => state.socket);
   const orders = data?.payload?.data || [];
@@ -193,7 +195,7 @@ export default function OrderList() {
 
   const handleCallStaff = async () => {
     if (!mounted || !guestInfo?.tableNodeId || !guestInfo?.tableName) {
-      toast.error('Không thể xác định thông tin bàn');
+      toast.error(t("Không thể xác định thông tin bàn"));
       return;
     }
 
@@ -206,7 +208,7 @@ export default function OrderList() {
 
     try {
       await callStaffMutation.mutateAsync(callStaffData);
-      toast.success('Quý khách đợi xíu, nhân viên sẽ đến ngay!', {
+      toast.success(t("Quý khách đợi xíu, nhân viên sẽ đến ngay!"), {
         autoClose: 2000,
         hideProgressBar: true,
       });
@@ -219,7 +221,7 @@ export default function OrderList() {
     console.log('guestInfo', guestInfo);
 
     if (!guestInfo?.id) {
-      toast.error('Không thể xác định thông tin khách hàng');
+      toast.error(t("Không thể xác định thông tin khách hàng"));
       return;
     }
 
@@ -233,7 +235,7 @@ export default function OrderList() {
         }
       } else if (method === 'cash') {
         // Cash payment disabled for guest
-        toast.info('Hãy nhấn chuông để gọi nhân viên thanh toán', {
+        toast.info(t("Hãy nhấn chuông để gọi nhân viên thanh toán"), {
           autoClose: 3000,
         });
       }
@@ -245,7 +247,7 @@ export default function OrderList() {
   return (
     <>
       <div className="flex items-center justify-between mb-4 md:mb-6">
-        <h1 className="text-lg md:text-xl lg:text-2xl font-bold">Đơn hàng</h1>
+        <h1 className="text-lg md:text-xl lg:text-2xl font-bold">{t("Đơn hàng")}</h1>
 
         <div className="hidden md:block">
           <TooltipProvider>
@@ -262,7 +264,7 @@ export default function OrderList() {
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Gọi nhân viên</p>
+                <p>{t("Gọi nhân viên")}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -283,7 +285,7 @@ export default function OrderList() {
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Gọi nhân viên</p>
+                <p>{t("Gọi nhân viên")}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -306,7 +308,7 @@ export default function OrderList() {
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Gọi nhân viên</p>
+              <p>{t("Gọi nhân viên")}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

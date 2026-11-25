@@ -39,18 +39,14 @@ Chưa có mã nào
 Chưa có mã nào. Bấm Tạo mã để bắt đầu.
 Chưa có thao tác nhạy cảm nào được ghi
 Chưa gồm VAT — cộng thuế lên trên
-Chưa hoạt động
 Chả Cá Lã Vọng
 Chả giò
 Chỉ dùng chữ, số, gạch ngang/gạch dưới
 Chỉnh sửa công thức
 Chọn danh mục
-Chọn khu vực
-Chọn loại bàn
 Chọn thời gian bắt đầu
 Chọn thời gian kết thúc
 Chọn từ khách hàng có sẵn
-Chọn vai trò
 Chốt cọc
 Chờ thanh toán
 Chờ xử lý
@@ -79,7 +75,6 @@ Cơm Quê
 Cơm Quê Dượng Bầu
 Cơm Tấm Sài Gòn
 Cơm quê
-Cập nhật
 Cập nhật bàn thất bại
 Cập nhật công thức
 Cọc đặt bàn
@@ -104,7 +99,6 @@ Gà hầm
 Gỏi Cuốn
 Hoàn tiền
 Hoàn tất
-Hoạt động
 Huỷ đơn
 Hàng ngày
 Hàng năm
@@ -112,7 +106,6 @@ Hàng tháng
 Hàng tuần
 Hào Khí Việt
 Há cảo
-Hãy nhấn chuông để gọi nhân viên thanh toán
 Hương Vị Quê Hương
 Hương Vị Việt
 Hương vị truyền thống, tinh hoa đất Việt
@@ -123,7 +116,6 @@ Khai vị
 Khác
 Khách hàng vãng lai
 Khách vãng lai
-Không có bàn nào để cập nhật token
 Không có mã nào khớp bộ lọc.
 Không có sẵn
 Không ghi được bút toán đối soát
@@ -133,7 +125,6 @@ Không lưu được cấu hình
 Không lưu được mã giảm giá
 Không lặp lại
 Không mở được ca
-Không thể xác định khách hàng
 Không thể xóa khu vực cuối cùng!
 Không tìm thấy
 Không tìm thấy AccessToken hoặc RefreshToken
@@ -161,9 +152,6 @@ Lặp lại
 Lệch két
 Lệch số tiền
 Lọ hoa
-Lọc số bàn
-Lọc theo tiêu đề...
-Lọc tên
 Lỗi
 Lỗi hệ thống
 Lỗi khi gọi api
@@ -190,15 +178,12 @@ Nem Nướng Nha Trang
 Nem rán
 Nguyên bản -
 Nguyên liệu tươi ngon từ vùng miền
-Ngày tạo
 Người dùng
 Người nhận
-Người tạo
 Người xử lý
 Ngừng hoạt động
 Nhà hàng Bắc Kim Thang
 Nhân viên
-Nhập tên khách hàng
 Nhập tên tài khoản
 Nhật ký sổ cái
 Nước giải khát
@@ -234,7 +219,6 @@ Thiếu bút toán
 Thu tiền vào két
 Thuế & phí
 Thành công
-Thêm
 Thêm bàn thành công
 Thêm khu vực thành công!
 Thêm mới
@@ -277,8 +261,6 @@ Tạo công thức mới
 Tạo khách hàng mới
 Tạo mã
 Tạo mã giảm giá
-Tạo tài khoản thành công
-Tạo đơn hàng thành công!
 Tải chứng từ thất bại
 Tất cả loại
 Tắt
@@ -292,13 +274,9 @@ URL ảnh quá dài
 VAT không âm
 VAT tối đa 100%
 VNPay báo khác
-Vai trò
 Vui lòng chọn SKU
-Vui lòng chọn bàn
 Vui lòng chọn nguyên liệu
-Vui lòng chọn ít nhất một món
 Vui lòng chọn đơn vị
-Vui lòng nhập tên khách hàng
 Vui lòng nhập đầy đủ mật khẩu mới và xác nhận.
 Vách ngăn
 Vô Danh
@@ -306,16 +284,9 @@ Vị Ngon Quê Nhà
 Vị Quê Hương
 Vốn chủ
 Xoá tài khoản
-Xác nhận
 Xác nhận món
 Xác thực thông tin thẻ/Tài khoản không đúng quá 3 lần
-Xóa
-Xóa bàn thành công
 Xóa công thức
-Xóa lời nhắc thành công
-Xóa món thành coong
-Xóa nguyên liệu thành công
-Xóa thành công
 Xóa tất cả
 accessToken bị thiếu ở http nè cha
 chứng từ
@@ -329,9 +300,7 @@ thanh toán
 tiền lẻ + thu − chi
 với orders:
 Đang cập nhật...
-Đang hoạt động
 Đang kết nối...
-Đang làm mới dữ liệu...
 Đang lưu...
 Đang lưu…
 Đang nấu
@@ -351,20 +320,16 @@ với orders:
 Đã hết hạn chờ thanh toán
 Đã kết nối
 Đã phục vụ
-Đã tạo lời nhắc thành công!
 Đã xảy ra lỗi trong quá trình thanh toán
 Đã xử lý
 Đã đánh dấu xử lý
 Đã đặt
 Đính kèm ảnh/video chứng từ
 Đăng ký thất bại
-Đăng nhập thành công
-Đăng nhập thất bại
 Đơn
 Đơn hàng của bạn đã được thanh toán thành công!
 Đơn thanh toán
 Đơn vị tính
-Đằng xuất thành công
 Đặc Biệt
 Đặc biệt
 Đặc sản được gợi ý

@@ -32,8 +32,10 @@ import {
   RegisterBodyType,
 } from '@/app/ValidationSchemas/auth.schema';
 import { RoleType } from '@/types/jwt.types';
+import { useI18n } from '@/i18n/locale-provider';
 
 function Register() {
+  const { t } = useI18n();
   const registerMutation = useRegisterMutation();
   const setRole = useAppStore((state) => state.setRole);
   const setSocket = useAppStore((state) => state.setSocket);
@@ -107,7 +109,7 @@ function Register() {
             <form
               onSubmit={registerForm.handleSubmit(onSubmit, (error) => {
                 console.warn(error);
-                toast.error('Đăng nhập thất bại');
+                toast.error(t("Đăng nhập thất bại"));
               })}
               className="space-y-2 w-[400px] "
               noValidate
@@ -131,7 +133,7 @@ function Register() {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel> Mật khẩu</FormLabel>
+                      <FormLabel>{t("Mật khẩu")}</FormLabel>
                       <FormControl>
                         <Input {...field} type="password" />
                       </FormControl>
@@ -144,7 +146,7 @@ function Register() {
                   name="confirmPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Xác nhận mật khẩu</FormLabel>
+                      <FormLabel>{t("Xác nhận mật khẩu")}</FormLabel>
                       <FormControl>
                         <Input {...field} type="password" />
                       </FormControl>
@@ -158,7 +160,7 @@ function Register() {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Họ tên</FormLabel>
+                      <FormLabel>{t("Họ tên")}</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -172,7 +174,7 @@ function Register() {
                   name="code"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Nhập mã code</FormLabel>
+                      <FormLabel>{t("Nhập mã code")}</FormLabel>
                       <FormControl>
                         <Input {...field} className="w-full" type="text" />
                       </FormControl>
@@ -202,7 +204,7 @@ function Register() {
             <div>
               <OTPDialog />
             </div>
-            <Button variant="link">Đăng nhập với Google</Button>
+            <Button variant="link">{t("Đăng nhập với Google")}</Button>
           </div>
         </div>
       </div>
