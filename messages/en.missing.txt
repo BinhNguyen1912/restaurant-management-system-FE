@@ -42,9 +42,4 @@ Vị Quê Hương
 🔄 Đang tạo khách hàng mới...
 🔔 Lỗi tạo audio:
 🛒 Đang tạo đơn hàng cho guest ID:
-Bản dịch
 bản gốc
-Đã lưu bản dịch
-Khách xem menu bằng ngôn ngữ nào sẽ thấy tên/mô tả của ngôn ngữ đó; thiếu bản dịch thì hiện tiếng Việt.
-Không có thay đổi nào
-Không lưu được bản dịch

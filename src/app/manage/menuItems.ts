@@ -15,6 +15,7 @@ import {
   Percent,
   Landmark,
   TicketPercent,
+  FolderTree,
 } from 'lucide-react';
 
 const menuItems = [
@@ -52,6 +53,12 @@ const menuItems = [
     title: 'Đối soát',
     Icon: Landmark,
     href: '/manage/reconciliation',
+    roles: [Role.ADMIN],
+  },
+  {
+    title: 'Danh mục',
+    Icon: FolderTree,
+    href: '/manage/categories',
     roles: [Role.ADMIN],
   },
   {
