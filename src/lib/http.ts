@@ -11,6 +11,7 @@ import {
 } from '@/lib/utils';
 import { redirect } from 'next/navigation';
 import { readLocaleCookie } from '@/i18n/locale';
+import { translateApiMessageForCurrentLocale } from '@/i18n/api-messages';
 
 //KHI ỬU DỤNG COOKIE , ACCESS TOKEN HẾT HẠN , SẼ TỰ ĐỘNG XÓA RA KHỎI COOKIE
 type CustomOptions = Omit<RequestInit, 'method'> & {
@@ -134,6 +135,14 @@ const request = async <Response>(
   };
   // Interceptor là nời chúng ta xử lý request và response trước khi trả về cho phía component
   if (!res.ok) {
+    // BE gửi `message` dạng key (`Error.InvalidEmail`). Dịch ngay tại đây để mọi call site
+    // (`error.payload.message`) nhận câu hiển thị được, không phải `Error.XxxYyy`.
+    const translatedMessage = translateApiMessageForCurrentLocale((payload as any)?.message);
+    if (payload && typeof payload === 'object' && (payload as any).message) {
+      payload = { ...(payload as any), message: translatedMessage ?? (payload as any).message };
+      data.payload = payload; // `data` đã giữ tham chiếu cũ ở trên
+    }
+
     if (res.status === ENTITY_ERROR_STATUS) {
       throw new EntityError(
         data as {
@@ -175,7 +184,7 @@ const request = async <Response>(
       throw new HttpError({
         payload: data.payload,
         status: data.status,
-        message: (data.payload as any).message,
+        message: translatedMessage,
       });
     }
   }

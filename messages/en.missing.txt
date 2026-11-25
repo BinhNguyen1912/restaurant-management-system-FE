@@ -36,10 +36,10 @@ Tinh Hoa Việt
 Tự Hào Dân Tộc
 Vị Ngon Quê Nhà
 Vị Quê Hương
+bản gốc
 ✅ Đã tạo khách hàng mới với ID:
 ❌ Lỗi khi tạo đơn hàng:
 👤 Sử dụng khách hàng có sẵn với ID:
 🔄 Đang tạo khách hàng mới...
 🔔 Lỗi tạo audio:
 🛒 Đang tạo đơn hàng cho guest ID:
-bản gốc

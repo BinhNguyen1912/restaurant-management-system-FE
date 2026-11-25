@@ -1,3 +1,4 @@
+import { translateApiMessageForCurrentLocale } from '@/i18n/api-messages';
 /**
  * Lấy thông điệp lỗi hiển thị được cho người dùng từ lỗi API.
  *
@@ -19,14 +20,18 @@ export function getApiErrorMessage(
         Boolean(message),
       );
     if (messages.length > 0) {
-      return Array.from(new Set<string>(messages)).join(' • ');
+      const translated = messages.map(
+        (item: string) => translateApiMessageForCurrentLocale(item) ?? item,
+      );
+      return Array.from(new Set<string>(translated)).join(' • ');
     }
   }
 
-  if (payload?.message && typeof payload.message === 'string') {
-    return payload.message;
-  }
+  // lỗi có thể do nơi khác tạo (không qua `http.ts`) nên dịch lại lần nữa; hàm này idempotent
+  const message = translateApiMessageForCurrentLocale(payload?.message);
+  if (message) return message;
 
-  if (err?.message && typeof err.message === 'string') return err.message;
+  const own = translateApiMessageForCurrentLocale(err?.message);
+  if (own) return own;
   return fallback;
 }
