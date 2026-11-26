@@ -2,7 +2,6 @@
 
 import { useI18n } from '@/i18n/locale-provider';
 import { SUPPORTED_LOCALES, Locale } from '@/i18n/locale';
-import { Globe } from 'lucide-react';
 
 const LABELS: Record<Locale, string> = { vi: 'VI', en: 'EN' };
 const TITLES: Record<Locale, string> = { vi: 'Tiếng Việt', en: 'English' };
@@ -17,13 +16,12 @@ export function LocaleSwitcher({ className }: { className?: string }) {
   const activeIndex = Math.max(0, SUPPORTED_LOCALES.indexOf(locale));
 
   return (
-    <div className={`flex items-center gap-2 ${className ?? ''}`} data-testid="locale-switcher">
-      <Globe className="h-4 w-4 text-muted-foreground" aria-hidden />
+    <div className={`flex items-center ${className ?? ''}`} data-testid="locale-switcher">
       <div
         role="group"
         aria-label="Ngôn ngữ / Language"
-        // nền mờ + blur để vẫn đọc được khi header trong suốt trên video hero
-        className="relative flex h-7 w-[68px] items-center rounded-full border border-border/60 bg-background/80 p-0.5 backdrop-blur"
+        // h-9 cho bằng các nút icon cạnh nó; nền mờ + blur để đọc được cả trên header trong suốt
+        className="relative flex h-9 w-[76px] items-center rounded-full border bg-muted p-0.5"
       >
         {/* con trượt: 1 ô bằng đúng nửa chiều rộng, dịch sang phải khi chọn EN */}
         <span

@@ -47,7 +47,7 @@ export default function DropdownAvatar() {
         <Button
           variant="outline"
           size="icon"
-          className="overflow-hidden rounded-full"
+          className="h-9 w-9 overflow-hidden rounded-full"
         >
           <Avatar>
             <AvatarImage
