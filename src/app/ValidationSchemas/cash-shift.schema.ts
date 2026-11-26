@@ -47,9 +47,20 @@ export const cashShiftLiveTotalsSchema = z.object({
 });
 export type CashShiftLiveTotalsType = z.infer<typeof cashShiftLiveTotalsSchema>;
 
+/** Một khoản thu tiền mặt từ đơn trong ca — giải thích `cashIn` gồm những gì */
+export const cashShiftPaymentRowSchema = z.object({
+  paymentId: z.number(),
+  amount: z.number(),
+  paidAt: z.string().nullable(),
+  method: z.string().nullable(),
+  orderIds: z.array(z.number()),
+});
+export type CashShiftPaymentRowType = z.infer<typeof cashShiftPaymentRowSchema>;
+
 export const cashShiftDetailSchema = cashShiftSchema.extend({
   movements: z.array(cashMovementSchema),
   liveTotals: cashShiftLiveTotalsSchema.optional(),
+  cashPayments: z.array(cashShiftPaymentRowSchema).optional(),
 });
 export type CashShiftDetailTypeRes = z.infer<typeof cashShiftDetailSchema>;
 

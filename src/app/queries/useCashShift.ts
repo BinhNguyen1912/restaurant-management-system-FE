@@ -59,3 +59,11 @@ export const useAddCashMovement = () => {
     onSuccess: invalidate,
   });
 };
+
+/** Chi tiết 1 ca: thu/chi trong ca + các khoản thu tiền mặt */
+export const useGetCashShiftDetail = (id: number) =>
+  useQuery({
+    queryKey: ['cash-shift-detail', id],
+    queryFn: () => cashShiftApiRequest.detail(id),
+    enabled: id > 0,
+  });

@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import Link from 'next/link';
 import { toast } from 'react-toastify';
 import {
   AlertTriangle,
@@ -13,6 +14,7 @@ import {
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { ChevronRight } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -529,7 +531,7 @@ export default function CashShiftBoard() {
         <CardHeader>
           <CardTitle>{t("Lịch sử ca")}</CardTitle>
           <CardDescription>
-            <T>20 ca gần nhất của chi nhánh. Lệch két đã ghi sổ cái ở tài khoản thiếu/thừa quỹ.</T>
+            <T>20 ca gần nhất của chi nhánh. Bấm “Chi tiết” để xem từng khoản thu/chi của ca.</T>
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -545,12 +547,13 @@ export default function CashShiftBoard() {
                 <TableHead className="text-right">{t("Két phải có")}</TableHead>
                 <TableHead className="text-right">{t("Đếm được")}</TableHead>
                 <TableHead className="text-right">{t("Lệch")}</TableHead>
+                <TableHead className="w-[90px]" />
               </TableRow>
             </TableHeader>
             <TableBody>
               {historyRows.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={9} className="text-sm text-muted-foreground">
+                  <TableCell colSpan={10} className="text-sm text-muted-foreground">
                     <T>Chưa có ca nào</T>
                   </TableCell>
                 </TableRow>
@@ -586,6 +589,15 @@ export default function CashShiftBoard() {
                       }
                     >
                       {row.variance === null ? '—' : formatCurrency(row.variance)}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {/* chi tiết ca: gồm những thu chi nào */}
+                      <Button asChild variant="ghost" size="sm">
+                        <Link href={`/manage/cash-shifts/${row.id}`}>
+                          {t('Chi tiết')}
+                          <ChevronRight className="ml-1 h-4 w-4" />
+                        </Link>
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))
