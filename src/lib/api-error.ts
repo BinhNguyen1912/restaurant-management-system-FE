@@ -35,3 +35,9 @@ export function getApiErrorMessage(
   if (own) return own;
   return fallback;
 }
+
+/** Lỗi 403: dùng để chỉ gợi ý "thiếu quyền" đúng lúc, không đoán cho mọi lỗi. */
+export function isForbidden(error: unknown): boolean {
+  const status = (error as { status?: number } | undefined)?.status;
+  return status === 403;
+}
