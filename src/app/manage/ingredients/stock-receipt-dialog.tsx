@@ -134,7 +134,7 @@ export default function StockReceiptDialog({
             {t('Nhập hàng')}: {ingredientName}
           </DialogTitle>
           <DialogDescription>
-            {t('Tồn hiện tại: {stock}{unit}. Số nhập sẽ được CỘNG vào tồn kho.', {
+            {t('Tồn hiện tại: {stock}{unit} — số nhập được cộng vào.', {
               stock: currentStock ?? 0,
               unit: unitName ? ` ${unitName}` : '',
             })}
@@ -174,7 +174,7 @@ export default function StockReceiptDialog({
                 placeholder="0"
               />
               <p className="text-xs text-muted-foreground">
-                {t('Dùng để tính giá vốn (bình quân gia quyền)')}
+                {t('Dùng tính giá vốn bình quân')}
               </p>
             </div>
           </div>
@@ -185,7 +185,7 @@ export default function StockReceiptDialog({
               id="receipt-supplier"
               value={supplier}
               onChange={(event) => setSupplier(event.target.value)}
-              placeholder={t('Tên nhà cung cấp / người giao hàng')}
+              placeholder={t('Tên NCC / người giao')}
             />
           </div>
 
@@ -196,7 +196,7 @@ export default function StockReceiptDialog({
               rows={2}
               value={note}
               onChange={(event) => setNote(event.target.value)}
-              placeholder={t('Ví dụ: hàng thiếu 1kg, đã báo nhà cung cấp')}
+              placeholder={t('VD: thiếu 1kg, đã báo NCC')}
             />
           </div>
 
@@ -217,7 +217,7 @@ export default function StockReceiptDialog({
                 {t('Chụp / chọn ảnh')}
               </Button>
               <span className="text-xs text-muted-foreground">
-                {t('Tối đa 5 ảnh (phiếu giao hàng, hàng thực tế)')}
+                {t('Tối đa 5 ảnh')}
               </span>
             </div>
             {previews.length > 0 && (

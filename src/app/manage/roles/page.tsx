@@ -12,10 +12,7 @@ export default function RolesPage() {
             <T>Phân quyền</T>
           </CardTitle>
           <CardDescription>
-            <T>
-              Mỗi vai trò được cấp quyền theo từng nhóm chức năng. Thay đổi có hiệu lực ngay với mọi
-              người dùng của vai trò đó.
-            </T>
+            <T>Cấp quyền theo nhóm chức năng cho từng vai trò.</T>
           </CardDescription>
         </CardHeader>
         <CardContent>

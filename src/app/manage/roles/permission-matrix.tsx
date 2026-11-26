@@ -156,7 +156,7 @@ export default function PermissionMatrix({ roleId, roleName }: { roleId: number;
         )}
         <p className="mt-3 text-xs text-muted-foreground">
           {t(
-            'Số trong ô là số route của nhóm đó; ô xanh = đã cấp toàn bộ, ô vàng = đã cấp một phần. Bấm để bật/tắt cả nhóm.',
+            'Ô xanh: đủ · ô vàng: một phần. Bấm để bật/tắt cả nhóm.',
           )}
         </p>
       </CardContent>

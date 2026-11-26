@@ -94,7 +94,7 @@ export default function BranchTable() {
 
       <p className="text-xs text-muted-foreground">
         {t(
-          'VAT và phí phục vụ sửa ở trang Thuế & phí. Cấu hình chỉ áp cho đơn tạo mới, đơn cũ giữ số đã snapshot.',
+          'VAT/phí sửa ở trang Thuế & phí; chỉ áp cho đơn mới.',
         )}
       </p>
     </div>

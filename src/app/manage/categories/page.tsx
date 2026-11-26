@@ -12,7 +12,7 @@ export default function CategoriesPage() {
             <T>Danh mục</T>
           </CardTitle>
           <CardDescription>
-            <T>Quản lý danh mục và bản dịch tên/mô tả theo từng ngôn ngữ.</T>
+            <T>Danh mục và bản dịch tên/mô tả.</T>
           </CardDescription>
         </CardHeader>
         <CardContent>

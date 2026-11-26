@@ -102,7 +102,7 @@ export default function BranchFormDialog({ branch }: { branch?: BranchRowType })
             {isEdit ? `${t('Sửa chi nhánh')}: ${branch?.name}` : t('Thêm chi nhánh')}
           </DialogTitle>
           <DialogDescription>
-            {t('Mỗi chi nhánh có dữ liệu riêng: bàn, đơn, nhân viên và báo cáo.')}
+            {t('Dữ liệu tách riêng theo chi nhánh.')}
           </DialogDescription>
         </DialogHeader>
 
@@ -118,7 +118,7 @@ export default function BranchFormDialog({ branch }: { branch?: BranchRowType })
             />
             {isEdit && (
               <p className="text-xs text-muted-foreground">
-                {t('Mã chi nhánh không đổi được vì đã in trên báo cáo cũ.')}
+                {t('Mã không đổi được (đã in trên báo cáo cũ).')}
               </p>
             )}
           </div>
@@ -142,7 +142,7 @@ export default function BranchFormDialog({ branch }: { branch?: BranchRowType })
             <div>
               <p className="text-sm font-medium">{t('Đang hoạt động')}</p>
               <p className="text-xs text-muted-foreground">
-                {t('Ngừng hoạt động thì chi nhánh không nhận đơn mới.')}
+                {t('Chi nhánh ngừng nhận đơn mới.')}
               </p>
             </div>
             <Switch
