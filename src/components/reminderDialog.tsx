@@ -197,13 +197,13 @@ export const QuickReminderDialog: React.FC<QuickReminderDialogProps> = ({
         {triggerVariant === 'icon' ? (
           <Button
             onClick={handleOpen}
-            className="h-8 w-8"
+            className="h-9 w-9"
             variant="ghost"
             size="icon"
             aria-label={tr("Tạo lời nhắc")}
             title={tr("Tạo lời nhắc")}
           >
-            <ClipboardClock size={16} />
+            <ClipboardClock size={18} />
           </Button>
         ) : (
           <Button
