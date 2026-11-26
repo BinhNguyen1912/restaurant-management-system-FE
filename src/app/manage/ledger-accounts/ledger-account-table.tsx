@@ -2,12 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { getApiErrorMessage, isForbidden } from '@/lib/api-error';
-import { toast } from 'react-toastify';
-import { Pencil, Trash2 } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Switch } from '@/components/ui/switch';
 import {
   Select,
   SelectContent,
@@ -23,25 +18,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import {
-  LEDGER_ACCOUNT_TYPE_LABEL,
-  LedgerAccountTypeRes,
-} from '@/app/ValidationSchemas/ledger-account.schema';
-import {
-  useDeleteLedgerAccount,
-  useGetLedgerAccounts,
-  useUpdateLedgerAccount,
-} from '@/app/queries/useLedgerAccount';
+import { LEDGER_ACCOUNT_TYPE_LABEL } from '@/app/ValidationSchemas/ledger-account.schema';
+import { useGetLedgerAccounts } from '@/app/queries/useLedgerAccount';
 import { formatCurrency } from '@/lib/utils';
 import CreateLedgerAccountDialog from '@/app/manage/ledger-accounts/create-ledger-account-dialog';
 import { useI18n } from '@/i18n/locale-provider';
@@ -52,16 +30,9 @@ const TYPE_OPTIONS = ['ALL', 'ASSET', 'LIABILITY', 'EQUITY', 'REVENUE', 'EXPENSE
 export default function LedgerAccountTable() {
   const { t } = useI18n();
   const { data, isLoading, isError, error } = useGetLedgerAccounts();
-  const { mutateAsync: updateAccount, isPending: isUpdating } =
-    useUpdateLedgerAccount();
-  const { mutateAsync: deleteAccount, isPending: isDeleting } =
-    useDeleteLedgerAccount();
 
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState<(typeof TYPE_OPTIONS)[number]>('ALL');
-  const [renaming, setRenaming] = useState<LedgerAccountTypeRes | null>(null);
-  const [renameValue, setRenameValue] = useState('');
-  const [deleting, setDeleting] = useState<LedgerAccountTypeRes | null>(null);
 
   const accounts = data?.payload?.data ?? [];
 
@@ -76,37 +47,6 @@ export default function LedgerAccountTable() {
       return matchType && matchKeyword;
     });
   }, [accounts, search, typeFilter]);
-
-  const toggleActive = async (account: LedgerAccountTypeRes) => {
-    try {
-      await updateAccount({ id: account.id, body: { isActive: !account.isActive } });
-      toast.success(account.isActive ? `Đã tắt ${account.code}` : `Đã bật ${account.code}`);
-    } catch (error: any) {
-      toast.error(error?.payload?.message ?? 'Không đổi được trạng thái');
-    }
-  };
-
-  const submitRename = async () => {
-    if (!renaming) return;
-    try {
-      await updateAccount({ id: renaming.id, body: { name: renameValue.trim() } });
-      toast.success(t("Đã đổi tên tài khoản"));
-      setRenaming(null);
-    } catch (error: any) {
-      toast.error(error?.payload?.message ?? 'Không đổi được tên');
-    }
-  };
-
-  const confirmDelete = async () => {
-    if (!deleting) return;
-    try {
-      await deleteAccount(deleting.id);
-      toast.success(`Đã xoá ${deleting.code}`);
-      setDeleting(null);
-    } catch (error: any) {
-      toast.error(error?.payload?.message ?? 'Không xoá được tài khoản');
-    }
-  };
 
   return (
     <div className="space-y-4">
@@ -137,12 +77,9 @@ export default function LedgerAccountTable() {
         <CreateLedgerAccountDialog />
       </div>
 
-      {/*
-        8 cột với bề rộng cố định nên bảng rộng hơn khung trên màn hình hẹp; thiếu `overflow-x-auto`
-        thì cột cuối ("Đang dùng" + nút Sửa/Xoá) bị CẮT mất — người dùng thấy như không render.
-      */}
+      {/* bảng nay chỉ ĐỌC: mã, tên, loại, tổng Nợ, tổng Có, số dư */}
       <div className="overflow-x-auto rounded-md border">
-        <Table className="min-w-[880px]">
+        <Table>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[170px]">{t("Mã")}</TableHead>
@@ -151,21 +88,19 @@ export default function LedgerAccountTable() {
               <TableHead className="w-[130px] text-right">{t("Tổng Nợ")}</TableHead>
               <TableHead className="w-[130px] text-right">{t("Tổng Có")}</TableHead>
               <TableHead className="w-[130px] text-right">{t("Số dư")}</TableHead>
-              <TableHead className="w-[90px] text-center">{t("Đang dùng")}</TableHead>
-              <TableHead className="w-[100px]" />
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading && (
               <TableRow>
-                <TableCell colSpan={8} className="text-center text-sm text-muted-foreground">
+                <TableCell colSpan={6} className="text-center text-sm text-muted-foreground">
                   <T>Đang tải danh mục tài khoản…</T>
                 </TableCell>
               </TableRow>
             )}
             {isError && (
               <TableRow>
-                <TableCell colSpan={8} className="text-center text-sm text-destructive">
+                <TableCell colSpan={6} className="text-center text-sm text-destructive">
                   {/*
                     Hiện NGUYÊN VĂN lỗi (mã HTTP + message) thay vì đoán "kiểm tra quyền X":
                     trước đây mọi lỗi — 500, mất mạng, 401 — đều hiện câu đó, nên người dùng đi
@@ -182,7 +117,7 @@ export default function LedgerAccountTable() {
             )}
             {!isLoading && !isError && filtered.length === 0 && (
               <TableRow>
-                <TableCell colSpan={8} className="text-center text-sm text-muted-foreground">
+                <TableCell colSpan={6} className="text-center text-sm text-muted-foreground">
                   <T>Không có tài khoản nào khớp</T>
                 </TableCell>
               </TableRow>
@@ -204,84 +139,11 @@ export default function LedgerAccountTable() {
                 <TableCell className="text-right font-medium tabular-nums">
                   {formatCurrency(account.balance)}
                 </TableCell>
-                <TableCell className="text-center">
-                  <Switch
-                    checked={account.isActive}
-                    disabled={account.isSystem || isUpdating}
-                    onCheckedChange={() => toggleActive(account)}
-                    // không dùng chữ "hệ thống" trên UI
-                    title={account.isSystem ? 'Tài khoản này không tắt được' : ''}
-                  />
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center justify-end gap-1">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => {
-                        setRenaming(account);
-                        setRenameValue(account.name);
-                      }}
-                    >
-                      <Pencil className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      disabled={account.isSystem || account.lineCount > 0 || isDeleting}
-                      title={
-                        account.isSystem
-                          ? 'Tài khoản này không xoá được'
-                          : account.lineCount > 0
-                            ? 'Đã có bút toán, chỉ được tắt'
-                            : 'Xoá tài khoản'
-                      }
-                      onClick={() => setDeleting(account)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </div>
-
-      <AlertDialog open={!!renaming} onOpenChange={(open) => !open && setRenaming(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Đổi tên {renaming?.code}</AlertDialogTitle>
-            <AlertDialogDescription>
-              Mã tài khoản không đổi được (báo cáo dùng mã).{renaming?.isSystem && ' Tài khoản này chỉ sửa được tên.'}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <Input value={renameValue} onChange={(event) => setRenameValue(event.target.value)} />
-          <AlertDialogFooter>
-            <AlertDialogCancel>{t("Huỷ")}</AlertDialogCancel>
-            <AlertDialogAction onClick={submitRename} disabled={isUpdating || !renameValue.trim()}>
-              <T>Lưu</T>
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      <AlertDialog open={!!deleting} onOpenChange={(open) => !open && setDeleting(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Xoá {deleting?.code}?</AlertDialogTitle>
-            <AlertDialogDescription>
-              <T>Tài khoản này chưa có bút toán nào nên xoá được. Nếu sau này cần, hãy tạo lại cùng mã.</T>
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>{t("Huỷ")}</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete} disabled={isDeleting}>
-              <T>Xoá</T>
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 }
