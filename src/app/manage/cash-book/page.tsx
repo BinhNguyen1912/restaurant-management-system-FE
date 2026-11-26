@@ -13,7 +13,7 @@ export default function CashBookPage() {
           </CardTitle>
           <CardDescription>
             <T>
-              Tiền mặt tại quầy và tiền gửi ngân hàng: quỹ đầu kỳ, thu vào, chi ra và tồn quỹ trong kỳ.
+              Tiền mặt và tiền gửi ngân hàng trong kỳ.
             </T>
           </CardDescription>
         </CardHeader>

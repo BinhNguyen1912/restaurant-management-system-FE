@@ -51,7 +51,7 @@ export default function StockReceiptHistory({
             {t('Lịch sử nhập hàng')}: {ingredientName}
           </DialogTitle>
           <DialogDescription>
-            {t('Mỗi dòng là một lần hàng về, kèm ảnh bằng chứng và người nhận.')}
+            {t('Ai nhập, bao nhiêu, ảnh nào.')}
           </DialogDescription>
         </DialogHeader>
 
@@ -101,7 +101,7 @@ export default function StockReceiptHistory({
         {receipts.length > 0 && (
           <p className="flex items-center gap-1 text-xs text-muted-foreground">
             <ImageIcon className="h-3 w-3" />
-            {t('Bấm vào ảnh để mở bản đầy đủ')}
+            {t('Bấm ảnh để xem lớn')}
           </p>
         )}
       </DialogContent>

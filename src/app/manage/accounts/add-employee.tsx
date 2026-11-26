@@ -298,9 +298,6 @@ export default function AddEmployee() {
                             </option>
                           ))}
                         </select>
-                        <p className="text-xs text-muted-foreground">
-                          {t('Nhân viên đăng nhập sẽ thấy dữ liệu của chi nhánh này.')}
-                        </p>
                         <FormMessage />
                       </div>
                     </div>

@@ -103,7 +103,7 @@ export default function CreateRoleDialog({ onCreated }: { onCreated?: (roleId: n
             {t('Thêm vai trò')}
           </DialogTitle>
           <DialogDescription>
-            {t('Vai trò mới bắt đầu với 0 quyền. Sao chép từ vai trò có sẵn rồi sửa lại cho nhanh.')}
+            {t('Vai trò mới bắt đầu với 0 quyền.')}
           </DialogDescription>
         </DialogHeader>
 
@@ -117,7 +117,7 @@ export default function CreateRoleDialog({ onCreated }: { onCreated?: (roleId: n
               onChange={(event) => setName(event.target.value)}
             />
             <p className="text-xs text-muted-foreground">
-              {t('Không dấu, không khoảng trắng (sẽ tự đổi thành chữ hoa, gạch dưới).')}
+              {t('Tự đổi thành CHỮ_HOA_GẠCH_DƯỚI.')}
             </p>
           </div>
           <div className="grid gap-1">
