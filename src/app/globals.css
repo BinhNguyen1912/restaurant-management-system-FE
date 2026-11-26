@@ -427,3 +427,17 @@ body {
     }
   }
 }
+
+/*
+ * Navbar dọc mở rộng khi hover (w-14 -> w-64). Navbar là `fixed` nên không tự đẩy nội dung;
+ * nếu không bù padding thì nó ĐÈ LÊN header — cụ thể là nút "Tất cả chi nhánh" và các nút đầu
+ * header, bấm không được.
+ *
+ * Dùng sibling selector thay vì thêm state React: hover là chuyện của CSS, không cần render lại.
+ * Chỉ áp dụng từ sm trở lên vì dưới sm navbar bị ẩn.
+ */
+@media (min-width: 640px) {
+  #app-nav:hover ~ #app-content {
+    padding-left: 16rem; /* = w-64 của navbar khi mở */
+  }
+}

@@ -49,7 +49,15 @@ export default function NavLinks() {
   };
 
   return (
-    <aside className="group/nav fixed inset-y-0 left-0 z-20 hidden w-14 flex-col overflow-hidden border-r bg-background transition-[width,box-shadow] duration-300 ease-out hover:w-64 hover:shadow-xl sm:flex">
+    <aside
+      id="app-nav"
+      /*
+       * Khi hover, navbar rộng ra 16rem và (trước đây) ĐÈ LÊN nút "Tất cả chi nhánh" ở header.
+       * `#app-nav:hover ~ #app-content` trong globals.css sẽ đẩy nội dung sang phải tương ứng,
+       * nên không còn chồng lên nhau. z-40 để navbar nằm trên header khi mở (header là z-30).
+       */
+      className="group/nav fixed inset-y-0 left-0 z-40 hidden w-14 flex-col overflow-hidden border-r bg-background transition-[width,box-shadow] duration-300 ease-out hover:w-64 hover:shadow-xl sm:flex"
+    >
       <div className="flex h-14 items-center gap-3 px-3">
         <Link
           href="/"
