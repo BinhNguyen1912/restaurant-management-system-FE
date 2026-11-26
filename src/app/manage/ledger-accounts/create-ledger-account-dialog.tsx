@@ -80,9 +80,7 @@ export default function CreateLedgerAccountDialog() {
         <DialogHeader>
           <DialogTitle>{t("Thêm tài khoản chi tiết")}</DialogTitle>
           <DialogDescription>
-            Chỉ dùng cho tài khoản phân loại báo cáo (chi phí, doanh thu khác).
-            Tài khoản hệ thống (CASH, VNPAY_CLEARING, …) đã có sẵn và không xoá
-            được.
+            Dùng cho tài khoản phân loại báo cáo (chi phí, doanh thu khác).
           </DialogDescription>
         </DialogHeader>
 
