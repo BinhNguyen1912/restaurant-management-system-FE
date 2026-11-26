@@ -39,6 +39,10 @@ const ACTION_LABEL: Record<string, string> = {
   ORDER_PRICE_CHANGED: 'Đổi giá đơn',
   PRODUCT_PRICE_CHANGED: 'Đổi giá sản phẩm',
   PAYMENT_REFUNDED: 'Hoàn tiền',
+  ROLE_PERMISSIONS_CHANGED: 'Đổi quyền vai trò',
+  ROLE_CREATED: 'Tạo vai trò',
+  ROLE_DELETED: 'Xoá vai trò',
+  USER_ACCESS_CHANGED: 'Đổi quyền truy cập tài khoản',
 };
 
 const ACTION_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
@@ -47,6 +51,11 @@ const ACTION_VARIANT: Record<string, 'default' | 'secondary' | 'destructive' | '
   ORDER_DISCOUNT_CHANGED: 'outline',
   ORDER_PRICE_CHANGED: 'outline',
   PRODUCT_PRICE_CHANGED: 'secondary',
+  // đổi quyền truy cập là thao tác quản trị rủi ro nhất trong nhóm này
+  ROLE_PERMISSIONS_CHANGED: 'destructive',
+  ROLE_DELETED: 'destructive',
+  USER_ACCESS_CHANGED: 'default',
+  ROLE_CREATED: 'secondary',
 };
 
 const ENTITY_LABEL: Record<string, string> = {
@@ -54,6 +63,8 @@ const ENTITY_LABEL: Record<string, string> = {
   PRODUCT: 'Sản phẩm',
   SKU: 'SKU',
   PAYMENT: 'Thanh toán',
+  ROLE: 'Vai trò',
+  USER: 'Tài khoản',
 };
 
 const formatDateTime = (value: string) => new Date(value).toLocaleString('vi-VN');
