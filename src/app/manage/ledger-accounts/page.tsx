@@ -16,10 +16,8 @@ export default function LedgerAccountsPage() {
         <CardHeader>
           <CardTitle><T>Sổ cái — Danh mục tài khoản</T></CardTitle>
           <CardDescription>
-            Tài khoản <b><T>hệ thống</T></b> do code dùng trực tiếp (CASH, VNPAY_CLEARING,
-            REVENUE_FOOD, …): không đổi mã/loại, không tắt, không xoá — chỉ đổi tên
-            hiển thị. Tài khoản <b><T>chi tiết</T></b> tự tạo được để phân loại chi phí /
-            doanh thu khác. Số dư chỉ tính bút toán đã POSTED.
+            Tài khoản có sẵn chỉ đổi được tên; tài khoản tự tạo để phân loại chi phí / doanh thu
+            khác. Số dư chỉ tính bút toán đã POSTED.
           </CardDescription>
         </CardHeader>
         <CardContent>

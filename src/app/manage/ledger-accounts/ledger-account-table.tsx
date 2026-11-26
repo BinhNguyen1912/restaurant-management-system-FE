@@ -137,8 +137,12 @@ export default function LedgerAccountTable() {
         <CreateLedgerAccountDialog />
       </div>
 
-      <div className="rounded-md border">
-        <Table>
+      {/*
+        8 cột với bề rộng cố định nên bảng rộng hơn khung trên màn hình hẹp; thiếu `overflow-x-auto`
+        thì cột cuối ("Đang dùng" + nút Sửa/Xoá) bị CẮT mất — người dùng thấy như không render.
+      */}
+      <div className="overflow-x-auto rounded-md border">
+        <Table className="min-w-[880px]">
           <TableHeader>
             <TableRow>
               <TableHead className="w-[170px]">{t("Mã")}</TableHead>
@@ -185,16 +189,7 @@ export default function LedgerAccountTable() {
             )}
             {filtered.map((account) => (
               <TableRow key={account.id} className={account.isActive ? '' : 'opacity-60'}>
-                <TableCell className="font-mono text-xs">
-                  <div className="flex items-center gap-2">
-                    {account.code}
-                    {account.isSystem && (
-                      <Badge variant="secondary" className="text-[10px]">
-                        <T>hệ thống</T>
-                      </Badge>
-                    )}
-                  </div>
-                </TableCell>
+                <TableCell className="font-mono text-xs">{account.code}</TableCell>
                 <TableCell>{account.name}</TableCell>
                 <TableCell className="text-xs">
                   {LEDGER_ACCOUNT_TYPE_LABEL[account.type]}
@@ -214,7 +209,8 @@ export default function LedgerAccountTable() {
                     checked={account.isActive}
                     disabled={account.isSystem || isUpdating}
                     onCheckedChange={() => toggleActive(account)}
-                    title={account.isSystem ? 'Tài khoản hệ thống không tắt được' : ''}
+                    // không dùng chữ "hệ thống" trên UI
+                    title={account.isSystem ? 'Tài khoản này không tắt được' : ''}
                   />
                 </TableCell>
                 <TableCell>
@@ -235,7 +231,7 @@ export default function LedgerAccountTable() {
                       disabled={account.isSystem || account.lineCount > 0 || isDeleting}
                       title={
                         account.isSystem
-                          ? 'Tài khoản hệ thống không xoá được'
+                          ? 'Tài khoản này không xoá được'
                           : account.lineCount > 0
                             ? 'Đã có bút toán, chỉ được tắt'
                             : 'Xoá tài khoản'
@@ -257,7 +253,7 @@ export default function LedgerAccountTable() {
           <AlertDialogHeader>
             <AlertDialogTitle>Đổi tên {renaming?.code}</AlertDialogTitle>
             <AlertDialogDescription>
-              Mã tài khoản không đổi được (báo cáo dùng mã).{renaming?.isSystem && ' Đây là tài khoản hệ thống: chỉ sửa được tên.'}
+              Mã tài khoản không đổi được (báo cáo dùng mã).{renaming?.isSystem && ' Tài khoản này chỉ sửa được tên.'}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <Input value={renameValue} onChange={(event) => setRenameValue(event.target.value)} />
