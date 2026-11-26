@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
-import menuItems, { menuGroups } from '@/app/manage/menuItems';
+import menuItems, { groupMenu, visibleMenu } from '@/app/manage/menuItems';
+import { useMeProfile } from '@/app/queries/useAccount';
 import { useAppStore } from '@/components/app-provider';
 import { cn } from '@/lib/utils';
 import { Package2, Settings } from 'lucide-react';
@@ -19,9 +20,14 @@ export default function NavLinks() {
   const { t } = useI18n();
   const pathname = usePathname();
   const role = useAppStore((state) => state.role);
+  // Menu sinh theo QUYỀN của vai trò (role tự tạo cũng có menu đúng, không cần khai báo tên role)
+  const { data: profile } = useMeProfile();
+  const permissions = (profile?.payload as { role?: { permissions?: { module: string; method: string }[] } })
+    ?.role?.permissions;
+  const groups = groupMenu(visibleMenu(permissions, role));
 
   const renderItem = (Item: (typeof menuItems)[number]) => {
-    if (!Item.roles.includes(role as any)) return null;
+
     // "/manage/orders/123" vẫn phải sáng mục "Đơn hàng"
     const isActive = pathname === Item.href || pathname.startsWith(`${Item.href}/`);
     return (
@@ -58,8 +64,8 @@ export default function NavLinks() {
       </div>
 
       <nav className="no-scrollbar flex flex-1 flex-col gap-1 overflow-y-auto overflow-x-hidden px-2 pb-4">
-        {menuGroups.map((group) => {
-          const items = group.items.filter((item) => item.roles.includes(role as any));
+        {groups.map((group) => {
+          const items = group.items;
           if (!items.length) return null; // role không xem được mục nào trong nhóm
           return (
             <div key={group.label} className="flex flex-col gap-1">

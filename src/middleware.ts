@@ -18,7 +18,12 @@ const onlyOwnerPaths = [
 ];
 
 // /manage chi danh cho nhan vien van hanh va quan tri (khach hang vao /manage la sai luong).
-const manageAllowedRoles = [Role.ADMIN, Role.STAFF, Role.KE_TOAN];
+/**
+ * Khu /manage là cho nhân viên vận hành; chỉ CHẶN khách (GUEST) và khách có tài khoản (USER).
+ * Không dùng danh sách role được phép: hệ thống cho tạo role tuỳ biến nên danh sách cứng sẽ
+ * chặn oan role mới. Việc *thấy gì* trong khu này do quyền quyết định (menu + BE 403).
+ */
+const manageBlockedRoles: string[] = [Role.GUEST, Role.USER];
 const privatePaths = [...managePaths, ...guestPaths];
 const publicPaths = ['/auth'];
 export function middleware(request: NextRequest) {
@@ -78,7 +83,7 @@ export function middleware(request: NextRequest) {
       onlyOwnerPaths.some((path) => pathname.startsWith(path));
 
     const isNotStaffGoToManagePath =
-      !manageAllowedRoles.map(String).includes(String(role)) &&
+      manageBlockedRoles.map(String).includes(String(role)) &&
       managePaths.some((path) => pathname.startsWith(path));
 
     if (
