@@ -69,6 +69,8 @@ import {
 import { GetAllIngredientResType } from '@/app/ValidationSchemas/ingredient.model';
 import { Badge } from '@/components/ui/badge';
 import AddIngredient from '@/app/manage/ingredients/add-ingredient';
+import StockReceiptDialog from '@/app/manage/ingredients/stock-receipt-dialog';
+import StockReceiptHistory from '@/app/manage/ingredients/stock-receipt-history';
 import EditIngredient from '@/app/manage/ingredients/edit-ingredient';
 import { useI18n } from '@/i18n/locale-provider';
 import { tr } from '@/i18n/tr';
@@ -210,6 +212,29 @@ export const columns: ColumnDef<GetAllIngredientResType['data'][0]>[] = [
             <DropdownMenuItem onClick={openDeleteIngredient}>
               <T>Xem chi tiết</T>
             </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            {/* Nhập hàng ngay từ dòng: số lượng CỘNG vào tồn, kèm ảnh bằng chứng */}
+            <StockReceiptDialog
+              ingredientId={row.original.id}
+              ingredientName={row.original.name}
+              unitName={(row.original as any).unit?.name}
+              currentStock={(row.original as any).stock}
+              trigger={
+                <DropdownMenuItem onSelect={(event) => event.preventDefault()}>
+                  <T>Nhập hàng</T>
+                </DropdownMenuItem>
+              }
+            />
+            <StockReceiptHistory
+              ingredientId={row.original.id}
+              ingredientName={row.original.name}
+              unitName={(row.original as any).unit?.name}
+              trigger={
+                <DropdownMenuItem onSelect={(event) => event.preventDefault()}>
+                  <T>Lịch sử nhập</T>
+                </DropdownMenuItem>
+              }
+            />
           </DropdownMenuContent>
         </DropdownMenu>
       );
