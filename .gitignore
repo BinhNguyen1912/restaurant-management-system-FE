@@ -40,3 +40,6 @@ next-env.d.ts
 .next-build
 # log của dev server (npm run dev > fe.log)
 *.log
+
+# file env that tren VPS (chi commit .env.production.example)
+.env.production
