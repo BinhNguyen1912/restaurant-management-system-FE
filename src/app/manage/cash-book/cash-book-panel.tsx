@@ -7,6 +7,7 @@ import { useGetCashBook } from '@/app/queries/useLedgerEntry';
 import { useGetBranches } from '@/app/queries/useBranch';
 import { useI18n } from '@/i18n/locale-provider';
 import { cn } from '@/lib/utils';
+import CashBookLinesTable from '@/app/manage/cash-book/cash-book-lines-table';
 
 type TabKey = 'CASH' | 'BANK' | 'TOTAL';
 
@@ -112,6 +113,9 @@ export default function CashBookPanel() {
         {' · '}
         {t('Tồn quỹ = Quỹ đầu kỳ + Tổng thu − Tổng chi')}
       </p>
+
+      {/* Dòng dữ liệu: thẻ ở trên là tổng, bảng dưới là bằng chứng */}
+      <CashBookLinesTable account={tab === 'TOTAL' ? undefined : tab} branchId={branchId} />
     </div>
   );
 }
