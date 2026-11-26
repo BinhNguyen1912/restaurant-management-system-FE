@@ -73,6 +73,14 @@ export default function AddEmployee() {
   };
   async function submit(value: CreateUserForm) {
     if (addEmployeeMutation.isPending) return;
+    // Chi nhánh bắt buộc với nhân viên (trừ ADMIN — admin là cấp tổng, xem mọi chi nhánh).
+    // Chặn ở FE để người dùng thấy ngay, BE cũng chặn (400 Error.BranchRequiredForEmployee).
+    const selectedRole = roles.find((role: any) => Number(role.id) === Number(value.roleId));
+    const needsBranch = selectedRole && selectedRole.name !== 'ADMIN';
+    if (needsBranch && !(value as any).branchId) {
+      toast.error(t('Vui lòng chọn chi nhánh cho nhân viên'));
+      return;
+    }
     try {
       let body: any = {
         email: value.email,
@@ -270,7 +278,9 @@ export default function AddEmployee() {
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="branchId">{t('Chi nhánh')}</Label>
+                      <Label htmlFor="branchId">
+                        {t('Chi nhánh')} <span className="text-destructive">*</span>
+                      </Label>
                       <div className="col-span-3 w-full space-y-2">
                         <select
                           id="branchId"
@@ -280,7 +290,7 @@ export default function AddEmployee() {
                             field.onChange(e.target.value ? Number(e.target.value) : null)
                           }
                         >
-                          <option value="">{t('Chưa gán chi nhánh')}</option>
+                          <option value="">{t('— Chọn chi nhánh —')}</option>
                           {branches.map((branch: any) => (
                             <option key={branch.id} value={branch.id}>
                               {branch.name} ({branch.code})
