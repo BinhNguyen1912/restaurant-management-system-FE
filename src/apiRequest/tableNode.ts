@@ -36,6 +36,10 @@ export const tableNodeRequestApi = {
       `${prefix}/updateMany/batch`,
       data,
     ),
+  /** Mở bàn: khách chỉ quét QR gọi món được khi bàn đang mở */
+  open: (id: number) => http.post<{ data: TableNodeResType }>(`${prefix}/${id}/open`, {}),
+  /** Đóng bàn: trả bàn về trống, kết thúc phiên của khách */
+  close: (id: number) => http.post<{ data: TableNodeResType }>(`${prefix}/${id}/close`, {}),
   delete: (id: number) => http.delete<TableNodeResType>(`${prefix}/${id}`),
   deleteAllByArea: (areaId: number) =>
     http.delete<TableNodeDetailResType>(`${prefix}/area/${areaId}`),

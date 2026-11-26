@@ -37,6 +37,8 @@ import {
 import { createContext, useContext, useEffect, useState } from 'react';
 
 import { getVietnameseTableStatus, handleErrorApi } from '@/lib/utils';
+import { useCloseTableMutation, useOpenTableMutation } from '@/app/queries/useTableNode';
+import { getApiErrorMessage } from '@/lib/api-error';
 import { useRouter, useSearchParams } from 'next/navigation';
 import AutoPagination from '@/components/auto-pagination';
 import EditTable from '@/app/manage/tables/edit-table';
@@ -105,10 +107,27 @@ export const columns: ColumnDef<TableItem>[] = [
   },
   {
     accessorKey: 'status',
-    header: 'Trạng thái',
-    cell: ({ row }) => (
-      <div>{getVietnameseTableStatus(row.getValue('status'))}</div>
-    ),
+    header: tr('Trạng thái'),
+    cell: ({ row }) => {
+      // `openedAt` mới là thứ quyết định khách quét QR được hay không — không phải status
+      const openedAt = (row.original as any).openedAt as string | null | undefined;
+      return (
+        <div className="grid gap-1">
+          <span>{getVietnameseTableStatus(row.getValue('status'))}</span>
+          <span
+            className={
+              openedAt
+                ? 'text-xs font-medium text-emerald-600'
+                : 'text-xs text-muted-foreground'
+            }
+          >
+            {openedAt
+              ? tr('Đang mở — khách quét QR được')
+              : tr('Chưa mở — khách không quét được')}
+          </span>
+        </div>
+      );
+    },
   },
   {
     accessorKey: 'token',
@@ -143,6 +162,7 @@ export const columns: ColumnDef<TableItem>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
+            <TableOpenCloseItem row={row.original as any} />
             <DropdownMenuItem onClick={openEditTable}>{tr("Sửa")}</DropdownMenuItem>
             <DropdownMenuItem onClick={openDeleteTable}>{tr("Xóa")}</DropdownMenuItem>
           </DropdownMenuContent>
@@ -487,5 +507,41 @@ export default function TableTable() {
         </div>
       </div>
     </TableTableContext.Provider>
+  );
+}
+
+/**
+ * Mở / đóng bàn ngay trong menu của dòng.
+ *
+ * Vì sao phải có: khách chỉ quét QR gọi món được khi bàn đang mở. Không có nút này thì nhân viên
+ * không có cách nào mở bàn, và mọi QR sẽ báo "bàn chưa mở".
+ */
+function TableOpenCloseItem({ row }: { row: { id: number; openedAt?: string | null } }) {
+  const { t } = useI18n();
+  const openTable = useOpenTableMutation();
+  const closeTable = useCloseTableMutation();
+  const isOpen = Boolean(row.openedAt);
+  const pending = openTable.isPending || closeTable.isPending;
+
+  return (
+    <DropdownMenuItem
+      disabled={pending}
+      onSelect={async (event) => {
+        event.preventDefault();
+        try {
+          if (isOpen) {
+            await closeTable.mutateAsync(row.id);
+            toast.success(t('Đã đóng bàn'));
+          } else {
+            await openTable.mutateAsync(row.id);
+            toast.success(t('Đã mở bàn — khách quét QR gọi món được'));
+          }
+        } catch (error) {
+          toast.error(getApiErrorMessage(error, t('Không đổi được trạng thái bàn')));
+        }
+      }}
+    >
+      {isOpen ? t('Đóng bàn') : t('Mở bàn')}
+    </DropdownMenuItem>
   );
 }

@@ -136,3 +136,20 @@ export const useDeleteAllTableNodeByAreaMutation = () => {
       queryClient.invalidateQueries({ queryKey: ['tableNodes'] }),
   });
 };
+
+/** Mở / đóng bàn — thao tác của nhân viên trước khi cho khách quét QR */
+export const useOpenTableMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => tableNodeRequestApi.open(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tableNodes'] }),
+  });
+};
+
+export const useCloseTableMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => tableNodeRequestApi.close(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tableNodes'] }),
+  });
+};
