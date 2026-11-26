@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Lock, Save, ShieldCheck } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -10,6 +10,7 @@ import { useGetRolePermissions, useSaveRolePermissions } from '@/app/queries/use
 import { useI18n } from '@/i18n/locale-provider';
 import { getApiErrorMessage } from '@/lib/api-error';
 import { cn } from '@/lib/utils';
+import { FEATURE_GROUPS, moduleLabel } from '@/app/manage/roles/permission-labels';
 
 const METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'] as const;
 
@@ -34,17 +35,33 @@ export default function PermissionMatrix({ roleId, roleName }: { roleId: number;
   }, [permissions]);
 
   // module -> method -> danh sách permission id
-  const grid = useMemo(() => {
+  const byModule = useMemo(() => {
     const map = new Map<string, Map<string, number[]>>();
     for (const item of permissions) {
       if (!map.has(item.module)) map.set(item.module, new Map());
-      const byMethod = map.get(item.module)!;
-      const list = byMethod.get(item.method) ?? [];
+      const methodMap = map.get(item.module)!;
+      const list = methodMap.get(item.method) ?? [];
       list.push(item.id);
-      byMethod.set(item.method, list);
+      methodMap.set(item.method, list);
     }
-    return Array.from(map.entries()).sort(([a], [b]) => a.localeCompare(b));
+    return map;
   }, [permissions]);
+
+  /**
+   * Nhóm module theo TÍNH NĂNG (Bán hàng / Thực đơn / Kho / Tài chính / Vận hành / Hệ thống)
+   * và chỉ giữ module có quyền thật. Module lạ (thêm sau này mà quên map tên) vẫn được hiện ở
+   * nhóm cuối để không có quyền nào bị ẩn khỏi màn hình.
+   */
+  const featureGroups = useMemo(() => {
+    const known = new Set(FEATURE_GROUPS.flatMap((group) => group.modules));
+    const unknown = Array.from(byModule.keys()).filter((module) => module && !known.has(module)).sort();
+    const groups = FEATURE_GROUPS.map((group) => ({
+      label: group.label,
+      modules: group.modules.filter((module) => byModule.has(module)),
+    })).filter((group) => group.modules.length > 0);
+    if (unknown.length) groups.push({ label: t('Khác'), modules: unknown });
+    return groups;
+  }, [byModule, t]);
 
   const toggleGroup = (ids: number[]) => {
     if (isLocked) return;
@@ -59,6 +76,10 @@ export default function PermissionMatrix({ roleId, roleName }: { roleId: number;
   const dirty =
     selected.size !== permissions.filter((item) => item.granted).length ||
     permissions.some((item) => item.granted !== selected.has(item.id));
+
+  /** id của mọi quyền trong 1 nhóm tính năng (để bật/tắt cả nhóm) */
+  const groupIds = (modules: string[]) =>
+    modules.flatMap((module) => Array.from(byModule.get(module)?.values() ?? []).flat());
 
   const submit = async () => {
     try {
@@ -113,44 +134,80 @@ export default function PermissionMatrix({ roleId, roleName }: { roleId: number;
               </tr>
             </thead>
             <tbody>
-              {grid.map(([module, byMethod]) => (
-                <tr key={module} className="border-b last:border-0">
-                  <td className="py-1.5 pr-3 font-mono text-xs">{module}</td>
-                  {METHODS.map((method) => {
-                    const ids = byMethod.get(method) ?? [];
-                    if (!ids.length) {
-                      return (
-                        <td key={method} className="px-2 py-1.5 text-center text-muted-foreground/40">
-                          ·
-                        </td>
-                      );
-                    }
-                    const grantedCount = ids.filter((id) => selected.has(id)).length;
-                    const allGranted = grantedCount === ids.length;
-                    return (
-                      <td key={method} className="px-1 py-1 text-center">
+              {featureGroups.map((group) => {
+                const ids = groupIds(group.modules);
+                const granted = ids.filter((id) => selected.has(id)).length;
+                const allGranted = ids.length > 0 && granted === ids.length;
+                return (
+                  <Fragment key={group.label}>
+                    <tr className="bg-muted/50">
+                      <td className="py-1.5 pr-3 font-semibold">{group.label}</td>
+                      <td colSpan={METHODS.length} className="px-2 py-1.5 text-right">
                         <button
                           type="button"
                           disabled={isLocked}
                           onClick={() => toggleGroup(ids)}
-                          title={`${module} ${method}`}
                           className={cn(
-                            'h-7 w-12 rounded text-xs font-medium transition-colors',
+                            'rounded px-2 py-0.5 text-xs font-medium',
                             allGranted
                               ? 'bg-emerald-500/90 text-white'
-                              : grantedCount > 0
+                              : granted > 0
                                 ? 'bg-amber-400/80 text-amber-950'
-                                : 'bg-muted text-muted-foreground hover:bg-muted/70',
+                                : 'bg-muted text-muted-foreground',
                             isLocked && 'cursor-not-allowed opacity-70',
                           )}
                         >
-                          {grantedCount > 0 ? grantedCount : ids.length}
+                          {granted}/{ids.length}
                         </button>
                       </td>
-                    );
-                  })}
-                </tr>
-              ))}
+                    </tr>
+                    {group.modules.map((module) => {
+                      const byMethod = byModule.get(module)!;
+                      return (
+                        <tr key={module} className="border-b last:border-0">
+                          <td className="py-1.5 pr-3">
+                            <span className="text-sm">{moduleLabel(module)}</span>
+                            <span className="ml-2 font-mono text-[10px] text-muted-foreground">{module}</span>
+                          </td>
+                          {METHODS.map((method) => {
+                            const methodIds = byMethod.get(method) ?? [];
+                            if (!methodIds.length) {
+                              return (
+                                <td key={method} className="px-2 py-1.5 text-center text-muted-foreground/40">
+                                  ·
+                                </td>
+                              );
+                            }
+                            const grantedCount = methodIds.filter((id) => selected.has(id)).length;
+                            const methodAllGranted = grantedCount === methodIds.length;
+                            return (
+                              <td key={method} className="px-1 py-1 text-center">
+                                <button
+                                  type="button"
+                                  disabled={isLocked}
+                                  onClick={() => toggleGroup(methodIds)}
+                                  title={`${moduleLabel(module)} · ${method}`}
+                                  className={cn(
+                                    'h-7 w-12 rounded text-xs font-medium transition-colors',
+                                    methodAllGranted
+                                      ? 'bg-emerald-500/90 text-white'
+                                      : grantedCount > 0
+                                        ? 'bg-amber-400/80 text-amber-950'
+                                        : 'bg-muted text-muted-foreground hover:bg-muted/70',
+                                    isLocked && 'cursor-not-allowed opacity-70',
+                                  )}
+                                >
+                                  {grantedCount > 0 ? grantedCount : methodIds.length}
+                                </button>
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      );
+                    })}
+                  </Fragment>
+                );
+              })}
             </tbody>
           </table>
         )}

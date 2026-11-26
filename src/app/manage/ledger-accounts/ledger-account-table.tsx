@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { getApiErrorMessage, isForbidden } from '@/lib/api-error';
 import { toast } from 'react-toastify';
 import { Pencil, Trash2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -50,7 +51,7 @@ const TYPE_OPTIONS = ['ALL', 'ASSET', 'LIABILITY', 'EQUITY', 'REVENUE', 'EXPENSE
 
 export default function LedgerAccountTable() {
   const { t } = useI18n();
-  const { data, isLoading, isError } = useGetLedgerAccounts();
+  const { data, isLoading, isError, error } = useGetLedgerAccounts();
   const { mutateAsync: updateAccount, isPending: isUpdating } =
     useUpdateLedgerAccount();
   const { mutateAsync: deleteAccount, isPending: isDeleting } =
@@ -161,7 +162,17 @@ export default function LedgerAccountTable() {
             {isError && (
               <TableRow>
                 <TableCell colSpan={8} className="text-center text-sm text-destructive">
-                  <T>Không tải được danh mục (kiểm tra quyền LEDGER-ACCOUNTS)</T>
+                  {/*
+                    Hiện NGUYÊN VĂN lỗi (mã HTTP + message) thay vì đoán "kiểm tra quyền X":
+                    trước đây mọi lỗi — 500, mất mạng, 401 — đều hiện câu đó, nên người dùng đi
+                    kiểm tra quyền trong khi lỗi thật ở chỗ khác.
+                  */}
+                  {getApiErrorMessage(error, t('Không tải được danh mục tài khoản'))}
+                  {isForbidden(error) && (
+                    <span className="ml-1">
+                      {t('(tài khoản của bạn không có quyền xem danh mục tài khoản kế toán)')}
+                    </span>
+                  )}
                 </TableCell>
               </TableRow>
             )}
