@@ -121,6 +121,14 @@ export default function EditEmployee({
   }, [data, form]);
 
   async function submit(value: UpdateUserBodyType) {
+    // Chi nhánh bắt buộc với nhân viên (trừ ADMIN). Không gửi `branchId` = giữ nguyên,
+    // nên chỉ chặn khi người dùng chủ động bỏ trống.
+    const selectedRole = roles.find((role: any) => Number(role.id) === Number(value.roleId));
+    const needsBranch = selectedRole && selectedRole.name !== 'ADMIN';
+    if (needsBranch && !(value as any).branchId) {
+      toast.error(t('Vui lòng chọn chi nhánh cho nhân viên'));
+      return;
+    }
     let body = { id: id as number, ...value };
     try {
       if (file) {
@@ -348,7 +356,9 @@ export default function EditEmployee({
                 render={({ field }) => (
                   <FormItem>
                     <div className="grid grid-cols-4 items-center justify-items-start gap-4">
-                      <Label htmlFor="branchId">{t('Chi nhánh')}</Label>
+                      <Label htmlFor="branchId">
+                        {t('Chi nhánh')} <span className="text-destructive">*</span>
+                      </Label>
                       <div className="col-span-3 w-full space-y-2">
                         <select
                           id="branchId"
@@ -358,7 +368,7 @@ export default function EditEmployee({
                             field.onChange(e.target.value ? Number(e.target.value) : null)
                           }
                         >
-                          <option value="">{t('Chưa gán chi nhánh')}</option>
+                          <option value="">{t('— Chọn chi nhánh —')}</option>
                           {branches.map((branch: any) => (
                             <option key={branch.id} value={branch.id}>
                               {branch.name} ({branch.code})
