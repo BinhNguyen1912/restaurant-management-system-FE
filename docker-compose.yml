@@ -1,0 +1,29 @@
+# Stack FE trên VPS — Docker RIÊNG, không gộp với BE.
+# Dùng: docker compose --env-file .env.production up -d --build
+#
+# LƯU Ý: NEXT_PUBLIC_* là BUILD-TIME args (nhúng vào bundle lúc build).
+# Đổi domain API -> phải build lại image, không sửa được bằng env lúc chạy.
+services:
+  fe:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_ENDPOINT: ${NEXT_PUBLIC_API_ENDPOINT}
+        NEXT_PUBLIC_URL: ${NEXT_PUBLIC_URL}
+        NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${NEXT_PUBLIC_GOOGLE_CLIENT_ID}
+        NEXT_PUBLIC_GOOGLE_AUTHORIZED_REDIRECT_URI: ${NEXT_PUBLIC_GOOGLE_AUTHORIZED_REDIRECT_URI}
+    image: res-mana-fe:latest
+    container_name: res-mana-fe
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      TZ: Asia/Ho_Chi_Minh
+      PORT: 3000
+    networks: [res-mana]
+    # Không publish port: proxy (ở repo BE, deploy/proxy) gọi fe:3000 qua network chung
+
+networks:
+  res-mana:
+    name: res-mana
+    external: true

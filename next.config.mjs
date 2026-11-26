@@ -2,6 +2,9 @@
 const nextConfig = {
   // Tách cache build khỏi cache dev để `npm run build` không làm chết `npm run dev`
   distDir: process.env.NEXT_DIST_DIR || '.next',
+  // Image Docker: `next build` sinh thêm `.next/standalone` chứa server tối thiểu + node_modules
+  // cần thiết, nên image chạy `node server.js` thay vì kéo theo toàn bộ node_modules.
+  output: 'standalone',
   images: {
     remotePatterns: [
       {
