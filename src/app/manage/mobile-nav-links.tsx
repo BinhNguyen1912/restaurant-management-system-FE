@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
-import { menuGroups } from '@/app/manage/menuItems';
+import { groupMenu, visibleMenu } from '@/app/manage/menuItems';
+import { useMeProfile } from '@/app/queries/useAccount';
 import { useAppStore } from '@/components/app-provider';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
@@ -14,6 +15,10 @@ export default function MobileNavLinks() {
   const { t } = useI18n();
   const pathname = usePathname();
   const role = useAppStore((state) => state.role);
+  const { data: profile } = useMeProfile();
+  const permissions = (profile?.payload as { role?: { permissions?: { module: string; method: string }[] } })
+    ?.role?.permissions;
+  const groups = groupMenu(visibleMenu(permissions, role));
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -31,10 +36,8 @@ export default function MobileNavLinks() {
             <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
             <span className="sr-only">Acme Inc</span>
           </Link>
-          {menuGroups.map((group) => {
-            const items = group.items.filter((item) =>
-              item.roles.includes(role as any)
-            );
+          {groups.map((group) => {
+            const items = group.items;
             if (!items.length) return null;
             return (
               <div key={group.label} className="grid gap-2">
