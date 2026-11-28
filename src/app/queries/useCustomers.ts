@@ -1,5 +1,5 @@
 import { customerApiRequest } from '@/apiRequest/customers';
-import { RedeemPointsBodyType } from '@/app/ValidationSchemas/customer.schema';
+import { ConsentPurposeType, RedeemPointsBodyType } from '@/app/ValidationSchemas/customer.schema';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 /** Một khoá gốc cho cả cụm: đổi điểm làm đổi số dư ⇒ phải làm mới danh sách, hồ sơ và lịch sử. */
@@ -38,6 +38,30 @@ export const useGetCustomerOpenOrders = (id: number | null) => {
     queryKey: [...QUERY_KEY, 'open-orders', id],
     queryFn: () => customerApiRequest.openOrders(id as number),
     enabled: id !== null,
+  });
+};
+
+export const useGetCustomerConsents = (id: number | null) => {
+  return useQuery({
+    queryKey: [...QUERY_KEY, 'consents', id],
+    queryFn: () => customerApiRequest.consents(id as number),
+    enabled: id !== null,
+  });
+};
+
+export const useRecordConsent = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      id,
+      purpose,
+      granted,
+    }: {
+      id: number;
+      purpose: ConsentPurposeType;
+      granted: boolean;
+    }) => customerApiRequest.recordConsent(id, { purpose, granted }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEY }),
   });
 };
 

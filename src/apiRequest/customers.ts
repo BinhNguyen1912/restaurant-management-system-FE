@@ -1,5 +1,7 @@
 import http from '@/lib/http';
 import {
+  CustomerConsentResType,
+  ConsentPurposeType,
   CustomerDetailResType,
   CustomerListResType,
   CustomerOpenOrdersResType,
@@ -22,6 +24,9 @@ export const customerApiRequest = {
   detail: (id: number) => http.get<CustomerDetailResType>(`/customers/${id}`),
   points: (id: number) => http.get<CustomerPointsResType>(`/customers/${id}/points`),
   openOrders: (id: number) => http.get<CustomerOpenOrdersResType>(`/customers/${id}/open-orders`),
+  consents: (id: number) => http.get<CustomerConsentResType>(`/customers/${id}/consent`),
+  recordConsent: (id: number, body: { purpose: ConsentPurposeType; granted: boolean; note?: string }) =>
+    http.post<CustomerConsentResType>(`/customers/${id}/consent`, body),
   redeemPoints: (id: number, body: RedeemPointsBodyType & { reason?: string }) =>
     http.post<RedeemPointsResType>(`/customers/${id}/points/redeem`, body),
   updateNote: (id: number, note: string | null) =>

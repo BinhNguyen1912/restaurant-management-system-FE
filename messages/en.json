@@ -1140,5 +1140,18 @@
  "Error.OrderNotEligibleForPoints": "This order cannot take points",
  "Error.OrderAlreadyPaidCannotChangeMoney": "The order is already settled; the amount can no longer change",
  "Hoá đơn này chỉ trừ được tối đa {max} điểm": "This order can take at most {max} points",
- "Hoá đơn này trừ được tối đa {max} điểm.": "This order can take at most {max} points."
+ "Hoá đơn này trừ được tối đa {max} điểm.": "This order can take at most {max} points.",
+ "Dữ liệu cá nhân (NĐ 13/2023)": "Personal data (Decree 13/2023)",
+ "Nhận ưu đãi, khuyến mại": "Receives promotions and offers",
+ "Liên hệ về đơn / đặt bàn": "Contact about orders / bookings",
+ "Đang đồng ý · {at}": "Consented · {at}",
+ "Chưa hỏi khách": "Not asked yet",
+ "Đồng ý theo chính sách cũ — cần hỏi lại": "Consented under an older policy — ask again",
+ "Khách đã rút đồng ý · {at}": "Customer withdrew consent · {at}",
+ "Rút đồng ý": "Withdraw consent",
+ "Ghi nhận đồng ý": "Record consent",
+ "Mỗi lần ghi nhận là một dòng mới và không sửa được — nhật ký này là bằng chứng khách đồng ý hay rút lúc nào.": "Each answer appends a new immutable row — this log is the evidence of when the customer consented or withdrew.",
+ "Đã ghi nhận khách đồng ý": "Consent recorded",
+ "Đã ghi nhận khách rút đồng ý": "Withdrawal recorded",
+ "Không lưu được đồng ý của khách": "Could not save the consent"
 }

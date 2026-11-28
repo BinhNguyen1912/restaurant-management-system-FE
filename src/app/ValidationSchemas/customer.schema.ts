@@ -103,6 +103,26 @@ export type CustomerOpenOrderType = {
 
 export type CustomerOpenOrdersResType = { message: string; data: CustomerOpenOrderType[] };
 
+/**
+ * Đồng ý xử lý dữ liệu cá nhân (NĐ 13/2023) — theo từng mục đích.
+ * Dùng `active` để quyết định "được phép hay không": nó đã tính cả trường hợp khách rút đồng ý và
+ * trường hợp đồng ý theo bản chính sách cũ (`stale`).
+ */
+export type ConsentPurposeType = 'SERVICE' | 'MARKETING';
+
+export type CustomerConsentStateType = {
+  purpose: ConsentPurposeType;
+  /** điều khách nói lần gần nhất */
+  granted: boolean;
+  /** null = chưa từng hỏi khách */
+  at: string | null;
+  version: string | null;
+  stale: boolean;
+  active: boolean;
+};
+
+export type CustomerConsentResType = { message: string; data: CustomerConsentStateType[] };
+
 export type CustomerPointsResType = {
   message: string;
   data: CustomerPointsType & { history: CustomerPointEntryType[] };

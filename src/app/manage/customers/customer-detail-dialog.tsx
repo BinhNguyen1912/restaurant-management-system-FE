@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
-import { Coins, History, NotebookPen, Save } from 'lucide-react';
+import { Coins, History, NotebookPen, Save, ShieldCheck } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -25,9 +25,11 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { useMeProfile } from '@/app/queries/useAccount';
 import {
+  useGetCustomerConsents,
   useGetCustomerDetail,
   useGetCustomerOpenOrders,
   useGetCustomerPoints,
+  useRecordConsent,
   useRedeemPoints,
   useUpdateCustomerNote,
 } from '@/app/queries/useCustomers';
@@ -88,6 +90,8 @@ export default function CustomerDetailDialog({
   const { data: detailRes, isLoading } = useGetCustomerDetail(activeId);
   const { data: pointsRes } = useGetCustomerPoints(activeId);
   const { data: openOrdersRes } = useGetCustomerOpenOrders(activeId);
+  const { data: consentsRes } = useGetCustomerConsents(activeId);
+  const { mutateAsync: recordConsent, isPending: savingConsent } = useRecordConsent();
   const { mutateAsync: redeem, isPending: redeeming } = useRedeemPoints();
   const { mutateAsync: saveNote, isPending: savingNote } = useUpdateCustomerNote();
 
@@ -127,6 +131,26 @@ export default function CustomerDetailDialog({
   const selectedOrder = openOrders.find((order) => String(order.id) === orderId);
   /** Trần của lần đổi này = min(số dư, tiền còn phải trả của đơn) — BE vẫn kiểm lại lần nữa. */
   const maxForOrder = Math.min(balance, selectedOrder?.maxRedeemPoints ?? 0);
+
+  const consents = consentsRes?.payload?.data ?? [];
+  const canRecordConsent = can('CUSTOMERS', 'POST');
+
+  /**
+   * Ghi nhận điều khách vừa nói. Nhãn "đang đồng ý" lấy từ `active` (đã tính cả rút đồng ý và
+   * chính sách đã đổi) chứ không tự ghép `granted` ở FE.
+   */
+  const submitConsent = async (purpose: 'SERVICE' | 'MARKETING', granted: boolean) => {
+    if (!customerId) return;
+    try {
+      await recordConsent({ id: customerId, purpose, granted });
+      toast.success(
+        granted ? t('Đã ghi nhận khách đồng ý') : t('Đã ghi nhận khách rút đồng ý'),
+      );
+    } catch (error) {
+      const message = (error as { payload?: { message?: string } })?.payload?.message;
+      toast.error(message ?? t('Không lưu được đồng ý của khách'));
+    }
+  };
 
   const submitRedeem = async () => {
     if (!customerId) return;
@@ -336,6 +360,55 @@ export default function CustomerDetailDialog({
                     {t('Chỉ quản lý (ADMIN) sửa được ghi chú chăm sóc khách.')}
                   </p>
                 )}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="flex items-center gap-2 text-sm">
+                  <ShieldCheck className="h-4 w-4" />
+                  {t('Dữ liệu cá nhân (NĐ 13/2023)')}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="grid gap-2 text-sm">
+                {consents.map((consent) => (
+                  <div
+                    key={consent.purpose}
+                    className="flex flex-wrap items-center justify-between gap-2 border-b py-1 last:border-b-0"
+                  >
+                    <div className="grid">
+                      <span>
+                        {consent.purpose === 'MARKETING'
+                          ? t('Nhận ưu đãi, khuyến mại')
+                          : t('Liên hệ về đơn / đặt bàn')}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {consent.active
+                          ? t('Đang đồng ý · {at}', { at: dateTime(consent.at) })
+                          : consent.at === null
+                            ? t('Chưa hỏi khách')
+                            : consent.stale
+                              ? t('Đồng ý theo chính sách cũ — cần hỏi lại')
+                              : t('Khách đã rút đồng ý · {at}', { at: dateTime(consent.at) })}
+                      </span>
+                    </div>
+                    {canRecordConsent && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        disabled={savingConsent}
+                        onClick={() => submitConsent(consent.purpose, !consent.active)}
+                      >
+                        {consent.active ? t('Rút đồng ý') : t('Ghi nhận đồng ý')}
+                      </Button>
+                    )}
+                  </div>
+                ))}
+                <p className="text-xs text-muted-foreground">
+                  {t(
+                    'Mỗi lần ghi nhận là một dòng mới và không sửa được — nhật ký này là bằng chứng khách đồng ý hay rút lúc nào.',
+                  )}
+                </p>
               </CardContent>
             </Card>
 
