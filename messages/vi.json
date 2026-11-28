@@ -204,6 +204,7 @@
  "Dùng để tính giá vốn (bình quân gia quyền)": "Dùng để tính giá vốn (bình quân gia quyền)",
  "Dữ liệu thu thập": "Dữ liệu thu thập",
  "Dữ liệu tách riêng theo chi nhánh.": "Dữ liệu tách riêng theo chi nhánh.",
+ "Error.AccountLocked": "Sai mật khẩu quá nhiều lần. Tài khoản tạm bị khoá vài phút — vui lòng thử lại sau.",
  "Error.ApiKeyNotMatch": "API key không đúng",
  "Error.AreaAlreadyExits": "Khu vực đã tồn tại",
  "Error.AreaNotFound": "Không tìm thấy khu vực",

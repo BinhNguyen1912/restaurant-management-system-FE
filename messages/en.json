@@ -191,6 +191,7 @@
  "Dùng để tính giá vốn (bình quân gia quyền)": "Used for cost of goods (weighted average)",
  "Dữ liệu thu thập": "Collected data",
  "Dữ liệu tách riêng theo chi nhánh.": "Data is kept per branch.",
+ "Error.AccountLocked": "Too many failed sign-in attempts. The account is locked for a few minutes — please try again later.",
  "Error.ApiKeyNotMatch": "Invalid API key",
  "Error.AreaAlreadyExits": "Area already exists",
  "Error.AreaNotFound": "Area not found",
