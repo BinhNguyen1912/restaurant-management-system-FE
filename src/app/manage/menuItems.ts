@@ -5,6 +5,7 @@ import {
   LineChart,
   ShoppingCart,
   Users2,
+  Contact,
   Salad,
   Table,
   Warehouse,
@@ -110,6 +111,13 @@ const menuItems = [
     Icon: ShoppingCart,
     href: '/manage/orders',
     permission: { module: 'ORDERS', method: 'GET' },
+    group: 'Bán hàng',
+  },
+  {
+    title: 'Khách hàng',
+    Icon: Contact,
+    href: '/manage/customers',
+    permission: { module: 'CUSTOMERS', method: 'GET' },
     group: 'Bán hàng',
   },
   {
