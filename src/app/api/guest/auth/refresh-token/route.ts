@@ -27,10 +27,10 @@ export async function POST(request: Request) {
       );
     }
     const decodeAccessToken = jwt.decode(payload.accessToken) as {
-      ext: number;
+      exp: number;
     };
     const decodeRefreshToken = jwt.decode(payload.refreshToken) as {
-      ext: number;
+      exp: number;
     };
     cookieStore.set({
       value: payload.accessToken,
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
       sameSite: 'lax',
       name: 'accessToken',
       secure: true,
-      expires: decodeAccessToken.ext * 1000,
+      expires: new Date(decodeAccessToken.exp * 1000),
     });
     cookieStore.set({
       value: payload.refreshToken,
@@ -48,7 +48,7 @@ export async function POST(request: Request) {
       sameSite: 'lax',
       name: 'refreshToken',
       secure: true,
-      expires: decodeRefreshToken.ext * 1000,
+      expires: new Date(decodeRefreshToken.exp * 1000),
     });
     return Response.json(payload);
   } catch (error: any) {
