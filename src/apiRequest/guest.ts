@@ -36,7 +36,7 @@ export const guestApiRequests = {
   //Hàm dưới đây được gọi từ Next Server Handler nên nó không thể nào lấy Token , nên ta phải truyèn token với header thủ côcng
   slogout: (body: LogoutBodyType & { accessToken: string }) =>
     http.post(
-      '/guest/auth/logout',
+      '/guest/logout',
       {
         refreshToken: body.refreshToken,
       },
@@ -48,7 +48,7 @@ export const guestApiRequests = {
     ),
 
   sRefreshToken: (body: RefreshTokenBodyType) => {
-    return http.post<GetAccessTokenResType>('/guest/auth/refresh-token', body);
+    return http.post<GetAccessTokenResType>('/guest/refreshToken', body);
   },
 
   //Vì arrow function không cho dùng this (để lấy phẩn tử cha hiện tại nên chuyển qua function  thường)

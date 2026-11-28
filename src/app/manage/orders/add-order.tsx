@@ -132,6 +132,9 @@ export default function AddOrder() {
   };
 
   const handleOrder = async () => {
+    // Chống double-submit: bấm 2 lần sẽ tạo 2 khách/2 đơn trùng và thu tiền 2 lần.
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     try {
       let guestId: number | undefined;
 
@@ -193,6 +196,8 @@ export default function AddOrder() {
         error,
         setError: form.setError,
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
   const reset = () => {
@@ -448,9 +453,9 @@ export default function AddOrder() {
             <Button
               className="w-full h-12 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg"
               onClick={handleOrder}
-              disabled={orders.length === 0}
+              disabled={orders.length === 0 || isSubmitting}
             >
-              <T>Tạo đơn hàng</T>
+              <T>{isSubmitting ? 'Đang tạo đơn...' : 'Tạo đơn hàng'}</T>
             </Button>
           </div>
         </DialogFooter>

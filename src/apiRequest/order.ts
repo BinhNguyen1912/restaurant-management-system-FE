@@ -86,10 +86,15 @@ const orderApiRequest = {
   getOrderDetail: (id: number) =>
     http.get<OrdersListResType['data']>(`${prefix}/${id}`),
 
-  payOrdersByGuest: (guestId: number) =>
-    http.get<{ payload: OrderDetailType[] }>(
-      `${prefix}/pay-orders-by-guest/${guestId}`,
-    ),
+  /**
+   * Thu tiền các đơn đang mở của khách — POST (trước đây GET, endpoint ghi tiền mà khai báo GET
+   * thì bị prefetch/retry gọi hộ, và không có body để ghi phương thức thu).
+   */
+  payOrdersByGuest: (guestId: number, body: { method?: 'CASH'; note?: string } = {}) =>
+    http.post<{ payload: OrderDetailType[] }>(`${prefix}/pay-guest/${guestId}`, {
+      method: body.method ?? 'CASH',
+      note: body.note,
+    }),
 };
 
 export default orderApiRequest;

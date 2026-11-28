@@ -23,12 +23,21 @@ import {
 } from 'lucide-react';
 import SafeImage from '@/components/SafeImage';
 import OrderMoneyBreakdown from '@/components/OrderMoneyBreakdown';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { OrdersListResType } from '@/app/ValidationSchemas/order.schema';
 import { usePayOrdersByGuestMutation } from '@/app/queries/useOrder';
 import { toast } from 'react-toastify';
 import { T } from '@/components/t';
 import { useI18n } from '@/i18n/locale-provider';
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 type Guest = OrdersListResType['data'][0]['guest'];
 type Orders = OrdersListResType['data'];
@@ -57,11 +66,14 @@ export default function OrderGuestDetail({
     : [];
 
   const usePayForGuest = usePayOrdersByGuestMutation();
+  /** Bấm thu tiền là thao tác tiền thật: phải xác nhận và hiện số tiền trước khi gọi API. */
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const pay = async () => {
     if (usePayForGuest.isPending || !safeGuest) return;
     try {
-      const result = await usePayForGuest.mutateAsync(safeGuest.id);
+      await usePayForGuest.mutateAsync({ guestId: safeGuest.id });
+      setConfirmOpen(false);
 
       // Show success toast
       toast.success(
@@ -236,10 +248,18 @@ export default function OrderGuestDetail({
         <Badge variant={'outline'}>
           <span>
             {formatCurrency(
-              purchasedOrderFilter.reduce((acc, order) => {
-                if (!order.items || order.items.length === 0) return acc;
-                return acc + order.items[0].quantity * order.items[0].skuPrice;
-              }, 0),
+              // Dùng `grandTotal` của server (đã gồm phí/thuế/giảm giá). Cộng `items[0]` như trước
+              // chỉ tính món đầu tiên và bỏ toàn bộ món còn lại ⇒ con số tiền sai.
+              purchasedOrderFilter.reduce(
+                (acc, order) =>
+                  acc +
+                  (order.grandTotal ??
+                    (order.items ?? []).reduce(
+                      (total, item) => total + item.quantity * item.skuPrice,
+                      0,
+                    )),
+                0,
+              ),
             )}
           </span>
         </Badge>
@@ -250,12 +270,36 @@ export default function OrderGuestDetail({
           className="w-full"
           size={'sm'}
           variant={'secondary'}
-          disabled={ordersFilterToPurchase.length === 0}
-          onClick={pay}
+          disabled={ordersFilterToPurchase.length === 0 || usePayForGuest.isPending}
+          onClick={() => setConfirmOpen(true)}
         >
-          Thanh toán tất cả ({ordersFilterToPurchase.length} đơn)
+          {usePayForGuest.isPending
+            ? t("Đang thu tiền...")
+            : `${t("Thanh toán tất cả")} (${ordersFilterToPurchase.length} ${t("đơn")})`}
         </Button>
       </div>
+
+      <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("Xác nhận thu tiền mặt")}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("Thu tiền")} <b>{ordersFilterToPurchase.length}</b> {t("đơn của khách")}{' '}
+              <b>{safeGuest?.name}</b>, {t("tổng")} <b>{formatCurrency(unpaidTotals.grandTotal)}</b>.{' '}
+              {t("Thao tác này ghi sổ cái và không hoàn tác được (sai phải huỷ đơn để hoàn tiền).")}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={usePayForGuest.isPending}>
+              {t("Huỷ")}
+            </AlertDialogCancel>
+            <Button onClick={pay} disabled={usePayForGuest.isPending}>
+              <HandCoins className="mr-1 h-4 w-4" />
+              {usePayForGuest.isPending ? t("Đang thu...") : t("Xác nhận thu tiền")}
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
