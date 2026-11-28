@@ -85,6 +85,24 @@ export type CustomerListResType = {
 
 export type CustomerDetailResType = { message: string; data: CustomerDetailType };
 
+/**
+ * Đơn còn trừ được điểm của khách — BE tính sẵn `maxRedeemPoints` (trần theo hoá đơn) để FE không
+ * cho chọn số điểm vượt quá số tiền còn phải trả.
+ */
+export type CustomerOpenOrderType = {
+  id: number;
+  status: string;
+  grandTotal: number;
+  /** còn phải trả = subtotal − discountTotal */
+  payable: number;
+  maxRedeemPoints: number;
+  branchName: string;
+  tableName: string | null;
+  createdAt: string;
+};
+
+export type CustomerOpenOrdersResType = { message: string; data: CustomerOpenOrderType[] };
+
 export type CustomerPointsResType = {
   message: string;
   data: CustomerPointsType & { history: CustomerPointEntryType[] };

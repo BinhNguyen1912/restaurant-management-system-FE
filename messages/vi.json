@@ -1179,5 +1179,7 @@
  "Error.InvalidPoints": "Error.InvalidPoints",
  "Error.PointsExceedOrderTotal": "Error.PointsExceedOrderTotal",
  "Error.OrderNotEligibleForPoints": "Error.OrderNotEligibleForPoints",
- "Error.OrderAlreadyPaidCannotChangeMoney": "Error.OrderAlreadyPaidCannotChangeMoney"
+ "Error.OrderAlreadyPaidCannotChangeMoney": "Error.OrderAlreadyPaidCannotChangeMoney",
+ "Hoá đơn này chỉ trừ được tối đa {max} điểm": "Hoá đơn này chỉ trừ được tối đa {max} điểm",
+ "Hoá đơn này trừ được tối đa {max} điểm.": "Hoá đơn này trừ được tối đa {max} điểm."
 }

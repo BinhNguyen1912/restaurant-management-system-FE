@@ -1138,5 +1138,7 @@
  "Error.InvalidPoints": "Invalid points value",
  "Error.PointsExceedOrderTotal": "Points exceed what this order can take",
  "Error.OrderNotEligibleForPoints": "This order cannot take points",
- "Error.OrderAlreadyPaidCannotChangeMoney": "The order is already settled; the amount can no longer change"
+ "Error.OrderAlreadyPaidCannotChangeMoney": "The order is already settled; the amount can no longer change",
+ "Hoá đơn này chỉ trừ được tối đa {max} điểm": "This order can take at most {max} points",
+ "Hoá đơn này trừ được tối đa {max} điểm.": "This order can take at most {max} points."
 }

@@ -2,6 +2,7 @@ import http from '@/lib/http';
 import {
   CustomerDetailResType,
   CustomerListResType,
+  CustomerOpenOrdersResType,
   CustomerPointsResType,
   CustomerReportResType,
   RedeemPointsBodyType,
@@ -20,6 +21,7 @@ export const customerApiRequest = {
   },
   detail: (id: number) => http.get<CustomerDetailResType>(`/customers/${id}`),
   points: (id: number) => http.get<CustomerPointsResType>(`/customers/${id}/points`),
+  openOrders: (id: number) => http.get<CustomerOpenOrdersResType>(`/customers/${id}/open-orders`),
   redeemPoints: (id: number, body: RedeemPointsBodyType & { reason?: string }) =>
     http.post<RedeemPointsResType>(`/customers/${id}/points/redeem`, body),
   updateNote: (id: number, note: string | null) =>
