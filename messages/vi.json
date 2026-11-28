@@ -1181,5 +1181,18 @@
  "Error.OrderNotEligibleForPoints": "Error.OrderNotEligibleForPoints",
  "Error.OrderAlreadyPaidCannotChangeMoney": "Error.OrderAlreadyPaidCannotChangeMoney",
  "Hoá đơn này chỉ trừ được tối đa {max} điểm": "Hoá đơn này chỉ trừ được tối đa {max} điểm",
- "Hoá đơn này trừ được tối đa {max} điểm.": "Hoá đơn này trừ được tối đa {max} điểm."
+ "Hoá đơn này trừ được tối đa {max} điểm.": "Hoá đơn này trừ được tối đa {max} điểm.",
+ "Dữ liệu cá nhân (NĐ 13/2023)": "Dữ liệu cá nhân (NĐ 13/2023)",
+ "Nhận ưu đãi, khuyến mại": "Nhận ưu đãi, khuyến mại",
+ "Liên hệ về đơn / đặt bàn": "Liên hệ về đơn / đặt bàn",
+ "Đang đồng ý · {at}": "Đang đồng ý · {at}",
+ "Chưa hỏi khách": "Chưa hỏi khách",
+ "Đồng ý theo chính sách cũ — cần hỏi lại": "Đồng ý theo chính sách cũ — cần hỏi lại",
+ "Khách đã rút đồng ý · {at}": "Khách đã rút đồng ý · {at}",
+ "Rút đồng ý": "Rút đồng ý",
+ "Ghi nhận đồng ý": "Ghi nhận đồng ý",
+ "Mỗi lần ghi nhận là một dòng mới và không sửa được — nhật ký này là bằng chứng khách đồng ý hay rút lúc nào.": "Mỗi lần ghi nhận là một dòng mới và không sửa được — nhật ký này là bằng chứng khách đồng ý hay rút lúc nào.",
+ "Đã ghi nhận khách đồng ý": "Đã ghi nhận khách đồng ý",
+ "Đã ghi nhận khách rút đồng ý": "Đã ghi nhận khách rút đồng ý",
+ "Không lưu được đồng ý của khách": "Không lưu được đồng ý của khách"
 }
