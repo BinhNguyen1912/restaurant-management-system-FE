@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import orderApiRequest from '@/apiRequest/order';
 import {
   OrderQueryType,
@@ -51,8 +51,28 @@ export const useCreateOrderForGuestMutation = () => {
   });
 };
 
+/**
+ * Thu tiền (tiền mặt). Sau khi thu, mọi màn hình tiền phải được làm mới: nếu chỉ refetch danh sách
+ * đơn thì sổ quỹ / sổ cái / báo cáo / dashboard vẫn hiện số cũ tới hết `staleTime`.
+ */
 export const usePayOrdersByGuestMutation = () => {
+  const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (guestId: number) => orderApiRequest.payOrdersByGuest(guestId),
+    mutationFn: ({ guestId, note }: { guestId: number; note?: string }) =>
+      orderApiRequest.payOrdersByGuest(guestId, { method: 'CASH', note }),
+    onSuccess: () => {
+      for (const queryKey of [
+        ['orders'],
+        ['order-detail'],
+        ['cash-shifts'],
+        ['cash-book'],
+        ['cash-book-lines'],
+        ['ledger-entries'],
+        ['ledger-integrity'],
+        ['revenue-report'],
+      ]) {
+        queryClient.invalidateQueries({ queryKey });
+      }
+    },
   });
 };

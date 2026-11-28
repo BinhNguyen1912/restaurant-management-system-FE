@@ -6,6 +6,13 @@ const nextConfig = {
   // cần thiết, nên image chạy `node server.js` thay vì kéo theo toàn bộ node_modules.
   output: 'standalone',
   images: {
+    /**
+     * Chỉ webp, KHÔNG bật avif: 3 advisory RCE không cần đăng nhập của next 14.2.30 nằm ở
+     * Image Optimization (GHSA-2xp9 cho avif, GHSA-2464 cho svg — svg vốn đã tắt vì không đặt
+     * `dangerouslyAllowSVG`). Chỉ bản next >= 15.5.28 mới vá, nên giữ đúng 1 format cho tới khi
+     * nâng next; đừng bật avif/svg trước mốc đó.
+     */
+    formats: ['image/webp'],
     remotePatterns: [
       {
         protocol: 'https',

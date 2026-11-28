@@ -69,7 +69,7 @@ export default function MenuOrder() {
   /** mã giảm giá khách nhập — BE kiểm hạn/lượt rồi ghi snapshot, giảm giá hiện sau khi đặt món */
   const [voucherCode, setVoucherCode] = useState('');
   const route = useRouter();
-  const { mutateAsync } = useCreateGuestOrderMutation();
+  const { mutateAsync, isPending: isPlacingOrder } = useCreateGuestOrderMutation();
   const callStaffMutation = useCallStaffMutation();
   const socket = useAppStore((state) => state.socket);
 
@@ -211,6 +211,9 @@ export default function MenuOrder() {
 
   const handleOrder = async () => {
     if (orders.length === 0) return;
+    // Mạng quán đông/3G chậm: bấm 2 lần sẽ tạo 2 đơn trùng (mỗi đơn có Payment riêng) ⇒ khách
+    // bị tính 2 lần. Chặn khi request trước chưa xong.
+    if (isPlacingOrder) return;
 
     try {
       const result = await mutateAsync({ data: orders, voucherCode: voucherCode.trim() || undefined });
@@ -548,10 +551,10 @@ export default function MenuOrder() {
             <Button
               className="w-full h-10 xl:h-11 text-white text-sm xl:text-base"
               onClick={handleOrder}
-              disabled={orders.length === 0}
+              disabled={orders.length === 0 || isPlacingOrder}
               variant="default"
             >
-              <T>Đặt món</T>
+              {isPlacingOrder ? <T>Đang gửi đơn...</T> : <T>Đặt món</T>}
             </Button>
           </div>
         </aside>

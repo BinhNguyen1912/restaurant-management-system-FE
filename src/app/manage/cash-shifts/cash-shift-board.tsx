@@ -62,6 +62,20 @@ const isVideoUrl = (url: string) => /\.(mp4|mov|webm)(\?|$)/i.test(url) || url.i
 const formatTime = (value: string | null) =>
   value ? new Date(value).toLocaleString('vi-VN') : '—';
 
+/**
+ * Đọc số tiền người dùng gõ theo thói quen VN: "1.000.000", "1 000 000", "1,000,000".
+ *
+ * Không dùng `Number()` trực tiếp: `Number('1.000.000')` là NaN, JSON gửi đi thành `null`, và
+ * `z.coerce.number()` ở BE biến `null` thành **0** ⇒ đóng ca 0đ và tự sinh bút toán thiếu quỹ
+ * bằng toàn bộ tiền trong két.
+ */
+const parseVndInput = (raw: string): number | null => {
+  const digits = raw.replace(/[.,\sđ]/gi, '');
+  if (!/^\d+$/.test(digits)) return null;
+  const value = Number(digits);
+  return Number.isSafeInteger(value) ? value : null;
+};
+
 function Stat({
   label,
   value,
@@ -128,9 +142,14 @@ export default function CashShiftBoard() {
 
   const handleOpen = async (event: React.FormEvent) => {
     event.preventDefault();
+    const floatValue = parseVndInput(openingFloat);
+    if (floatValue === null) {
+      toast.error(t('Tiền lẻ đầu ca không hợp lệ'));
+      return;
+    }
     try {
       await openShift({
-        openingFloat: Number(openingFloat),
+        openingFloat: floatValue,
         note: openNote.trim() || undefined,
       });
       setOpenNote('');
@@ -186,11 +205,16 @@ export default function CashShiftBoard() {
   const handleClose = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!shift) return;
+    const countedValue = parseVndInput(countedCash);
+    if (countedValue === null) {
+      toast.error(t('Tiền mặt thực đếm không hợp lệ'));
+      return;
+    }
     try {
       const closed = await closeShift({
         id: shift.id,
         body: {
-          countedCash: Number(countedCash),
+          countedCash: countedValue,
           note: closeNote.trim() || undefined,
         },
       });
