@@ -26,6 +26,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useMeProfile } from '@/app/queries/useAccount';
 import {
   useGetCustomerDetail,
+  useGetCustomerOpenOrders,
   useGetCustomerPoints,
   useRedeemPoints,
   useUpdateCustomerNote,
@@ -42,9 +43,6 @@ const money = (value: number) =>
 
 const dateTime = (iso: string | null) =>
   iso ? new Date(iso).toLocaleString('vi-VN', { dateStyle: 'short', timeStyle: 'short' }) : '—';
-
-/** Đơn đã chốt tiền thì không trừ điểm được nữa (BE cũng chặn — đây chỉ là ẩn nút). */
-const CLOSED_ORDER_STATUS = ['PAID', 'COMPLETED', 'CANCELLED'];
 
 const ORDER_STATUS_LABEL: Record<string, string> = {
   PENDING: 'Chờ xác nhận',
@@ -89,6 +87,7 @@ export default function CustomerDetailDialog({
 
   const { data: detailRes, isLoading } = useGetCustomerDetail(activeId);
   const { data: pointsRes } = useGetCustomerPoints(activeId);
+  const { data: openOrdersRes } = useGetCustomerOpenOrders(activeId);
   const { mutateAsync: redeem, isPending: redeeming } = useRedeemPoints();
   const { mutateAsync: saveNote, isPending: savingNote } = useUpdateCustomerNote();
 
@@ -103,10 +102,12 @@ export default function CustomerDetailDialog({
     setNote(detail?.note ?? '');
   }, [detail?.id, detail?.note]);
 
-  const openOrders = useMemo(
-    () => (detail?.recentOrders ?? []).filter((order) => !CLOSED_ORDER_STATUS.includes(order.status)),
-    [detail],
-  );
+  /**
+   * Danh sách đơn đổi được điểm lấy từ API riêng, KHÔNG lọc từ `recentOrders` của hồ sơ: khách ăn
+   * nhiều thì đơn đang mở có thể đã rơi khỏi 10 đơn gần nhất, và nhân viên sẽ không có gì để chọn
+   * dù hệ thống vẫn cho đổi.
+   */
+  const openOrders = useMemo(() => openOrdersRes?.payload?.data ?? [], [openOrdersRes]);
 
   useEffect(() => {
     if (openOrders.length > 0 && !openOrders.some((order) => String(order.id) === orderId)) {
@@ -123,11 +124,21 @@ export default function CustomerDetailDialog({
   const canRedeem = can('CUSTOMERS', 'POST');
   const canEditNote = can('CUSTOMERS', 'PATCH');
 
+  const selectedOrder = openOrders.find((order) => String(order.id) === orderId);
+  /** Trần của lần đổi này = min(số dư, tiền còn phải trả của đơn) — BE vẫn kiểm lại lần nữa. */
+  const maxForOrder = Math.min(balance, selectedOrder?.maxRedeemPoints ?? 0);
+
   const submitRedeem = async () => {
     if (!customerId) return;
     const parsed = RedeemPointsBody.safeParse({ orderId, points: pointsToUse });
     if (!parsed.success) {
       toast.error(parsed.error.issues[0]?.message ?? t('Dữ liệu chưa hợp lệ'));
+      return;
+    }
+    // Đổi quá tiền còn phải trả thì phần dư bốc hơi mà khách vẫn mất điểm — chặn ở đây, đừng để
+    // BE trả lỗi rồi mới báo.
+    if (parsed.data.points > maxForOrder) {
+      toast.error(t('Hoá đơn này chỉ trừ được tối đa {max} điểm', { max: maxForOrder }));
       return;
     }
     try {
@@ -236,13 +247,16 @@ export default function CustomerDetailDialog({
                         onChange={(event) => setPointsToUse(event.target.value.replace(/[^0-9]/g, ''))}
                       />
                     </div>
-                    <Button onClick={submitRedeem} disabled={redeeming || requested <= 0}>
+                    <Button onClick={submitRedeem} disabled={redeeming || requested <= 0 || requested > maxForOrder}>
                       {redeeming ? t('Đang đổi…') : t('Đổi điểm')}
                     </Button>
                     <p className="text-xs text-muted-foreground sm:col-span-3">
                       {requested > 0
                         ? t('Giảm {value} cho hoá đơn này', { value: money(valueVnd) })
                         : t('Chỉ trừ được trên hoá đơn CHƯA thanh toán của chính khách này.')}
+                    </p>
+                    <p className="text-xs text-muted-foreground sm:col-span-3">
+                      {t('Hoá đơn này trừ được tối đa {max} điểm.', { max: maxForOrder })}
                     </p>
                   </div>
                 )}

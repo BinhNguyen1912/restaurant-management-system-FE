@@ -33,6 +33,14 @@ export const useGetCustomerPoints = (id: number | null) => {
   });
 };
 
+export const useGetCustomerOpenOrders = (id: number | null) => {
+  return useQuery({
+    queryKey: [...QUERY_KEY, 'open-orders', id],
+    queryFn: () => customerApiRequest.openOrders(id as number),
+    enabled: id !== null,
+  });
+};
+
 export const useGetCustomerReport = (params: { fromDate?: string; toDate?: string; branchId?: number }) => {
   return useQuery({
     queryKey: [...QUERY_KEY, 'report', params],
